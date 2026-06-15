@@ -1,0 +1,24 @@
+Épica 2: Seguridad y acceso
+HU-002: Registro de ciudadano con acceso opcional
+
+Como ciudadano
+quiero registrarme con o sin contraseña
+para quedar vinculado a una red de campaña.
+
+Tareas
+
+1. Crear DTO RegistroCiudadanoRequest.
+2. Crear DTO RegistroCiudadanoResponse.
+3. Crear procedimiento almacenado para registrar ciudadano.
+4. Validar código de referido recibido por URL.
+5. Generar CódigoReferido único automáticamente.
+6. Guardar CiudadanoReferidorId si el código existe.
+7. Si el ciudadano ingresa contraseña, crear registro en Usuarios.
+8. Encriptar contraseña antes de guardar.
+9. Marcar TieneAcceso = 1 cuando tenga usuario.
+10. Crear endpoint POST /api/ciudadanos/registrar.
+11. Crear validaciones de campos obligatorios.
+12. Validar email duplicado si se crea usuario.
+13. Probar registro sin referido.
+14. Probar registro con referido válido.
+15. Probar registro con referido inválido.

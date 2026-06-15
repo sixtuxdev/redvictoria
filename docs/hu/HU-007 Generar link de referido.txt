@@ -1,0 +1,14 @@
+Épica 4: Red de referidos
+HU-007: Generar link de referido
+
+Como ciudadano con acceso
+quiero ver mi link de referido
+para compartirlo con otras personas.
+
+Tareas
+1. Crear endpoint GET /api/ciudadanos/mi-link.
+2. Obtener CiudadanoId desde el token.
+3. Consultar CódigoReferido.
+4. Construir URL pública de registro.
+5. Retornar código y link.
+6. Mostrar botón copiar link en frontend.

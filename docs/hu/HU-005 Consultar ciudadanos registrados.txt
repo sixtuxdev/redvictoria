@@ -1,0 +1,18 @@
+Épica 3: Gestión de ciudadanos
+HU-005: Consultar ciudadanos registrados
+
+Como administrador
+quiero consultar ciudadanos registrados
+para hacer seguimiento de la campaña.
+
+Tareas
+
+1. Crear DTO CiudadanoDto.
+2. Crear procedimiento almacenado para listar ciudadanos.
+3. Incluir datos de departamento, ciudad, género, grupo edad y tipo identificación.
+4. Crear filtros por nombre, celular, email, departamento y ciudad.
+5. Crear endpoint GET /api/ciudadanos.
+6. Crear paginación.
+7. Crear ordenamiento por fecha de registro.
+8. Probar filtros.
+

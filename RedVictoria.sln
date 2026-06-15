@@ -1,0 +1,148 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11801.241
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedVictoria.Domain", "src\RedVictoria.Domain\RedVictoria.Domain.csproj", "{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedVictoria.Application", "src\RedVictoria.Application\RedVictoria.Application.csproj", "{A1205F26-6076-48B6-8A06-C94D356EBF13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedVictoria.Infrastructure", "src\RedVictoria.Infrastructure\RedVictoria.Infrastructure.csproj", "{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedVictoria.Services.API", "src\RedVictoria.Services.API\RedVictoria.Services.API.csproj", "{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{576C531C-8452-4D10-A2CE-9FAC8C062589}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hu", "hu", "{286581DE-1FF4-44D3-AE1B-DE21421C64BC}"
+	ProjectSection(SolutionItems) = preProject
+		docs\hu\HU-001 Configuración inicial del proyecto.txt = docs\hu\HU-001 Configuración inicial del proyecto.txt
+		docs\hu\HU-002 Seguridad y acceso.txt = docs\hu\HU-002 Seguridad y acceso.txt
+		docs\hu\HU-003 Inicio de sesión.txt = docs\hu\HU-003 Inicio de sesión.txt
+		docs\hu\HU-004 Activar acceso de ciudadano.txt = docs\hu\HU-004 Activar acceso de ciudadano.txt
+		docs\hu\HU-005 Consultar ciudadanos registrados.txt = docs\hu\HU-005 Consultar ciudadanos registrados.txt
+		docs\hu\HU-006 Actualizar información del ciudadano.txt = docs\hu\HU-006 Actualizar información del ciudadano.txt
+		docs\hu\HU-007 Generar link de referido.txt = docs\hu\HU-007 Generar link de referido.txt
+		docs\hu\HU-008 Registrar ciudadano usando link de referido.txt = docs\hu\HU-008 Registrar ciudadano usando link de referido.txt
+		docs\hu\HU-009 Ver red directa.txt = docs\hu\HU-009 Ver red directa.txt
+		docs\hu\HU-010 Ver red completa tipo árbol.txt = docs\hu\HU-010 Ver red completa tipo árbol.txt
+		docs\hu\HU-011 Administrar clases.txt = docs\hu\HU-011 Administrar clases.txt
+		docs\hu\HU-012 Administrar parámetros.txt = docs\hu\HU-012 Administrar parámetros.txt
+		docs\hu\HU-013 Consultar departamentos y ciudades.txt = docs\hu\HU-013 Consultar departamentos y ciudades.txt
+		docs\hu\HU-014 Ver resumen de mi red.txt = docs\hu\HU-014 Ver resumen de mi red.txt
+		docs\hu\HU-015 Crear pantalla pública de registro.txt = docs\hu\HU-015 Crear pantalla pública de registro.txt
+		docs\hu\HU-016 Crear pantalla de login.txt = docs\hu\HU-016 Crear pantalla de login.txt
+		docs\hu\HU-017 Crear panel principal.txt = docs\hu\HU-017 Crear panel principal.txt
+		docs\hu\HU-018 Panel administrador.txt = docs\hu\HU-018 Panel administrador.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "specs", "specs", "{092E2A15-A6C9-4522-941C-9B854D4E9805}"
+	ProjectSection(SolutionItems) = preProject
+		docs\specs\SPEC-001 Crear solución base del sistema RedVictoria.md = docs\specs\SPEC-001 Crear solución base del sistema RedVictoria.md
+		docs\specs\SPEC-002 Registro de ciudadano con acceso opcional.md = docs\specs\SPEC-002 Registro de ciudadano con acceso opcional.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedVictoria.Application.Tests", "tests\RedVictoria.Application.Tests\RedVictoria.Application.Tests.csproj", "{6994820A-E830-4858-B93C-BF75A564C7C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedVictoria.Services.API.Tests", "tests\RedVictoria.Services.API.Tests\RedVictoria.Services.API.Tests.csproj", "{9C53C421-A95E-4B79-977E-1670DE909F2D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}.Debug|x64.Build.0 = Debug|Any CPU
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}.Debug|x86.Build.0 = Debug|Any CPU
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}.Release|x64.ActiveCfg = Release|Any CPU
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}.Release|x64.Build.0 = Release|Any CPU
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}.Release|x86.ActiveCfg = Release|Any CPU
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF}.Release|x86.Build.0 = Release|Any CPU
+		{A1205F26-6076-48B6-8A06-C94D356EBF13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1205F26-6076-48B6-8A06-C94D356EBF13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1205F26-6076-48B6-8A06-C94D356EBF13}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A1205F26-6076-48B6-8A06-C94D356EBF13}.Debug|x64.Build.0 = Debug|Any CPU
+		{A1205F26-6076-48B6-8A06-C94D356EBF13}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A1205F26-6076-48B6-8A06-C94D356EBF13}.Debug|x86.Build.0 = Debug|Any CPU
+		{A1205F26-6076-48B6-8A06-C94D356EBF13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1205F26-6076-48B6-8A06-C94D356EBF13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1205F26-6076-48B6-8A06-C94D356EBF13}.Release|x64.ActiveCfg = Release|Any CPU
+		{A1205F26-6076-48B6-8A06-C94D356EBF13}.Release|x64.Build.0 = Release|Any CPU
+		{A1205F26-6076-48B6-8A06-C94D356EBF13}.Release|x86.ActiveCfg = Release|Any CPU
+		{A1205F26-6076-48B6-8A06-C94D356EBF13}.Release|x86.Build.0 = Release|Any CPU
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}.Debug|x64.Build.0 = Debug|Any CPU
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}.Debug|x86.Build.0 = Debug|Any CPU
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}.Release|x64.ActiveCfg = Release|Any CPU
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}.Release|x64.Build.0 = Release|Any CPU
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}.Release|x86.ActiveCfg = Release|Any CPU
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212}.Release|x86.Build.0 = Release|Any CPU
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}.Debug|x64.Build.0 = Debug|Any CPU
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}.Debug|x86.Build.0 = Debug|Any CPU
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}.Release|x64.ActiveCfg = Release|Any CPU
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}.Release|x64.Build.0 = Release|Any CPU
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}.Release|x86.ActiveCfg = Release|Any CPU
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58}.Release|x86.Build.0 = Release|Any CPU
+		{6994820A-E830-4858-B93C-BF75A564C7C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6994820A-E830-4858-B93C-BF75A564C7C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6994820A-E830-4858-B93C-BF75A564C7C5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6994820A-E830-4858-B93C-BF75A564C7C5}.Debug|x64.Build.0 = Debug|Any CPU
+		{6994820A-E830-4858-B93C-BF75A564C7C5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6994820A-E830-4858-B93C-BF75A564C7C5}.Debug|x86.Build.0 = Debug|Any CPU
+		{6994820A-E830-4858-B93C-BF75A564C7C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6994820A-E830-4858-B93C-BF75A564C7C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6994820A-E830-4858-B93C-BF75A564C7C5}.Release|x64.ActiveCfg = Release|Any CPU
+		{6994820A-E830-4858-B93C-BF75A564C7C5}.Release|x64.Build.0 = Release|Any CPU
+		{6994820A-E830-4858-B93C-BF75A564C7C5}.Release|x86.ActiveCfg = Release|Any CPU
+		{6994820A-E830-4858-B93C-BF75A564C7C5}.Release|x86.Build.0 = Release|Any CPU
+		{9C53C421-A95E-4B79-977E-1670DE909F2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C53C421-A95E-4B79-977E-1670DE909F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C53C421-A95E-4B79-977E-1670DE909F2D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9C53C421-A95E-4B79-977E-1670DE909F2D}.Debug|x64.Build.0 = Debug|Any CPU
+		{9C53C421-A95E-4B79-977E-1670DE909F2D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9C53C421-A95E-4B79-977E-1670DE909F2D}.Debug|x86.Build.0 = Debug|Any CPU
+		{9C53C421-A95E-4B79-977E-1670DE909F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C53C421-A95E-4B79-977E-1670DE909F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C53C421-A95E-4B79-977E-1670DE909F2D}.Release|x64.ActiveCfg = Release|Any CPU
+		{9C53C421-A95E-4B79-977E-1670DE909F2D}.Release|x64.Build.0 = Release|Any CPU
+		{9C53C421-A95E-4B79-977E-1670DE909F2D}.Release|x86.ActiveCfg = Release|Any CPU
+		{9C53C421-A95E-4B79-977E-1670DE909F2D}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D28C93EC-28A3-4BDE-ADE1-BFC3ECEB21BF} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{A1205F26-6076-48B6-8A06-C94D356EBF13} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{D60F698B-AAE1-4972-ABF5-38ACB8B2A212} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{A54E3F02-ABC1-46A2-8BF5-9D074FC26E58} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{286581DE-1FF4-44D3-AE1B-DE21421C64BC} = {576C531C-8452-4D10-A2CE-9FAC8C062589}
+		{092E2A15-A6C9-4522-941C-9B854D4E9805} = {576C531C-8452-4D10-A2CE-9FAC8C062589}
+		{6994820A-E830-4858-B93C-BF75A564C7C5} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{9C53C421-A95E-4B79-977E-1670DE909F2D} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,16 @@
+HU-010: Ver red completa tipo árbol
+
+Como ciudadano
+quiero ver toda mi red descendente
+para conocer toda mi estructura de campaña.
+
+Tareas
+1. Crear procedimiento almacenado con CTE recursivo.
+2. Consultar todos los ciudadanos descendientes.
+3. Agregar campo Nivel.
+4. Agregar nombre del ciudadano referidor.
+5. Crear endpoint GET /api/red/arbol.
+6. Crear DTO NodoRedDto.
+7. Convertir resultado plano en estructura jerárquica.
+8. Crear componente visual tipo árbol en frontend.
+9. Probar red de varios niveles.

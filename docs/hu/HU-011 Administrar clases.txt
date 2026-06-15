@@ -1,0 +1,12 @@
+Épica 5: Catálogos del sistema
+HU-011: Administrar clases
+
+Como administrador
+quiero administrar clases de parámetros
+para configurar catálogos del sistema.
+
+Tareas
+1. Crear CRUD de Clase.
+2. Crear endpoints GET, POST, PUT, DELETE lógico.
+3. Crear pantalla de administración.
+4. Validar descripción obligatoria.

@@ -1,0 +1,12 @@
+HU-009: Ver red directa
+
+Como ciudadano
+quiero ver mis referidos directos
+para saber quiénes se registraron con mi link.
+
+Tareas
+1. Crear procedimiento almacenado para consultar referidos directos.
+2. Filtrar por CiudadanoReferidorId.
+3. Crear endpoint GET /api/red/directos.
+4. Retornar nombre, celular, email, ciudad, fecha registro y estado.
+5. Crear pantalla “Mis referidos directos”.

@@ -1,0 +1,15 @@
+HU-004: Activar acceso de ciudadano
+
+Como ciudadano registrado sin contraseña
+quiero crear mi contraseña después
+para poder iniciar sesión.
+
+Tareas
+
+1. Crear endpoint para activar cuenta.
+2. Validar que el ciudadano exista.
+3. Validar que no tenga usuario creado.
+4. Crear PasswordHash.
+5. Insertar registro en Usuarios.
+6. Actualizar Ciudadanos.TieneAcceso = 1.
+7. Retornar confirmación.

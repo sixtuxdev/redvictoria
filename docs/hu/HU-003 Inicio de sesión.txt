@@ -1,0 +1,19 @@
+HU-003: Inicio de sesión
+
+Como ciudadano con acceso
+quiero iniciar sesión
+para ver mi red de campaña.
+
+Tareas
+
+1. Crear DTO LoginRequest.
+2. Crear DTO LoginResponse.
+3. Crear procedimiento almacenado para obtener usuario por email.
+4. Validar email y contraseña.
+5. Implementar JWT.
+6. Retornar token, UsuarioId, CiudadanoId, Nombre y Rol.
+7. Crear endpoint POST /api/auth/login.
+8. Proteger endpoints privados con autorización.
+9. Probar login exitoso.
+10. Probar login con contraseña incorrecta.
+11. Probar login de ciudadano sin acceso.

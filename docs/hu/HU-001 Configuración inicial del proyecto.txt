@@ -1,0 +1,19 @@
+Épica 1: Configuración inicial del proyecto
+HU-001: Crear solución base del sistema
+
+Como desarrollador
+quiero crear la estructura inicial del proyecto
+para iniciar el desarrollo de forma organizada.
+
+Tareas
+
+1. Crear solución backend.
+2. Crear proyecto API.
+3. Crear proyecto Application.
+4. Crear proyecto Domain.
+5. Crear proyecto Infrastructure.
+6. Configurar conexión a SQL Server.
+7. Configurar Dapper o Entity Framework, según decisión técnica.
+8. Configurar Swagger.
+9. Configurar inyección de dependencias.
+10. Crear estructura base de carpetas.

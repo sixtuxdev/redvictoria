@@ -1,0 +1,16 @@
+HU-012: Administrar parámetros
+
+Como administrador
+quiero administrar parámetros
+para manejar listas como género, tipo identificación y grupo de edad.
+
+Tareas
+1. Crear CRUD de Parametros.
+2. Filtrar parámetros por ClaseId.
+3. Crear endpoint GET /api/parametros/por-clase/{claseId}.
+4. Cargar combos desde parámetros.
+5. Crear datos iniciales para:
+   - Tipo Identificación
+   - Género
+   - Grupo Edad
+   - Rol

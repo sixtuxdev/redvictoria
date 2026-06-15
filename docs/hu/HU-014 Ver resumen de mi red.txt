@@ -1,0 +1,16 @@
+Épica 7: Dashboard
+HU-014: Ver resumen de mi red
+
+Como ciudadano
+quiero ver indicadores de mi red
+para conocer el avance de mi estructura.
+
+Tareas
+1. Crear procedimiento almacenado de indicadores.
+2. Calcular total referidos directos.
+3. Calcular total red completa.
+4. Calcular registros por día.
+5. Calcular registros por departamento.
+6. Calcular registros por ciudad.
+7. Crear endpoint GET /api/dashboard/mi-red.
+8. Crear tarjetas resumen en frontend.

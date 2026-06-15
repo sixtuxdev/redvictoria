@@ -1,0 +1,20 @@
+using Microsoft.Extensions.DependencyInjection;
+using RedVictoria.Application.Interfaces;
+using RedVictoria.Domain.Interfaces;
+using RedVictoria.Infrastructure.Persistence;
+using RedVictoria.Infrastructure.Repositories;
+using RedVictoria.Infrastructure.Security;
+
+namespace RedVictoria.Infrastructure.DependencyInjection;
+
+public static class DependencyInjection
+{
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+    {
+        services.AddScoped<IConnectionFactory, SqlConnectionFactory>();
+        services.AddScoped<ICiudadanoRepository, CiudadanoRepository>();
+        services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
+        return services;
+    }
+}

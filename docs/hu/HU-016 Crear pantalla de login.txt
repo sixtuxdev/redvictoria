@@ -1,0 +1,8 @@
+HU-016: Crear pantalla de login
+Tareas
+1. Crear página /login.
+2. Validar email y contraseña.
+3. Consumir endpoint de login.
+4. Guardar token.
+5. Redireccionar al dashboard.
+6. Mostrar errores de autenticación.

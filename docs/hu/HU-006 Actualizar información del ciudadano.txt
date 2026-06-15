@@ -1,0 +1,14 @@
+HU-006: Actualizar información del ciudadano
+
+Como ciudadano o administrador
+quiero actualizar los datos del ciudadano
+para mantener la información correcta.
+
+Tareas
+
+1. Crear DTO ActualizarCiudadanoRequest.
+2. Crear procedimiento almacenado para actualizar ciudadano.
+3. Validar existencia del ciudadano.
+4. Validar permisos.
+5. Crear endpoint PUT /api/ciudadanos/{id}.
+6. Probar actualización correcta.

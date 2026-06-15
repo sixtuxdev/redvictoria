@@ -1,0 +1,12 @@
+Épica 6: Ubicación territorial
+HU-013: Consultar departamentos y ciudades
+
+Como ciudadano
+quiero seleccionar departamento y ciudad
+para registrar mi ubicación.
+
+Tareas
+1. Crear endpoint GET /api/departamentos.
+2. Crear endpoint GET /api/ciudades/por-departamento/{departamentoId}.
+3. Crear combos dependientes en frontend.
+4. Validar que la ciudad pertenezca al departamento.

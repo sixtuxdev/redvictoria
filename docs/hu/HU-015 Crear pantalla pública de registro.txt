@@ -1,0 +1,12 @@
+Épica 8: Frontend
+HU-015: Crear pantalla pública de registro
+Tareas
+1. Crear página /registro.
+2. Leer parámetro ref desde URL.
+3. Crear formulario con campos de Ciudadanos.
+4. Cargar combos de tipo identificación, género y grupo edad.
+5. Cargar departamentos y ciudades.
+6. Permitir contraseña opcional.
+7. Validar campos obligatorios.
+8. Consumir endpoint de registro.
+9. Mostrar confirmación.

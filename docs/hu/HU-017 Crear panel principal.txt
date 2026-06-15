@@ -1,0 +1,10 @@
+HU-017: Crear panel principal
+Tareas
+1. Crear layout privado.
+2. Crear menú lateral.
+3. Crear dashboard.
+4. Crear pantalla “Mi link”.
+5. Crear pantalla “Mi red”.
+6. Crear pantalla “Mis referidos”.
+7. Crear pantalla “Mi perfil”.
+8. Crear opción cerrar sesión.

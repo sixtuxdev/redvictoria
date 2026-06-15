@@ -1,0 +1,16 @@
+Épica 9: Administración
+HU-018: Panel administrador
+
+Como administrador
+quiero gestionar ciudadanos y catálogos
+para controlar la operación del sistema.
+
+Tareas
+1. Crear rol Administrador.
+2. Proteger rutas administrativas.
+3. Crear pantalla de ciudadanos.
+4. Crear filtros avanzados.
+5. Crear pantalla de clases.
+6. Crear pantalla de parámetros.
+7. Crear pantalla de departamentos.
+8. Crear pantalla de ciudades.

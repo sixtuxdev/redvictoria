@@ -1,0 +1,13 @@
+HU-008: Registrar ciudadano usando link de referido
+
+Como visitante
+quiero registrarme desde un link de referido
+para quedar asociado al ciudadano que me invitó.
+
+Tareas
+1. Leer parámetro ref desde la URL.
+2. Consultar ciudadano dueño del código.
+3. Mostrar mensaje “Invitado por”.
+4. Guardar CiudadanoReferidorId al registrar.
+5. Validar que el código referido exista.
+6. Definir regla si el código no existe: bloquear o registrar sin referido.
