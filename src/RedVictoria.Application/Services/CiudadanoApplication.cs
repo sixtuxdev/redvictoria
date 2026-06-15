@@ -12,6 +12,7 @@ public class CiudadanoApplication : ICiudadanoApplication
     private const int PasswordMinimumLength = 6;
     private readonly ICiudadanoRepository _ciudadanoRepository;
     private readonly IPasswordHasher _passwordHasher;
+    
 
     public CiudadanoApplication(
         ICiudadanoRepository ciudadanoRepository,
