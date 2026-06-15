@@ -54,11 +54,9 @@ public class CiudadanoApplication : ICiudadanoApplication
             ParametroIdGenero = request.ParametroIdGenero,
             ParametroIdSoy = request.ParametroIdSoy,
             Estado = request.Estado,
-            CodigoReferidoInvitacion = request.CodigoReferido,
+            CodigoReferidoInvitacion = Normalize(codigoReferidoUrl)
+                ?? Normalize(request.CodigoReferido),
             PasswordHash = hasPassword ? _passwordHasher.Hash(request.Password!) : null
-
-            //CodigoReferidoInvitacion = Normalize(codigoReferidoUrl)
-            //    ?? Normalize(request.CodigoReferido),
         };
 
         var result = await _ciudadanoRepository.RegistrarAsync(command, cancellationToken);

@@ -320,6 +320,7 @@ public class CiudadanoApplicationTests
     private sealed class PasswordHasherFake : IPasswordHasher
     {
         public string Hash(string password) => $"hash:{password}";
+        public bool Verify(string password, string passwordHash) => passwordHash == $"hash:{password}";
     }
 
     private sealed class CiudadanoRepositoryThrowingFake : ICiudadanoRepository

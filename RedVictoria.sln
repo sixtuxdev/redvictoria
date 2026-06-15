@@ -41,6 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "specs", "specs", "{092E2A15
 	ProjectSection(SolutionItems) = preProject
 		docs\specs\SPEC-001 Crear solución base del sistema RedVictoria.md = docs\specs\SPEC-001 Crear solución base del sistema RedVictoria.md
 		docs\specs\SPEC-002 Registro de ciudadano con acceso opcional.md = docs\specs\SPEC-002 Registro de ciudadano con acceso opcional.md
+		docs\specs\SPEC-003 Inicio de sesión.md = docs\specs\SPEC-003 Inicio de sesión.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
@@ -144,5 +145,8 @@ Global
 		{092E2A15-A6C9-4522-941C-9B854D4E9805} = {576C531C-8452-4D10-A2CE-9FAC8C062589}
 		{6994820A-E830-4858-B93C-BF75A564C7C5} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{9C53C421-A95E-4B79-977E-1670DE909F2D} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB0FD0ED-C512-40B4-9285-4AD66C8E6DBD}
 	EndGlobalSection
 EndGlobal

@@ -13,6 +13,8 @@ public static class DependencyInjection
     {
         services.AddScoped<IConnectionFactory, SqlConnectionFactory>();
         services.AddScoped<ICiudadanoRepository, CiudadanoRepository>();
+        services.AddScoped<IAuthRepository, AuthRepository>();
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
         return services;
