@@ -24,4 +24,16 @@ public class UsuariosController : ControllerBase
 
         return Ok(response);
     }
+
+    [HttpPost("activar-acceso")]
+    public async Task<IActionResult> ActivarAcceso(
+        [FromBody] ActivarAccesoRequest request,
+        CancellationToken cancellationToken)
+    {
+        var response = await _usuarioApplication.ActivarAccesoAsync(
+            request,
+            cancellationToken);
+
+        return response.IsSuccess ? Ok(response) : BadRequest(response);
+    }
 }

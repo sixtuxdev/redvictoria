@@ -34,4 +34,23 @@ public class UsuarioRepository : IUsuarioRepository
 
         return await connection.QuerySingleAsync<RegistroUsuarioResult>(databaseCommand);
     }
+
+    public async Task<ActivarAccesoResult> ActivarAccesoAsync(
+        ActivarAccesoCommand command,
+        CancellationToken cancellationToken = default)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        var databaseCommand = new CommandDefinition(
+            "dbo.usp_Usuarios_ActivarAcceso",
+            new
+            {
+                command.CiudadanoId,
+                command.Email,
+                command.PasswordHash
+            },
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
+
+        return await connection.QuerySingleAsync<ActivarAccesoResult>(databaseCommand);
+    }
 }

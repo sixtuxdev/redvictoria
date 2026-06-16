@@ -92,6 +92,58 @@ public class UsuarioApplicationTests
         Assert.Null(repository.Command);
     }
 
+    [Fact]
+    public async Task ActivarAccesoAsync_ConDatosValidos_ActivaAccesoConPasswordHash()
+    {
+        var repository = new UsuarioRepositoryFake(SuccessResult());
+        repository.ActivarAccesoResult = SuccessActivationResult();
+        var application = CreateApplication(repository);
+
+        var response = await application.ActivarAccesoAsync(ValidActivationRequest());
+
+        Assert.True(response.IsSuccess);
+        Assert.Equal("Acceso activado correctamente.", response.Message);
+        Assert.Equal(10, response.Data!.UsuarioId);
+        Assert.True(response.Data.TieneAcceso);
+        Assert.Equal("usuario@email.com", repository.ActivarAccesoCommand!.Email);
+        Assert.Equal("hash:123456", repository.ActivarAccesoCommand.PasswordHash);
+        Assert.NotEqual("123456", repository.ActivarAccesoCommand.PasswordHash);
+    }
+
+    [Theory]
+    [InlineData("El ciudadano no existe.")]
+    [InlineData("El ciudadano está inactivo.")]
+    [InlineData("El ciudadano ya tiene acceso creado.")]
+    [InlineData("El ciudadano ya tiene acceso al sistema.")]
+    public async Task ActivarAccesoAsync_ConErrorDeNegocio_RetornaMensajeEsperado(
+        string message)
+    {
+        var repository = new UsuarioRepositoryFake(SuccessResult());
+        repository.ActivarAccesoResult = ActivationFailureResult(message);
+        var application = CreateApplication(repository);
+
+        var response = await application.ActivarAccesoAsync(ValidActivationRequest());
+
+        Assert.False(response.IsSuccess);
+        Assert.Equal(message, response.Message);
+        Assert.Null(response.Data);
+    }
+
+    [Fact]
+    public async Task ActivarAccesoAsync_ConPasswordDiferente_NoInvocaRepositorio()
+    {
+        var repository = new UsuarioRepositoryFake(SuccessResult());
+        var application = CreateApplication(repository);
+        var request = ValidActivationRequest();
+        request.ConfirmPassword = "654321";
+
+        var response = await application.ActivarAccesoAsync(request);
+
+        Assert.False(response.IsSuccess);
+        Assert.Contains("Password y ConfirmPassword deben coincidir.", response.Errors);
+        Assert.Null(repository.ActivarAccesoCommand);
+    }
+
     private static UsuarioApplication CreateApplication(IUsuarioRepository repository) =>
         new(repository, new PasswordHasherFake());
 
@@ -103,6 +155,15 @@ public class UsuarioApplicationTests
             Password = "123456",
             ConfirmPassword = "123456",
             Rol = "Ciudadano"
+        };
+
+    private static ActivarAccesoRequest ValidActivationRequest() =>
+        new()
+        {
+            CiudadanoId = 1,
+            Email = "USUARIO@EMAIL.COM",
+            Password = "123456",
+            ConfirmPassword = "123456"
         };
 
     private static RegistroUsuarioResult SuccessResult() =>
@@ -125,6 +186,24 @@ public class UsuarioApplicationTests
             Message = message
         };
 
+    private static ActivarAccesoResult SuccessActivationResult() =>
+        new()
+        {
+            IsSuccess = true,
+            Message = "Acceso activado correctamente.",
+            UsuarioId = 10,
+            CiudadanoId = 1,
+            Nombre = "Juan Perez",
+            TieneAcceso = true
+        };
+
+    private static ActivarAccesoResult ActivationFailureResult(string message) =>
+        new()
+        {
+            IsSuccess = false,
+            Message = message
+        };
+
     private sealed class UsuarioRepositoryFake : IUsuarioRepository
     {
         private readonly RegistroUsuarioResult _result;
@@ -135,6 +214,9 @@ public class UsuarioApplicationTests
         }
 
         public RegistroUsuarioCommand? Command { get; private set; }
+        public ActivarAccesoResult ActivarAccesoResult { get; set; } =
+            SuccessActivationResult();
+        public ActivarAccesoCommand? ActivarAccesoCommand { get; private set; }
 
         public Task<RegistroUsuarioResult> RegistrarAsync(
             RegistroUsuarioCommand command,
@@ -142,6 +224,14 @@ public class UsuarioApplicationTests
         {
             Command = command;
             return Task.FromResult(_result);
+        }
+
+        public Task<ActivarAccesoResult> ActivarAccesoAsync(
+            ActivarAccesoCommand command,
+            CancellationToken cancellationToken = default)
+        {
+            ActivarAccesoCommand = command;
+            return Task.FromResult(ActivarAccesoResult);
         }
     }
 

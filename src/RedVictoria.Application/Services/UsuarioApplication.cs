@@ -62,6 +62,42 @@ public class UsuarioApplication : IUsuarioApplication
             result.Message);
     }
 
+    public async Task<Response<ActivarAccesoResponse>> ActivarAccesoAsync(
+        ActivarAccesoRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var errors = Validate(request);
+        if (errors.Count > 0)
+        {
+            return Response<ActivarAccesoResponse>.Failure(
+                "La solicitud contiene datos inválidos.",
+                errors);
+        }
+
+        var command = new ActivarAccesoCommand
+        {
+            CiudadanoId = request.CiudadanoId,
+            Email = request.Email.Trim().ToLowerInvariant(),
+            PasswordHash = _passwordHasher.Hash(request.Password)
+        };
+
+        var result = await _usuarioRepository.ActivarAccesoAsync(command, cancellationToken);
+        if (!result.IsSuccess)
+        {
+            return Response<ActivarAccesoResponse>.Failure(result.Message);
+        }
+
+        return Response<ActivarAccesoResponse>.Success(
+            new ActivarAccesoResponse
+            {
+                UsuarioId = result.UsuarioId!.Value,
+                CiudadanoId = result.CiudadanoId!.Value,
+                Nombre = result.Nombre!,
+                TieneAcceso = result.TieneAcceso
+            },
+            result.Message);
+    }
+
     private static List<string> Validate(RegistroUsuarioRequest request)
     {
         var errors = new List<string>();
@@ -94,6 +130,39 @@ public class UsuarioApplication : IUsuarioApplication
 
         if (!string.IsNullOrWhiteSpace(request.Rol) && request.Rol.Trim().Length > 50)
             errors.Add("Rol no puede superar 50 caracteres.");
+
+        return errors;
+    }
+
+    private static List<string> Validate(ActivarAccesoRequest request)
+    {
+        var errors = new List<string>();
+
+        if (request.CiudadanoId <= 0)
+            errors.Add("CiudadanoId debe ser mayor que 0.");
+
+        if (string.IsNullOrWhiteSpace(request.Email))
+        {
+            errors.Add("Email es obligatorio.");
+        }
+        else
+        {
+            var email = request.Email.Trim();
+            if (email.Length > 150)
+                errors.Add("Email no puede superar 150 caracteres.");
+            if (!new EmailAddressAttribute().IsValid(email))
+                errors.Add("Email no tiene un formato válido.");
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Password))
+            errors.Add("Password es obligatorio.");
+        else if (request.Password.Length < PasswordMinimumLength)
+            errors.Add($"Password debe tener mínimo {PasswordMinimumLength} caracteres.");
+
+        if (string.IsNullOrWhiteSpace(request.ConfirmPassword))
+            errors.Add("ConfirmPassword es obligatorio.");
+        else if (!string.Equals(request.Password, request.ConfirmPassword, StringComparison.Ordinal))
+            errors.Add("Password y ConfirmPassword deben coincidir.");
 
         return errors;
     }

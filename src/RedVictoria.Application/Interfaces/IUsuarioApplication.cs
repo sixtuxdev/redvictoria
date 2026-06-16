@@ -8,4 +8,8 @@ public interface IUsuarioApplication
     Task<Response<RegistroUsuarioResponse>> RegistrarAsync(
         RegistroUsuarioRequest request,
         CancellationToken cancellationToken = default);
+
+    Task<Response<ActivarAccesoResponse>> ActivarAccesoAsync(
+        ActivarAccesoRequest request,
+        CancellationToken cancellationToken = default);
 }
