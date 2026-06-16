@@ -11,6 +11,7 @@ public static class DependencyInjection
         services.AddScoped<ICiudadanoApplication, CiudadanoApplication>();
         services.AddScoped<IAuthApplication, AuthApplication>();
         services.AddScoped<IUsuarioApplication, UsuarioApplication>();
+        services.AddScoped<IParametrosApplication, ParametrosApplication>();
 
         return services;
     }

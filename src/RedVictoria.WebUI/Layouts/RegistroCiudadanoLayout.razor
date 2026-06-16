@@ -1,0 +1,70 @@
+@inherits LayoutComponentBase
+
+<MudLayout>
+    <MudMainContent Class="registro-layout">
+        <MudContainer MaxWidth="MaxWidth.Large" Class="registro-container">
+            <MudPaper Elevation="0" Class="registro-shell">
+                <section class="registro-campaign-banner">
+                    <div class="registro-campaign-banner__shape registro-campaign-banner__shape--one"></div>
+                    <div class="registro-campaign-banner__shape registro-campaign-banner__shape--two"></div>
+
+                    <MudGrid Spacing="0" Class="registro-campaign-banner__grid">
+                        <MudItem xs="12" md="4" Class="registro-campaign-banner__photo-column">
+                            <div class="registro-candidate-card">
+                                <img src="/image/candidato.jpeg"
+                                     alt="Pablo Emilio Otero"
+                                     class="registro-candidate-photo" />
+                            </div>
+                        </MudItem>
+
+                        <MudItem xs="12" md="8" Class="registro-campaign-banner__info-column">
+                            <MudStack Spacing="2" Class="registro-campaign-banner__info">
+                                <MudPaper Elevation="0" Class="registro-badge">
+                                    <MudIcon Icon="@Icons.Material.Filled.Groups" Size="Size.Small" />
+                                    <MudText Typo="Typo.caption">Red ciudadana</MudText>
+                                </MudPaper>
+
+                                <div>
+                                    <MudText Typo="Typo.h2" Class="registro-candidate-name">
+                                        Pablo Emilio Otero
+                                    </MudText>
+                                    <MudText Typo="Typo.h5" Class="registro-campaign-title">
+                                        Construyamos juntos el futuro que sonamos
+                                    </MudText>
+                                    <MudText Typo="Typo.body1" Class="registro-campaign-message">
+                                        Una nueva forma de conectar con nuestra comunidad.
+                                    </MudText>
+                                </div>
+
+                                <MudStack Row="true" Class="registro-values" Spacing="1">
+                                    <span>Participacion ciudadana</span>
+                                    <span>Cercania</span>
+                                    <span>Gestion</span>
+                                    <span>Compromiso</span>
+                                </MudStack>
+                            </MudStack>
+                        </MudItem>
+                    </MudGrid>
+                </section>
+
+                <section class="registro-form-section">
+                    <MudStack Spacing="1" Class="registro-form-section__header">
+                        <MudText Typo="Typo.overline" Class="registro-overline">
+                            Registro ciudadano
+                        </MudText>
+                        <MudText Typo="Typo.h4" Class="registro-form-title">
+                            Completa tus datos para sumarte a esta iniciativa
+                        </MudText>
+                        <MudText Typo="Typo.body2" Class="registro-form-subtitle">
+                            El codigo de referido se captura automaticamente desde el enlace de invitacion.
+                        </MudText>
+                    </MudStack>
+
+                    <div class="registro-body">
+                        @Body
+                    </div>
+                </section>
+            </MudPaper>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>

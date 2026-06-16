@@ -1,0 +1,329 @@
+@page "/registro-ciudadano"
+@page "/registro-ciudadano/{CodigoReferido}"
+@layout RegistroCiudadanoLayout
+@inject RegistroCiudadanoViewModel ViewModel
+@inject ISnackbar Snackbar
+@inject NavigationManager Navigation
+
+<PageTitle>Registro ciudadano</PageTitle>
+
+@if (ViewModel.IsLoading)
+{
+    <MudPaper Elevation="1" Class="pa-8 text-center">
+        <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+        <MudText Typo="Typo.body1" Class="mt-3">Cargando formulario...</MudText>
+    </MudPaper>
+}
+else
+{
+    <MudForm @ref="_form">
+        <MudGrid Spacing="3">
+            <MudItem xs="12">
+                @if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+                {
+                    <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" Class="mb-3">
+                        @ViewModel.ErrorMessage
+                    </MudAlert>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(ViewModel.SuccessMessage))
+                {
+                    <MudAlert Severity="Severity.Success" Variant="Variant.Filled" Class="mb-3">
+                        @ViewModel.SuccessMessage
+                    </MudAlert>
+                }
+
+                @if (!ViewModel.HasParametroOptions)
+                {
+                    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">
+                        Las listas de parametros no tienen datos disponibles. Cuando el servicio de parametros este disponible, los campos desplegables se llenaran automaticamente.
+                    </MudAlert>
+                }
+            </MudItem>
+
+            <MudItem xs="12" lg="8">
+                <MudCard Elevation="2">
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5" Class="mb-4">Datos personales</MudText>
+
+                        <MudGrid Spacing="3">
+                            <MudItem xs="12">
+                                <MudTextField @bind-Value="ViewModel.Request.NombresCompletos"
+                                              Label="Nombres completos"
+                                              Variant="Variant.Outlined"
+                                              Required="true"
+                                              Immediate="true"
+                                              MaxLength="200"
+                                              Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateNombresCompletos))" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6">
+                                <MudDatePicker @bind-Date="ViewModel.Request.FechaNacimiento"
+                                               Label="Fecha de nacimiento"
+                                               Variant="Variant.Outlined"
+                                               MaxDate="@DateTime.Today"
+                                               Validation="@(new Func<DateTime?, IEnumerable<string>>(ViewModel.ValidateFechaNacimiento))" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6">
+                                <MudTextField @bind-Value="ViewModel.Request.LugarNacimiento"
+                                              Label="Lugar de nacimiento"
+                                              Variant="Variant.Outlined"
+                                              Immediate="true"
+                                              MaxLength="150" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6">
+                                <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdTipoIdentificacion"
+                                           Label="Tipo de identificacion"
+                                           Variant="Variant.Outlined"
+                                           Clearable="true">
+                                    @foreach (var opcion in ViewModel.Parametros.TiposIdentificacion)
+                                    {
+                                        <MudSelectItem T="int?" Value="@opcion.ParametroId">@opcion.Nombre</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6">
+                                <MudTextField @bind-Value="ViewModel.Request.NumeroIdentificacion"
+                                              Label="Numero de identificacion"
+                                              Variant="Variant.Outlined"
+                                              Immediate="true"
+                                              MaxLength="50"
+                                              Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateNumeroIdentificacion))" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6">
+                                <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdGrupoEdad"
+                                           Label="Grupo de edad"
+                                           Variant="Variant.Outlined"
+                                           Clearable="true">
+                                    @foreach (var opcion in ViewModel.Parametros.GruposEdad)
+                                    {
+                                        <MudSelectItem T="int?" Value="@opcion.ParametroId">@opcion.Nombre</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6">
+                                <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdGenero"
+                                           Label="Genero"
+                                           Variant="Variant.Outlined"
+                                           Clearable="true">
+                                    @foreach (var opcion in ViewModel.Parametros.Generos)
+                                    {
+                                        <MudSelectItem T="int?" Value="@opcion.ParametroId">@opcion.Nombre</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12">
+                                <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdSoy"
+                                           Label="Soy"
+                                           Variant="Variant.Outlined"
+                                           Clearable="true">
+                                    @foreach (var opcion in ViewModel.Parametros.Soy)
+                                    {
+                                        <MudSelectItem T="int?" Value="@opcion.ParametroId">@opcion.Nombre</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+
+            <MudItem xs="12" lg="4">
+                <MudCard Elevation="2">
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5" Class="mb-4">Contacto y ubicacion</MudText>
+
+                        <MudStack Spacing="3">
+                            <MudTextField @bind-Value="ViewModel.Request.Email"
+                                          Label="Email"
+                                          Variant="Variant.Outlined"
+                                          Immediate="true"
+                                          MaxLength="150"
+                                          Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateEmail))" />
+
+                            <MudTextField @bind-Value="ViewModel.Request.Celular"
+                                          Label="Celular"
+                                          Variant="Variant.Outlined"
+                                          Immediate="true"
+                                          MaxLength="30"
+                                          Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateCelular))" />
+
+                            <MudSelect T="bool?" @bind-Value="ViewModel.Request.TieneWhatsapp"
+                                       Label="Tiene WhatsApp"
+                                       Variant="Variant.Outlined"
+                                       Clearable="true">
+                                <MudSelectItem T="bool?" Value="true">Si</MudSelectItem>
+                                <MudSelectItem T="bool?" Value="false">No</MudSelectItem>
+                            </MudSelect>
+
+                            <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdDondeVive"
+                                       Label="Donde vive"
+                                       Variant="Variant.Outlined"
+                                       Clearable="true">
+                                @foreach (var opcion in ViewModel.Parametros.DondeVive)
+                                {
+                                    <MudSelectItem T="int?" Value="@opcion.ParametroId">@opcion.Nombre</MudSelectItem>
+                                }
+                            </MudSelect>
+
+                            <MudTextField @bind-Value="ViewModel.Request.Direccion"
+                                          Label="Direccion"
+                                          Variant="Variant.Outlined"
+                                          Immediate="true"
+                                          MaxLength="250" />
+
+                            <MudGrid Spacing="2">
+                                <MudItem xs="12" sm="6">
+                                    <MudNumericField T="int?" @bind-Value="ViewModel.Request.DepartamentoId"
+                                                     Label="Departamento Id"
+                                                     Variant="Variant.Outlined"
+                                                     Min="1" />
+                                </MudItem>
+                                <MudItem xs="12" sm="6">
+                                    <MudNumericField T="int?" @bind-Value="ViewModel.Request.MunicipioId"
+                                                     Label="Municipio Id"
+                                                     Variant="Variant.Outlined"
+                                                     Min="1" />
+                                </MudItem>
+                            </MudGrid>
+
+                            <MudTextField @bind-Value="ViewModel.Request.PuestoVotacion"
+                                          Label="Puesto de votacion"
+                                          Variant="Variant.Outlined"
+                                          Immediate="true"
+                                          MaxLength="150" />
+                        </MudStack>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudCard Elevation="2">
+                    <MudCardContent>
+                        <MudGrid Spacing="3">
+                            <MudItem xs="12" md="8">
+                                <MudText Typo="Typo.h5">Referido y acceso</MudText>
+                                <MudText Typo="Typo.body2" Color="Color.Secondary">
+                                    El codigo referido se toma de la URL y se enviara al backend.
+                                </MudText>
+                            </MudItem>
+
+                            <MudItem xs="12" md="4">
+                                <MudSwitch T="bool"
+                                           Value="@ViewModel.Request.TieneAcceso"
+                                           ValueChanged="@ViewModel.ToggleTieneAcceso"
+                                           Color="Color.Primary"
+                                           Label="Crear acceso de usuario" />
+                            </MudItem>
+
+                            @if (ViewModel.Request.TieneAcceso)
+                            {
+                                <MudItem xs="12" md="6">
+                                    <MudTextField @bind-Value="ViewModel.Request.Password"
+                                                  Label="Contrasena"
+                                                  Variant="Variant.Outlined"
+                                                  InputType="InputType.Password"
+                                                  Immediate="true"
+                                                  Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidatePasswordField))" />
+                                </MudItem>
+                                <MudItem xs="12" md="6">
+                                    <MudTextField @bind-Value="ViewModel.Request.ConfirmPassword"
+                                                  Label="Confirmar contrasena"
+                                                  Variant="Variant.Outlined"
+                                                  InputType="InputType.Password"
+                                                  Immediate="true"
+                                                  Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateConfirmPasswordField))" />
+                                </MudItem>
+                            }
+                        </MudGrid>
+                    </MudCardContent>
+                    <MudCardActions Class="pa-4 justify-end">
+                        <MudButton Color="Color.Primary"
+                                   Variant="Variant.Filled"
+                                   Size="Size.Large"
+                                   Disabled="@ViewModel.IsSubmitting"
+                                   OnClick="HandleRegistroAsync">
+                            @if (ViewModel.IsSubmitting)
+                            {
+                                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                                <span>Registrando...</span>
+                            }
+                            else
+                            {
+                                <span>Registrar ciudadano</span>
+                            }
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudForm>
+}
+
+@code {
+    private MudForm? _form;
+
+    [Parameter]
+    public string? CodigoReferido { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await ViewModel.InitializeAsync(ResolveCodigoReferido());
+    }
+
+    private string? ResolveCodigoReferido()
+    {
+        if (!string.IsNullOrWhiteSpace(CodigoReferido))
+        {
+            return CodigoReferido;
+        }
+
+        return GetQueryStringValue("codigoReferido") ?? GetQueryStringValue("ref");
+    }
+
+    private string? GetQueryStringValue(string key)
+    {
+        var query = Navigation.ToAbsoluteUri(Navigation.Uri).Query;
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return null;
+        }
+
+        foreach (var pair in query.TrimStart('?').Split('&', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var parts = pair.Split('=', 2);
+            var name = Uri.UnescapeDataString(parts[0]);
+
+            if (!string.Equals(name, key, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            return parts.Length == 2
+                ? Uri.UnescapeDataString(parts[1].Replace("+", " "))
+                : string.Empty;
+        }
+
+        return null;
+    }
+
+    private async Task HandleRegistroAsync()
+    {
+        if (_form is not null)
+        {
+            await _form.Validate();
+        }
+
+        var registrado = await ViewModel.RegistrarAsync();
+        if (registrado)
+        {
+            Snackbar.Add(ViewModel.SuccessMessage ?? "Ciudadano registrado correctamente.", Severity.Success);
+        }
+    }
+}
