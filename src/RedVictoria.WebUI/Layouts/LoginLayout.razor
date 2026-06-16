@@ -1,0 +1,21 @@
+@inherits LayoutComponentBase
+
+<MudLayout>
+    <MudMainContent Class="login-layout">
+        <MudContainer MaxWidth="MaxWidth.Large" Class="login-container">
+            <MudGrid Justify="Justify.Center" Class="min-vh-100 align-center">
+                <MudItem xs="12" md="5" lg="4">
+                    @Body
+                </MudItem>
+                <MudItem xs="12" md="6" lg="5" Class="d-none d-md-flex">
+                    <MudPaper Elevation="0" Class="login-hero">
+                        <MudText Typo="Typo.h3" Class="mb-4">RedVictoria</MudText>
+                        <MudText Typo="Typo.h6">
+                            Gestion politica y ciudadana con una experiencia clara, segura y moderna.
+                        </MudText>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>

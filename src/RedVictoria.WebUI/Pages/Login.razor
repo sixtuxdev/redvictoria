@@ -1,0 +1,87 @@
+@page "/login"
+@layout LoginLayout
+@inject LoginViewModel ViewModel
+@inject ISnackbar Snackbar
+
+<PageTitle>Iniciar sesion</PageTitle>
+
+<MudPaper Elevation="8" Class="pa-6 pa-md-8 rounded-xl">
+    <MudStack Spacing="4">
+        <div>
+            <MudText Typo="Typo.h4">Iniciar sesion</MudText>
+            <MudText Typo="Typo.body2" Color="Color.Secondary">
+                Ingresa con tu usuario, correo o documento.
+            </MudText>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">
+                @ViewModel.ErrorMessage
+            </MudAlert>
+        }
+
+        <MudForm @ref="_form" Model="@ViewModel.Request" @onsubmit="HandleLoginAsync">
+            <MudStack Spacing="3">
+                <MudTextField @bind-Value="ViewModel.Request.UserIdentifier"
+                              Label="Usuario, correo o documento"
+                              Variant="Variant.Outlined"
+                              Immediate="true"
+                              Required="true"
+                              RequiredError="Ingresa tu usuario, correo o documento."
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Person" />
+
+                <MudTextField @bind-Value="ViewModel.Request.Password"
+                              Label="Contrasena"
+                              Variant="Variant.Outlined"
+                              InputType="InputType.Password"
+                              Immediate="true"
+                              Required="true"
+                              RequiredError="Ingresa tu contrasena."
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Lock" />
+
+                <MudButton ButtonType="ButtonType.Submit"
+                           Color="Color.Primary"
+                           Variant="Variant.Filled"
+                           Size="Size.Large"
+                           FullWidth="true"
+                           Disabled="@ViewModel.IsBusy">
+                    @if (ViewModel.IsBusy)
+                    {
+                        <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                        <span>Validando...</span>
+                    }
+                    else
+                    {
+                        <span>Iniciar sesion</span>
+                    }
+                </MudButton>
+            </MudStack>
+        </MudForm>
+
+        <AuthLinks />
+    </MudStack>
+</MudPaper>
+
+@code {
+    private MudForm? _form;
+
+    private async Task HandleLoginAsync()
+    {
+        if (_form is not null)
+        {
+            await _form.Validate();
+        }
+
+        var loggedIn = await ViewModel.LoginAsync();
+
+        if (!loggedIn)
+        {
+            return;
+        }
+
+        Snackbar.Add(ViewModel.SuccessMessage ?? "Inicio de sesion exitoso.", Severity.Success);
+    }
+}

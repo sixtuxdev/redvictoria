@@ -1,0 +1,47 @@
+<MudThemeProvider Theme="@_theme" />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Pagina no encontrada</PageTitle>
+        <LayoutView Layout="@typeof(LoginLayout)">
+            <MudContainer MaxWidth="MaxWidth.Small" Class="mt-12">
+                <MudAlert Severity="Severity.Warning" Variant="Variant.Filled">
+                    No encontramos la pagina solicitada.
+                </MudAlert>
+                <MudButton Href="@AppRoutes.Login" Color="Color.Primary" Variant="Variant.Filled" Class="mt-4">
+                    Ir al inicio de sesion
+                </MudButton>
+            </MudContainer>
+        </LayoutView>
+    </NotFound>
+</Router>
+
+@code {
+    private readonly MudTheme _theme = new()
+    {
+        PaletteLight = new PaletteLight
+        {
+            Primary = "#1E3A8A",
+            Secondary = "#E11D48",
+            AppbarBackground = "#1E3A8A",
+            DrawerBackground = "#0F172A",
+            DrawerText = "#E2E8F0",
+            DrawerIcon = "#CBD5E1",
+            Background = "#F8FAFC"
+        },
+        Typography = new Typography
+        {
+            Default = new DefaultTypography
+            {
+                FontFamily = new[] { "Inter", "Roboto", "Helvetica", "Arial", "sans-serif" }
+            }
+        }
+    };
+}

@@ -1,0 +1,16 @@
+<MudPaper Elevation="0" Class="pa-6 text-center">
+    <MudIcon Icon="@Icon" Size="Size.Large" Color="Color.Primary" />
+    <MudText Typo="Typo.h6" Class="mt-3">@Title</MudText>
+    <MudText Typo="Typo.body2" Color="Color.Secondary">@Description</MudText>
+</MudPaper>
+
+@code {
+    [Parameter]
+    public string Icon { get; set; } = Icons.Material.Filled.Info;
+
+    [Parameter]
+    public string Title { get; set; } = "Sin informacion";
+
+    [Parameter]
+    public string? Description { get; set; }
+}

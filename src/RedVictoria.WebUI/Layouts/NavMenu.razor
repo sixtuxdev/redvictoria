@@ -1,0 +1,18 @@
+<MudStack Class="pa-4" Spacing="1">
+    <MudText Typo="Typo.h6" Color="Color.Inherit">RedVictoria</MudText>
+    <MudText Typo="Typo.caption" Color="Color.Inherit">Panel de gestion</MudText>
+</MudStack>
+
+<MudDivider />
+
+<MudNavMenu Dense="true" Class="pt-2">
+    <MudNavLink Href="@AppRoutes.Home" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">
+        Inicio
+    </MudNavLink>
+    <MudNavLink Href="/counter" Icon="@Icons.Material.Filled.AddCircleOutline">
+        Contador
+    </MudNavLink>
+    <MudNavLink Href="/weather" Icon="@Icons.Material.Filled.Cloud">
+        Clima
+    </MudNavLink>
+</MudNavMenu>
