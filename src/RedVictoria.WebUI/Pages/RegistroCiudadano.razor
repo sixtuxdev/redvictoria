@@ -36,7 +36,13 @@ else
                 @if (!ViewModel.HasParametroOptions)
                 {
                     <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">
-                        Las listas de parametros no tienen datos disponibles. Cuando el servicio de parametros este disponible, los campos desplegables se llenaran automaticamente.
+                        Las listas de parametros no tienen datos disponibles. Verifica que el endpoint de parametros y las clases requeridas esten disponibles.
+                    </MudAlert>
+                }
+                else if (!ViewModel.AreRequiredParametrosLoaded)
+                {
+                    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">
+                        Algunas listas requeridas no cargaron. No podras registrar el ciudadano hasta completar los datos de los select.
                     </MudAlert>
                 }
             </MudItem>
@@ -80,7 +86,7 @@ else
                                            Clearable="true">
                                     @foreach (var opcion in ViewModel.Parametros.TiposIdentificacion)
                                     {
-                                        <MudSelectItem T="int?" Value="@opcion.ParametroId">@opcion.Nombre</MudSelectItem>
+                                        <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
                                     }
                                 </MudSelect>
                             </MudItem>
@@ -101,7 +107,7 @@ else
                                            Clearable="true">
                                     @foreach (var opcion in ViewModel.Parametros.GruposEdad)
                                     {
-                                        <MudSelectItem T="int?" Value="@opcion.ParametroId">@opcion.Nombre</MudSelectItem>
+                                        <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
                                     }
                                 </MudSelect>
                             </MudItem>
@@ -113,7 +119,7 @@ else
                                            Clearable="true">
                                     @foreach (var opcion in ViewModel.Parametros.Generos)
                                     {
-                                        <MudSelectItem T="int?" Value="@opcion.ParametroId">@opcion.Nombre</MudSelectItem>
+                                        <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
                                     }
                                 </MudSelect>
                             </MudItem>
@@ -125,7 +131,7 @@ else
                                            Clearable="true">
                                     @foreach (var opcion in ViewModel.Parametros.Soy)
                                     {
-                                        <MudSelectItem T="int?" Value="@opcion.ParametroId">@opcion.Nombre</MudSelectItem>
+                                        <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
                                     }
                                 </MudSelect>
                             </MudItem>
@@ -168,7 +174,7 @@ else
                                        Clearable="true">
                                 @foreach (var opcion in ViewModel.Parametros.DondeVive)
                                 {
-                                    <MudSelectItem T="int?" Value="@opcion.ParametroId">@opcion.Nombre</MudSelectItem>
+                                    <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
                                 }
                             </MudSelect>
 
@@ -247,7 +253,7 @@ else
                         <MudButton Color="Color.Primary"
                                    Variant="Variant.Filled"
                                    Size="Size.Large"
-                                   Disabled="@ViewModel.IsSubmitting"
+                                   Disabled="@(!ViewModel.CanSubmit)"
                                    OnClick="HandleRegistroAsync">
                             @if (ViewModel.IsSubmitting)
                             {

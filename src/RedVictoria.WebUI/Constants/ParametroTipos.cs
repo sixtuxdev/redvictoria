@@ -2,9 +2,9 @@ namespace RedVictoria.WebUI.Constants;
 
 public static class ParametroTipos
 {
-    public const string DondeVive = "DondeVive";
-    public const string TipoIdentificacion = "TipoDocumento";
-    public const string GrupoEdad = "GrupoEdad";
+    public const string TipoIdentificacion = "Tipo Documento";
+    public const string GrupoEdad = "Grupo Edad";
     public const string Genero = "Genero";
-    public const string Soy = "Soy";
+    public const string Soy = "Quien Soy";
+    public const string DondeVive = "Donde Vive";
 }

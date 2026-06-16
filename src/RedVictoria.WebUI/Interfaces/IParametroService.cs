@@ -6,4 +6,8 @@ public interface IParametroService
 {
     Task<RegistroCiudadanoParametrosModel> ObtenerParametrosRegistroCiudadanoAsync(
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyCollection<ParametroOptionModel>> ObtenerParametrosPorClaseDescripcionAsync(
+        string descripcionClase,
+        CancellationToken cancellationToken = default);
 }

@@ -33,6 +33,15 @@ public sealed partial class RegistroCiudadanoViewModel(
         || Parametros.Generos.Count > 0
         || Parametros.Soy.Count > 0;
 
+    public bool AreRequiredParametrosLoaded =>
+        Parametros.TiposIdentificacion.Count > 0
+        && Parametros.GruposEdad.Count > 0
+        && Parametros.Generos.Count > 0
+        && Parametros.Soy.Count > 0
+        && Parametros.DondeVive.Count > 0;
+
+    public bool CanSubmit => AreRequiredParametrosLoaded && !IsSubmitting;
+
     public async Task InitializeAsync(string? codigoReferido, CancellationToken cancellationToken = default)
     {
         CodigoReferido = Normalize(codigoReferido);
@@ -46,9 +55,9 @@ public sealed partial class RegistroCiudadanoViewModel(
         {
             Parametros = await parametroService.ObtenerParametrosRegistroCiudadanoAsync(cancellationToken);
 
-            if (!HasParametroOptions)
+            if (!AreRequiredParametrosLoaded)
             {
-                ErrorMessage = "No se encontraron parametros para cargar las listas desplegables.";
+                ErrorMessage = "No fue posible cargar todas las listas requeridas del formulario.";
             }
         }
         catch
@@ -65,6 +74,12 @@ public sealed partial class RegistroCiudadanoViewModel(
     {
         ErrorMessage = null;
         SuccessMessage = null;
+
+        if (!AreRequiredParametrosLoaded)
+        {
+            ErrorMessage = "No puedes registrar el ciudadano hasta que carguen las listas requeridas.";
+            return false;
+        }
 
         var errors = Validate();
         if (errors.Count > 0)
