@@ -186,18 +186,42 @@ else
 
                             <MudGrid Spacing="2">
                                 <MudItem xs="12" sm="6">
-                                    <MudNumericField T="int?" @bind-Value="ViewModel.Request.DepartamentoId"
-                                                     Label="Departamento Id"
-                                                     Variant="Variant.Outlined"
-                                                     Min="1" />
+                                    <MudSelect T="int?"
+                                               Label="Departamento"
+                                               Variant="Variant.Outlined"
+                                               Clearable="true"
+                                               Value="@ViewModel.Request.DepartamentoId"
+                                               ValueChanged="@ViewModel.OnDepartamentoChangedAsync"
+                                               Disabled="@ViewModel.IsLoading">
+                                        @foreach (var departamento in ViewModel.Departamentos)
+                                        {
+                                            <MudSelectItem T="int?" Value="@((int?)departamento.DepartamentoId)">
+                                                @departamento.DepartamentoNombre
+                                            </MudSelectItem>
+                                        }
+                                    </MudSelect>
                                 </MudItem>
                                 <MudItem xs="12" sm="6">
-                                    <MudNumericField T="int?" @bind-Value="ViewModel.Request.MunicipioId"
-                                                     Label="Municipio Id"
-                                                     Variant="Variant.Outlined"
-                                                     Min="1" />
+                                    <MudSelect T="int?"
+                                               Label="Ciudad"
+                                               Variant="Variant.Outlined"
+                                               Clearable="true"
+                                               Disabled="@(!ViewModel.PuedeSeleccionarCiudad)"
+                                               @bind-Value="ViewModel.Request.MunicipioId">
+                                        @foreach (var ciudad in ViewModel.Ciudades)
+                                        {
+                                            <MudSelectItem T="int?" Value="@((int?)ciudad.CiudadId)">
+                                                @ciudad.CiudadNombre
+                                            </MudSelectItem>
+                                        }
+                                    </MudSelect>
                                 </MudItem>
                             </MudGrid>
+
+                            @if (ViewModel.IsLoadingCiudades)
+                            {
+                                <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mt-n2" />
+                            }
 
                             <MudTextField @bind-Value="ViewModel.Request.PuestoVotacion"
                                           Label="Puesto de votacion"

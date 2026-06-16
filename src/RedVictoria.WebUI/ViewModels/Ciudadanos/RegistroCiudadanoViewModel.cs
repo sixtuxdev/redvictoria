@@ -1,22 +1,33 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using RedVictoria.WebUI.Interfaces;
+using RedVictoria.WebUI.Models.Ciudades;
 using RedVictoria.WebUI.Models.Ciudadanos;
+using RedVictoria.WebUI.Models.Departamentos;
 using RedVictoria.WebUI.Models.Parametros;
 
 namespace RedVictoria.WebUI.ViewModels.Ciudadanos;
 
 public sealed partial class RegistroCiudadanoViewModel(
     ICiudadanoService ciudadanoService,
-    IParametroService parametroService)
+    IParametroService parametroService,
+    IDepartamentoService departamentoService,
+    ICiudadService ciudadService)
 {
     private const int PasswordMinimumLength = 6;
+    private bool _isInitialized;
 
     public RegistroCiudadanoRequestModel Request { get; } = new();
 
     public RegistroCiudadanoParametrosModel Parametros { get; private set; } = new();
 
+    public IReadOnlyCollection<DepartamentoModel> Departamentos { get; private set; } = [];
+
+    public IReadOnlyCollection<CiudadModel> Ciudades { get; private set; } = [];
+
     public bool IsLoading { get; private set; }
+
+    public bool IsLoadingCiudades { get; private set; }
 
     public bool IsSubmitting { get; private set; }
 
@@ -42,31 +53,102 @@ public sealed partial class RegistroCiudadanoViewModel(
 
     public bool CanSubmit => AreRequiredParametrosLoaded && !IsSubmitting;
 
+    public bool PuedeSeleccionarCiudad =>
+        Request.DepartamentoId.HasValue
+        && Request.DepartamentoId.Value > 0
+        && !IsLoadingCiudades
+        && Ciudades.Count > 0;
+
     public async Task InitializeAsync(string? codigoReferido, CancellationToken cancellationToken = default)
     {
         CodigoReferido = Normalize(codigoReferido);
         Request.CodigoReferido = CodigoReferido;
         Request.Estado = true;
 
+        if (_isInitialized)
+        {
+            return;
+        }
+
         IsLoading = true;
         ErrorMessage = null;
+        Departamentos = [];
+        Ciudades = [];
 
         try
         {
-            Parametros = await parametroService.ObtenerParametrosRegistroCiudadanoAsync(cancellationToken);
+            var parametrosTask = parametroService.ObtenerParametrosRegistroCiudadanoAsync(cancellationToken);
+            var departamentosTask = departamentoService.ObtenerDepartamentosAsync(cancellationToken);
+
+            await Task.WhenAll(parametrosTask, departamentosTask);
+
+            Parametros = parametrosTask.Result;
+            Departamentos = departamentosTask.Result;
 
             if (!AreRequiredParametrosLoaded)
             {
                 ErrorMessage = "No fue posible cargar todas las listas requeridas del formulario.";
             }
+
+            if (Departamentos.Count == 0)
+            {
+                ErrorMessage = AppendError(
+                    ErrorMessage,
+                    "No fue posible cargar la lista de departamentos.");
+            }
+
+            _isInitialized = true;
         }
         catch
         {
-            ErrorMessage = "No fue posible cargar los parametros del formulario.";
+            ErrorMessage = "No fue posible cargar la informacion inicial del formulario.";
         }
         finally
         {
             IsLoading = false;
+        }
+    }
+
+    public async Task OnDepartamentoChangedAsync(int? departamentoId)
+    {
+        Request.DepartamentoId = departamentoId;
+        Request.MunicipioId = null;
+        Ciudades = [];
+
+        if (!departamentoId.HasValue || departamentoId.Value <= 0)
+        {
+            return;
+        }
+
+        await CargarCiudadesPorDepartamentoAsync(departamentoId.Value);
+    }
+
+    public async Task CargarCiudadesPorDepartamentoAsync(
+        int departamentoId,
+        CancellationToken cancellationToken = default)
+    {
+        IsLoadingCiudades = true;
+        ErrorMessage = null;
+
+        try
+        {
+            Ciudades = await ciudadService.ObtenerCiudadesPorDepartamentoIdAsync(
+                departamentoId,
+                cancellationToken);
+
+            if (Ciudades.Count == 0)
+            {
+                ErrorMessage = "No se encontraron ciudades para el departamento seleccionado.";
+            }
+        }
+        catch
+        {
+            Ciudades = [];
+            ErrorMessage = "No fue posible cargar las ciudades del departamento seleccionado.";
+        }
+        finally
+        {
+            IsLoadingCiudades = false;
         }
     }
 
@@ -311,6 +393,13 @@ public sealed partial class RegistroCiudadanoViewModel(
     private static string? Normalize(string? value)
     {
         return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+    }
+
+    private static string AppendError(string? currentError, string newError)
+    {
+        return string.IsNullOrWhiteSpace(currentError)
+            ? newError
+            : $"{currentError} {newError}";
     }
 
     [GeneratedRegex(@"^\+?[0-9\s-]{7,30}$")]

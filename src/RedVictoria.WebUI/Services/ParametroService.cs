@@ -54,13 +54,6 @@ public sealed class ParametroService(HttpClient httpClient, IConfiguration confi
     private string BuildEndpoint(string descripcionClase)
     {
         var relativeEndpoint = $"{ApiEndpoints.Parametros}/clase/{Uri.EscapeDataString(descripcionClase.Trim())}";
-        var apiBaseUrl = configuration["ApiBaseUrl"];
-
-        if (string.IsNullOrWhiteSpace(apiBaseUrl))
-        {
-            return relativeEndpoint;
-        }
-
-        return new Uri(new Uri(apiBaseUrl, UriKind.Absolute), relativeEndpoint).ToString();
+        return ApiEndpointBuilder.Build(configuration, relativeEndpoint);
     }
 }
