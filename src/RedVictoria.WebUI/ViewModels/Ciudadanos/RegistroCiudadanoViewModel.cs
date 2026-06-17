@@ -356,6 +356,35 @@ public sealed partial class RegistroCiudadanoViewModel(
         }
     }
 
+    public void LimpiarFormulario()
+    {
+        Request.NombresCompletos = string.Empty;
+        Request.FechaNacimiento = null;
+        Request.LugarNacimiento = null;
+        Request.Email = null;
+        Request.Celular = null;
+        Request.TieneWhatsapp = null;
+        Request.ParametroIdDondeVive = null;
+        Request.PuestoVotacion = null;
+        Request.ParametroIdTipoIdentificacion = null;
+        Request.NumeroIdentificacion = null;
+        Request.Direccion = null;
+        Request.DepartamentoId = null;
+        Request.MunicipioId = null;
+        Request.ParametroIdGrupoEdad = null;
+        Request.ParametroIdGenero = null;
+        Request.ParametroIdSoy = null;
+        Request.CodigoReferido = CodigoReferido;
+        Request.CiudadanoReferidorId = null;
+        Request.TieneAcceso = false;
+        Request.Estado = true;
+        Request.Password = null;
+        Request.ConfirmPassword = null;
+
+        Ciudades = [];
+        ErrorMessage = null;
+    }
+
     private void ValidatePassword(ICollection<string> errors)
     {
         if (Request.TieneAcceso && string.IsNullOrWhiteSpace(Request.Password))

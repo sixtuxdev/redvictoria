@@ -133,6 +133,42 @@ BEGIN TRY
             WHERE CodigoReferido IS NOT NULL;
     END
 
+    IF NOT EXISTS (
+        SELECT 1
+        FROM sys.indexes
+        WHERE name = N'UX_Ciudadanos_Email'
+          AND object_id = OBJECT_ID(N'dbo.Ciudadanos')
+    )
+    BEGIN
+        CREATE UNIQUE INDEX UX_Ciudadanos_Email
+            ON dbo.Ciudadanos (Email)
+            WHERE Email IS NOT NULL;
+    END
+
+    IF NOT EXISTS (
+        SELECT 1
+        FROM sys.indexes
+        WHERE name = N'UX_Ciudadanos_Celular'
+          AND object_id = OBJECT_ID(N'dbo.Ciudadanos')
+    )
+    BEGIN
+        CREATE UNIQUE INDEX UX_Ciudadanos_Celular
+            ON dbo.Ciudadanos (Celular)
+            WHERE Celular IS NOT NULL;
+    END
+
+    IF NOT EXISTS (
+        SELECT 1
+        FROM sys.indexes
+        WHERE name = N'UX_Ciudadanos_NumeroIdentificacion'
+          AND object_id = OBJECT_ID(N'dbo.Ciudadanos')
+    )
+    BEGIN
+        CREATE UNIQUE INDEX UX_Ciudadanos_NumeroIdentificacion
+            ON dbo.Ciudadanos (NumeroIdentificacion)
+            WHERE NumeroIdentificacion IS NOT NULL;
+    END
+
     COMMIT TRANSACTION;
 END TRY
 BEGIN CATCH

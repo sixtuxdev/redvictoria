@@ -64,7 +64,7 @@ public class CiudadanoApplicationTests
     {
         var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: true));
         var hasher = new PasswordHasherFake();
-        var application = new CiudadanoApplication(repository, hasher);
+        var application = new CiudadanoApplication(repository, hasher, new CorreoServiceFake());
         var request = ValidRequest();
         request.Email = "CIUDADANO@EXAMPLE.COM";
         request.Password = "123456";
@@ -96,6 +96,30 @@ public class CiudadanoApplicationTests
 
         Assert.False(response.IsSuccess);
         Assert.Equal("El email ya se encuentra registrado.", response.Message);
+    }
+
+    [Theory]
+    [InlineData("El email ya se encuentra registrado en ciudadanos.")]
+    [InlineData("El celular ya se encuentra registrado en ciudadanos.")]
+    [InlineData("El numero de identificacion ya se encuentra registrado en ciudadanos.")]
+    public async Task RegistrarAsync_ConDatoUnicoDuplicado_RetornaMensajeEsperado(string expectedMessage)
+    {
+        var repository = new CiudadanoRepositoryFake(new RegistroCiudadanoResult
+        {
+            IsSuccess = false,
+            Message = expectedMessage
+        });
+        var correoService = new CorreoServiceFake();
+        var application = CreateApplication(repository, correoService);
+        var request = ValidRequest();
+        request.Email = "ciudadano@example.com";
+
+        var response = await application.RegistrarAsync(request);
+
+        Assert.False(response.IsSuccess);
+        Assert.Equal(expectedMessage, response.Message);
+        Assert.Null(response.Data);
+        Assert.Null(correoService.Destinatario);
     }
 
     [Fact]
@@ -271,8 +295,63 @@ public class CiudadanoApplicationTests
         Assert.Same(expectedException, exception);
     }
 
+    [Fact]
+    public async Task RegistrarAsync_ConEmailYRegistroExitoso_EnviaCorreoConCodigoReferido()
+    {
+        var repository = new CiudadanoRepositoryFake(SuccessResult(
+            tieneAcceso: false,
+            email: "ciudadano@example.com"));
+        var correoService = new CorreoServiceFake();
+        var application = CreateApplication(repository, correoService);
+        var request = ValidRequest();
+        request.Email = "ciudadano@example.com";
+
+        var response = await application.RegistrarAsync(request);
+
+        Assert.True(response.IsSuccess);
+        Assert.Equal("ciudadano@example.com", correoService.Destinatario);
+        Assert.Equal("Juan Perez Martinez", correoService.NombresCompletos);
+        Assert.Equal("RV-ABC123", correoService.CodigoReferido);
+    }
+
+    [Fact]
+    public async Task RegistrarAsync_CuandoCorreoFalla_MantieneRegistroExitoso()
+    {
+        var repository = new CiudadanoRepositoryFake(SuccessResult(
+            tieneAcceso: false,
+            email: "ciudadano@example.com"));
+        var correoService = new CorreoServiceFake(new InvalidOperationException("smtp no disponible"));
+        var application = CreateApplication(repository, correoService);
+        var request = ValidRequest();
+        request.Email = "ciudadano@example.com";
+
+        var response = await application.RegistrarAsync(request);
+
+        Assert.True(response.IsSuccess);
+        Assert.NotNull(response.Data);
+        Assert.Contains("No fue posible enviar el correo", response.Message);
+    }
+
+    [Fact]
+    public async Task RegistrarAsync_SinEmail_NoEnviaCorreo()
+    {
+        var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: false));
+        var correoService = new CorreoServiceFake();
+        var application = CreateApplication(repository, correoService);
+
+        var response = await application.RegistrarAsync(ValidRequest());
+
+        Assert.True(response.IsSuccess);
+        Assert.Null(correoService.Destinatario);
+    }
+
     private static CiudadanoApplication CreateApplication(ICiudadanoRepository repository) =>
-        new(repository, new PasswordHasherFake());
+        CreateApplication(repository, new CorreoServiceFake());
+
+    private static CiudadanoApplication CreateApplication(
+        ICiudadanoRepository repository,
+        ICorreoService correoService) =>
+        new(repository, new PasswordHasherFake(), correoService);
 
     private static RegistroCiudadanoRequest ValidRequest() =>
         new()
@@ -283,13 +362,15 @@ public class CiudadanoApplicationTests
 
     private static RegistroCiudadanoResult SuccessResult(
         bool tieneAcceso,
-        int? ciudadanoReferidorId = null) =>
+        int? ciudadanoReferidorId = null,
+        string? email = null) =>
         new()
         {
             IsSuccess = true,
             Message = "Ciudadano registrado correctamente.",
             CiudadanoId = 10,
             NombresCompletos = "Juan Perez Martinez",
+            Email = email,
             CodigoReferido = "RV-ABC123",
             TieneAcceso = tieneAcceso,
             CiudadanoReferidorId = ciudadanoReferidorId,
@@ -321,6 +402,35 @@ public class CiudadanoApplicationTests
     {
         public string Hash(string password) => $"hash:{password}";
         public bool Verify(string password, string passwordHash) => passwordHash == $"hash:{password}";
+    }
+
+    private sealed class CorreoServiceFake : ICorreoService
+    {
+        private readonly Exception? _exception;
+
+        public CorreoServiceFake(Exception? exception = null)
+        {
+            _exception = exception;
+        }
+
+        public string? Destinatario { get; private set; }
+        public string? NombresCompletos { get; private set; }
+        public string? CodigoReferido { get; private set; }
+
+        public Task EnviarRegistroCiudadanoAsync(
+            string destinatario,
+            string nombresCompletos,
+            string codigoReferido,
+            CancellationToken cancellationToken = default)
+        {
+            if (_exception is not null)
+                return Task.FromException(_exception);
+
+            Destinatario = destinatario;
+            NombresCompletos = nombresCompletos;
+            CodigoReferido = codigoReferido;
+            return Task.CompletedTask;
+        }
     }
 
     private sealed class CiudadanoRepositoryThrowingFake : ICiudadanoRepository

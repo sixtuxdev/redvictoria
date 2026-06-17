@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using RedVictoria.Application.Interfaces;
 using RedVictoria.Domain.Interfaces;
+using RedVictoria.Infrastructure.Email;
 using RedVictoria.Infrastructure.Persistence;
 using RedVictoria.Infrastructure.Repositories;
 using RedVictoria.Infrastructure.Security;
@@ -18,6 +19,7 @@ public static class DependencyInjection
         services.AddScoped<IParametrosRepository, ParametrosRepository>();
         services.AddScoped<IDepartamentoRepository, DepartamentoRepository>();
         services.AddScoped<ICiudadRepository, CiudadRepository>();
+        services.AddScoped<ICorreoService, SmtpCorreoService>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
 

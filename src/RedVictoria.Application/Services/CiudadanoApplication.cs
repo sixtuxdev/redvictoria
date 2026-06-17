@@ -12,14 +12,17 @@ public class CiudadanoApplication : ICiudadanoApplication
     private const int PasswordMinimumLength = 6;
     private readonly ICiudadanoRepository _ciudadanoRepository;
     private readonly IPasswordHasher _passwordHasher;
+    private readonly ICorreoService _correoService;
     
 
     public CiudadanoApplication(
         ICiudadanoRepository ciudadanoRepository,
-        IPasswordHasher passwordHasher)
+        IPasswordHasher passwordHasher,
+        ICorreoService correoService)
     {
         _ciudadanoRepository = ciudadanoRepository;
         _passwordHasher = passwordHasher;
+        _correoService = correoService;
     }
 
     public async Task<Response<RegistroCiudadanoResponse>> RegistrarAsync(
@@ -66,8 +69,7 @@ public class CiudadanoApplication : ICiudadanoApplication
             return Response<RegistroCiudadanoResponse>.Failure(result.Message);
         }
 
-        return Response<RegistroCiudadanoResponse>.Success(
-            new RegistroCiudadanoResponse
+        var response = new RegistroCiudadanoResponse
             {
                 CiudadanoId = result.CiudadanoId!.Value,
                 NombresCompletos = result.NombresCompletos!,
@@ -91,8 +93,27 @@ public class CiudadanoApplication : ICiudadanoApplication
                 TieneAcceso = result.TieneAcceso,
                 Estado = result.Estado,
                 FechaRegistro = result.FechaRegistro
-            },
-            result.Message);
+            };
+
+        var message = result.Message;
+        if (!string.IsNullOrWhiteSpace(response.Email)
+            && !string.IsNullOrWhiteSpace(response.CodigoReferido))
+        {
+            try
+            {
+                await _correoService.EnviarRegistroCiudadanoAsync(
+                    response.Email,
+                    response.NombresCompletos,
+                    response.CodigoReferido,
+                    cancellationToken);
+            }
+            catch
+            {
+                message = $"{message} No fue posible enviar el correo de confirmacion.";
+            }
+        }
+
+        return Response<RegistroCiudadanoResponse>.Success(response, message);
     }
 
     private static List<string> Validate(RegistroCiudadanoRequest request)

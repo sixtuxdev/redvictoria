@@ -82,6 +82,78 @@ BEGIN
             RETURN;
         END
 
+        IF @Email IS NOT NULL
+           AND EXISTS (
+               SELECT 1
+               FROM dbo.Ciudadanos WITH (UPDLOCK, HOLDLOCK)
+               WHERE Email = @Email
+           )
+        BEGIN
+            ROLLBACK TRANSACTION;
+            SELECT
+                CAST(0 AS BIT) AS IsSuccess,
+                N'El email ya se encuentra registrado en ciudadanos.' AS Message,
+                CAST(NULL AS INT) AS CiudadanoId,
+                CAST(NULL AS NVARCHAR(50)) AS CodigoReferido,
+                CAST(0 AS BIT) AS TieneAcceso,
+                CAST(NULL AS INT) AS CiudadanoReferidorId,
+                CAST(NULL AS DATETIME) AS FechaNacimiento,
+                CAST(NULL AS NVARCHAR(150)) AS LugarNacimiento,
+                CAST(NULL AS NVARCHAR(30)) AS Celular,
+                CAST(NULL AS BIT) AS TieneWhatsapp,
+                CAST(NULL AS INT) AS ParametroIdDondeVive,
+                CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
+            RETURN;
+        END
+
+        IF @Celular IS NOT NULL
+           AND EXISTS (
+               SELECT 1
+               FROM dbo.Ciudadanos WITH (UPDLOCK, HOLDLOCK)
+               WHERE Celular = @Celular
+           )
+        BEGIN
+            ROLLBACK TRANSACTION;
+            SELECT
+                CAST(0 AS BIT) AS IsSuccess,
+                N'El celular ya se encuentra registrado en ciudadanos.' AS Message,
+                CAST(NULL AS INT) AS CiudadanoId,
+                CAST(NULL AS NVARCHAR(50)) AS CodigoReferido,
+                CAST(0 AS BIT) AS TieneAcceso,
+                CAST(NULL AS INT) AS CiudadanoReferidorId,
+                CAST(NULL AS DATETIME) AS FechaNacimiento,
+                CAST(NULL AS NVARCHAR(150)) AS LugarNacimiento,
+                CAST(NULL AS NVARCHAR(30)) AS Celular,
+                CAST(NULL AS BIT) AS TieneWhatsapp,
+                CAST(NULL AS INT) AS ParametroIdDondeVive,
+                CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
+            RETURN;
+        END
+
+        IF @NumeroIdentificacion IS NOT NULL
+           AND EXISTS (
+               SELECT 1
+               FROM dbo.Ciudadanos WITH (UPDLOCK, HOLDLOCK)
+               WHERE NumeroIdentificacion = @NumeroIdentificacion
+           )
+        BEGIN
+            ROLLBACK TRANSACTION;
+            SELECT
+                CAST(0 AS BIT) AS IsSuccess,
+                N'El numero de identificacion ya se encuentra registrado en ciudadanos.' AS Message,
+                CAST(NULL AS INT) AS CiudadanoId,
+                CAST(NULL AS NVARCHAR(50)) AS CodigoReferido,
+                CAST(0 AS BIT) AS TieneAcceso,
+                CAST(NULL AS INT) AS CiudadanoReferidorId,
+                CAST(NULL AS DATETIME) AS FechaNacimiento,
+                CAST(NULL AS NVARCHAR(150)) AS LugarNacimiento,
+                CAST(NULL AS NVARCHAR(30)) AS Celular,
+                CAST(NULL AS BIT) AS TieneWhatsapp,
+                CAST(NULL AS INT) AS ParametroIdDondeVive,
+                CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
+            RETURN;
+        END
+
         WHILE @CodigoReferido IS NULL
         BEGIN
             SET @CodigoReferido = N'RV-' + UPPER(LEFT(REPLACE(CONVERT(NVARCHAR(36), NEWID()), N'-', N''), 12));

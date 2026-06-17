@@ -359,6 +359,8 @@ else
         if (registrado)
         {
             Snackbar.Add(ViewModel.SuccessMessage ?? "Ciudadano registrado correctamente.", Severity.Success);
+            ViewModel.LimpiarFormulario();
+            _form?.ResetValidation();
             return;
         }
 
