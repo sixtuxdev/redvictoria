@@ -28,4 +28,16 @@ public class CiudadanosController : ControllerBase
 
         return response.IsSuccess ? Ok(response) : BadRequest(response);
     }
+
+    [HttpGet("validar-referido/{codigoReferido}")]
+    public async Task<IActionResult> ValidarCodigoReferido(
+        [FromRoute] string codigoReferido,
+        CancellationToken cancellationToken)
+    {
+        var response = await _ciudadanoApplication.ValidarCodigoReferidoAsync(
+            codigoReferido,
+            cancellationToken);
+
+        return response.IsSuccess ? Ok(response) : BadRequest(response);
+    }
 }

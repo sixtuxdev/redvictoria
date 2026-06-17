@@ -10,7 +10,7 @@ namespace RedVictoria.Application.Tests.Services;
 public class CiudadanoApplicationTests
 {
     [Fact]
-    public async Task RegistrarAsync_SinReferidoNiPassword_RegistraSinAcceso()
+    public async Task RegistrarAsync_ConReferidoNiPassword_RegistraSinAcceso()
     {
         var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: false));
         var application = CreateApplication(repository);
@@ -19,7 +19,7 @@ public class CiudadanoApplicationTests
 
         Assert.True(response.IsSuccess);
         Assert.False(response.Data!.TieneAcceso);
-        Assert.Null(repository.Command!.CodigoReferidoInvitacion);
+        Assert.Equal("RV-REF001", repository.Command!.CodigoReferidoInvitacion);
         Assert.Null(repository.Command.PasswordHash);
     }
 
@@ -156,6 +156,7 @@ public class CiudadanoApplicationTests
         var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: true));
         var application = CreateApplication(repository);
         var request = ValidRequest();
+        request.Email = null;
         request.Password = "123456";
         request.ConfirmPassword = "123456";
 
@@ -337,16 +338,52 @@ public class CiudadanoApplicationTests
     }
 
     [Fact]
-    public async Task RegistrarAsync_SinEmail_NoEnviaCorreo()
+    public async Task RegistrarAsync_SinEmail_RetornaError()
     {
         var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: false));
         var correoService = new CorreoServiceFake();
         var application = CreateApplication(repository, correoService);
+        var request = ValidRequest();
+        request.Email = null;
 
-        var response = await application.RegistrarAsync(ValidRequest());
+        var response = await application.RegistrarAsync(request);
+
+        Assert.False(response.IsSuccess);
+        Assert.Contains("Email es obligatorio.", response.Errors);
+        Assert.Null(repository.Command);
+        Assert.Null(correoService.Destinatario);
+    }
+
+    [Fact]
+    public async Task ValidarCodigoReferidoAsync_ConCodigoExistente_RetornaExiste()
+    {
+        var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: false))
+        {
+            ExisteCodigoReferido = true
+        };
+        var application = CreateApplication(repository);
+
+        var response = await application.ValidarCodigoReferidoAsync(" RV-REF001 ");
 
         Assert.True(response.IsSuccess);
-        Assert.Null(correoService.Destinatario);
+        Assert.True(response.Data!.Existe);
+        Assert.Equal("RV-REF001", response.Data.CodigoReferido);
+    }
+
+    [Fact]
+    public async Task ValidarCodigoReferidoAsync_ConCodigoInexistente_RetornaNoExiste()
+    {
+        var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: false))
+        {
+            ExisteCodigoReferido = false
+        };
+        var application = CreateApplication(repository);
+
+        var response = await application.ValidarCodigoReferidoAsync("NO-EXISTE");
+
+        Assert.True(response.IsSuccess);
+        Assert.False(response.Data!.Existe);
+        Assert.Equal("No puede continuar porque el referido ingresado no existe.", response.Message);
     }
 
     private static CiudadanoApplication CreateApplication(ICiudadanoRepository repository) =>
@@ -361,7 +398,21 @@ public class CiudadanoApplicationTests
         new()
         {
             NombresCompletos = "Juan Pérez Martínez",
-            Celular = "3001234567"
+            FechaNacimiento = new DateTime(1990, 5, 20),
+            Email = "ciudadano@example.com",
+            Celular = "3001234567",
+            TieneWhatsapp = true,
+            ParametroIdDondeVive = 8,
+            PuestoVotacion = "Colegio Central",
+            ParametroIdTipoIdentificacion = 1,
+            NumeroIdentificacion = "12345678",
+            Direccion = "Calle 1 # 2-3",
+            DepartamentoId = 5,
+            MunicipioId = 10,
+            ParametroIdGenero = 2,
+            ParametroIdSoy = 4,
+            ParametroIdVereda = 15,
+            CodigoReferido = "RV-REF001"
         };
 
     private static RegistroCiudadanoResult SuccessResult(
@@ -393,12 +444,21 @@ public class CiudadanoApplicationTests
 
         public RegistroCiudadanoCommand? Command { get; private set; }
 
+        public bool ExisteCodigoReferido { get; init; } = true;
+
         public Task<RegistroCiudadanoResult> RegistrarAsync(
             RegistroCiudadanoCommand command,
             CancellationToken cancellationToken = default)
         {
             Command = command;
             return Task.FromResult(_result);
+        }
+
+        public Task<bool> ExisteCodigoReferidoAsync(
+            string codigoReferido,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(ExisteCodigoReferido);
         }
     }
 
@@ -451,6 +511,13 @@ public class CiudadanoApplicationTests
             CancellationToken cancellationToken = default)
         {
             return Task.FromException<RegistroCiudadanoResult>(_exception);
+        }
+
+        public Task<bool> ExisteCodigoReferidoAsync(
+            string codigoReferido,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromException<bool>(_exception);
         }
     }
 }

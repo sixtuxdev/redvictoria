@@ -10,6 +10,47 @@ namespace RedVictoria.WebUI.Services;
 
 public sealed class CiudadanoService(HttpClient httpClient, IConfiguration configuration) : ICiudadanoService
 {
+    public async Task<OperationResultModel> ValidarCodigoReferidoAsync(
+        string? codigoReferido,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(codigoReferido))
+        {
+            return OperationResultModel.Failure("No puede continuar porque el referido ingresado no existe.");
+        }
+
+        var relativeEndpoint = $"{ApiEndpoints.ValidarCodigoReferido}/{Uri.EscapeDataString(codigoReferido.Trim())}";
+        var endpoint = ApiEndpointBuilder.Build(configuration, relativeEndpoint);
+
+        ApiResponseModel<ValidarCodigoReferidoResponseModel>? apiResponse;
+        try
+        {
+            apiResponse = await httpClient.GetFromJsonAsync<ApiResponseModel<ValidarCodigoReferidoResponseModel>>(
+                endpoint,
+                cancellationToken);
+        }
+        catch (HttpRequestException)
+        {
+            return OperationResultModel.Failure("No fue posible validar el referido ingresado.");
+        }
+        catch (JsonException)
+        {
+            return OperationResultModel.Failure("No fue posible interpretar la validacion del referido.");
+        }
+        catch (NotSupportedException)
+        {
+            return OperationResultModel.Failure("El servicio de validacion del referido no devolvio una respuesta JSON valida.");
+        }
+
+        if (apiResponse?.IsSuccess == true && apiResponse.Data?.Existe == true)
+        {
+            return OperationResultModel.Success(apiResponse.Message);
+        }
+
+        return OperationResultModel.Failure(
+            apiResponse?.Message ?? "No puede continuar porque el referido ingresado no existe.");
+    }
+
     public async Task<OperationResultModel> RegistrarAsync(
         RegistroCiudadanoRequestModel request,
         string? codigoReferido,

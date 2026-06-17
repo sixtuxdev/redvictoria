@@ -50,4 +50,18 @@ public class CiudadanoRepository : ICiudadanoRepository
 
         return await connection.QuerySingleAsync<RegistroCiudadanoResult>(databaseCommand);
     }
+
+    public async Task<bool> ExisteCodigoReferidoAsync(
+        string codigoReferido,
+        CancellationToken cancellationToken = default)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        var databaseCommand = new CommandDefinition(
+            "dbo.usp_Ciudadanos_ExisteCodigoReferido",
+            new { CodigoReferido = codigoReferido },
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
+
+        return await connection.QuerySingleAsync<bool>(databaseCommand);
+    }
 }

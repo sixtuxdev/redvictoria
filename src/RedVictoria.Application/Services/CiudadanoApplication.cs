@@ -30,7 +30,9 @@ public class CiudadanoApplication : ICiudadanoApplication
         string? codigoReferidoUrl = null,
         CancellationToken cancellationToken = default)
     {
-        var errors = Validate(request);
+        var codigoReferido = Normalize(codigoReferidoUrl)
+            ?? Normalize(request.CodigoReferido);
+        var errors = Validate(request, codigoReferido);
         if (errors.Count > 0)
         {
             return Response<RegistroCiudadanoResponse>.Failure(
@@ -59,8 +61,7 @@ public class CiudadanoApplication : ICiudadanoApplication
             ParametroIdSoy = request.ParametroIdSoy,
             ParametroIdVereda = request.ParametroIdVereda,
             Estado = request.Estado,
-            CodigoReferidoInvitacion = Normalize(codigoReferidoUrl)
-                ?? Normalize(request.CodigoReferido),
+            CodigoReferidoInvitacion = codigoReferido,
             PasswordHash = hasPassword ? _passwordHasher.Hash(request.Password!) : null
         };
 
@@ -118,7 +119,37 @@ public class CiudadanoApplication : ICiudadanoApplication
         return Response<RegistroCiudadanoResponse>.Success(response, message);
     }
 
-    private static List<string> Validate(RegistroCiudadanoRequest request)
+    public async Task<Response<ValidarCodigoReferidoResponse>> ValidarCodigoReferidoAsync(
+        string? codigoReferido,
+        CancellationToken cancellationToken = default)
+    {
+        var normalizedCode = Normalize(codigoReferido);
+        if (string.IsNullOrWhiteSpace(normalizedCode))
+        {
+            return Response<ValidarCodigoReferidoResponse>.Failure(
+                "CodigoReferido es obligatorio.");
+        }
+
+        var existe = await _ciudadanoRepository.ExisteCodigoReferidoAsync(
+            normalizedCode,
+            cancellationToken);
+
+        var response = new ValidarCodigoReferidoResponse
+        {
+            CodigoReferido = normalizedCode,
+            Existe = existe
+        };
+
+        return Response<ValidarCodigoReferidoResponse>.Success(
+            response,
+            existe
+                ? "El codigo de referido existe."
+                : "No puede continuar porque el referido ingresado no existe.");
+    }
+
+    private static List<string> Validate(
+        RegistroCiudadanoRequest request,
+        string? codigoReferido)
     {
         var errors = new List<string>();
 
@@ -127,12 +158,29 @@ public class CiudadanoApplication : ICiudadanoApplication
         else if (request.NombresCompletos.Trim().Length > 200)
             errors.Add("NombresCompletos no puede superar 200 caracteres.");
 
+        ValidateRequiredText(request.Celular, "Celular", errors);
+        ValidateRequiredText(request.Email, "Email", errors);
+        ValidateRequiredText(request.NumeroIdentificacion, "NumeroIdentificacion", errors);
+        ValidateRequiredText(request.Direccion, "Direccion", errors);
+        ValidateRequiredText(request.PuestoVotacion, "PuestoVotacion", errors);
+        ValidateRequiredText(codigoReferido, "CodigoReferido", errors);
+        ValidateRequiredValue(request.FechaNacimiento, "FechaNacimiento", errors);
+        ValidateRequiredValue(request.TieneWhatsapp, "TieneWhatsapp", errors);
+        ValidateRequiredValue(request.ParametroIdDondeVive, "ParametroIdDondeVive", errors);
+        ValidateRequiredValue(request.ParametroIdTipoIdentificacion, "ParametroIdTipoIdentificacion", errors);
+        ValidateRequiredValue(request.DepartamentoId, "DepartamentoId", errors);
+        ValidateRequiredValue(request.MunicipioId, "MunicipioId", errors);
+        ValidateRequiredValue(request.ParametroIdGenero, "ParametroIdGenero", errors);
+        ValidateRequiredValue(request.ParametroIdSoy, "ParametroIdSoy", errors);
+        ValidateRequiredValue(request.ParametroIdVereda, "ParametroIdVereda", errors);
+
         ValidateMaximumLength(request.Celular, 30, "Celular", errors);
         ValidateMaximumLength(request.Email, 150, "Email", errors);
         ValidateMaximumLength(request.NumeroIdentificacion, 50, "NumeroIdentificacion", errors);
         ValidateMaximumLength(request.Direccion, 250, "Direccion", errors);
         ValidateMaximumLength(request.LugarNacimiento, 150, "LugarNacimiento", errors);
         ValidateMaximumLength(request.PuestoVotacion, 150, "PuestoVotacion", errors);
+        ValidateMaximumLength(codigoReferido, 50, "CodigoReferido", errors);
 
         if (request.FechaNacimiento?.Date > DateTime.Today)
             errors.Add("FechaNacimiento no puede ser una fecha futura.");
@@ -142,6 +190,9 @@ public class CiudadanoApplication : ICiudadanoApplication
         {
             errors.Add("Email no tiene un formato válido.");
         }
+
+        if (request.TieneAcceso && string.IsNullOrWhiteSpace(request.Password))
+            errors.Add("Password es obligatorio cuando el ciudadano tendra acceso.");
 
         if (!string.IsNullOrWhiteSpace(request.Password))
         {
@@ -170,6 +221,24 @@ public class CiudadanoApplication : ICiudadanoApplication
     {
         if (value?.Trim().Length > maximumLength)
             errors.Add($"{fieldName} no puede superar {maximumLength} caracteres.");
+    }
+
+    private static void ValidateRequiredText(
+        string? value,
+        string fieldName,
+        ICollection<string> errors)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            errors.Add($"{fieldName} es obligatorio.");
+    }
+
+    private static void ValidateRequiredValue<T>(
+        T? value,
+        string fieldName,
+        ICollection<string> errors)
+    {
+        if (value is null)
+            errors.Add($"{fieldName} es obligatorio.");
     }
 
     private static string? Normalize(string? value) =>

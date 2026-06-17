@@ -9,4 +9,8 @@ public interface ICiudadanoApplication
         RegistroCiudadanoRequest request,
         string? codigoReferidoUrl = null,
         CancellationToken cancellationToken = default);
+
+    Task<Response<ValidarCodigoReferidoResponse>> ValidarCodigoReferidoAsync(
+        string? codigoReferido,
+        CancellationToken cancellationToken = default);
 }

@@ -16,6 +16,7 @@ public sealed partial class RegistroCiudadanoViewModel(
 {
     private const int PasswordMinimumLength = 6;
     private bool _isInitialized;
+    private string? _initializedCodigoReferido;
 
     public RegistroCiudadanoRequestModel Request { get; } = new();
 
@@ -37,6 +38,10 @@ public sealed partial class RegistroCiudadanoViewModel(
 
     public string? SuccessMessage { get; private set; }
 
+    public bool IsCodigoReferidoValido { get; private set; }
+
+    public bool BloquearRegistroPorReferido => !IsCodigoReferidoValido;
+
     public bool HasParametroOptions =>
         Parametros.DondeVive.Count > 0
         || Parametros.TiposIdentificacion.Count > 0
@@ -53,7 +58,10 @@ public sealed partial class RegistroCiudadanoViewModel(
         && Parametros.DondeVive.Count > 0
         && Parametros.Veredas.Count > 0;
 
-    public bool CanSubmit => AreRequiredParametrosLoaded && !IsSubmitting;
+    public bool CanSubmit =>
+        AreRequiredParametrosLoaded
+        && IsCodigoReferidoValido
+        && !IsSubmitting;
 
     public bool PuedeSeleccionarCiudad =>
         Request.DepartamentoId.HasValue
@@ -67,22 +75,32 @@ public sealed partial class RegistroCiudadanoViewModel(
         Request.CodigoReferido = CodigoReferido;
         Request.Estado = true;
 
-        if (_isInitialized)
+        if (_isInitialized
+            && string.Equals(_initializedCodigoReferido, CodigoReferido, StringComparison.Ordinal))
         {
             return;
         }
 
         IsLoading = true;
         ErrorMessage = null;
+        IsCodigoReferidoValido = false;
         Departamentos = [];
         Ciudades = [];
 
         try
         {
+            var referidoTask = ciudadanoService.ValidarCodigoReferidoAsync(CodigoReferido, cancellationToken);
             var parametrosTask = parametroService.ObtenerParametrosRegistroCiudadanoAsync(cancellationToken);
             var departamentosTask = departamentoService.ObtenerDepartamentosAsync(cancellationToken);
 
-            await Task.WhenAll(parametrosTask, departamentosTask);
+            await Task.WhenAll(referidoTask, parametrosTask, departamentosTask);
+
+            var referidoResult = referidoTask.Result;
+            IsCodigoReferidoValido = referidoResult.IsSuccess;
+            if (!IsCodigoReferidoValido)
+            {
+                ErrorMessage = "No puede continuar porque el referido ingresado no existe.";
+            }
 
             Parametros = parametrosTask.Result;
             Departamentos = departamentosTask.Result;
@@ -100,6 +118,7 @@ public sealed partial class RegistroCiudadanoViewModel(
             }
 
             _isInitialized = true;
+            _initializedCodigoReferido = CodigoReferido;
         }
         catch
         {
@@ -165,6 +184,12 @@ public sealed partial class RegistroCiudadanoViewModel(
             return false;
         }
 
+        if (!IsCodigoReferidoValido)
+        {
+            ErrorMessage = "No puede continuar porque el referido ingresado no existe.";
+            return false;
+        }
+
         var errors = Validate();
         if (errors.Count > 0)
         {
@@ -226,6 +251,19 @@ public sealed partial class RegistroCiudadanoViewModel(
             errors.Add("Fecha de nacimiento no puede ser una fecha futura.");
         }
 
+        ValidateRequiredSelect(Request.DepartamentoId, "Departamento de nacimiento", errors);
+        ValidateRequiredSelect(Request.MunicipioId, "Ciudad de nacimiento", errors);
+        ValidateRequiredSelect(Request.ParametroIdTipoIdentificacion, "Tipo de identificacion", errors);
+        ValidateRequiredSelect(Request.ParametroIdGenero, "Genero", errors);
+        ValidateRequiredSelect(Request.ParametroIdSoy, "Soy", errors);
+        ValidateRequiredSelect(Request.ParametroIdDondeVive, "Donde vive", errors);
+        ValidateRequiredSelect(Request.ParametroIdVereda, "Vereda", errors);
+
+        if (!Request.TieneWhatsapp.HasValue)
+        {
+            errors.Add("Tiene WhatsApp es obligatorio.");
+        }
+
         if (!string.IsNullOrWhiteSpace(Request.Celular)
             && !PhoneRegex().IsMatch(Request.Celular.Trim()))
         {
@@ -259,6 +297,7 @@ public sealed partial class RegistroCiudadanoViewModel(
     {
         if (string.IsNullOrWhiteSpace(value))
         {
+            yield return "Email es obligatorio.";
             yield break;
         }
 
@@ -277,6 +316,7 @@ public sealed partial class RegistroCiudadanoViewModel(
     {
         if (string.IsNullOrWhiteSpace(value))
         {
+            yield return "Celular es obligatorio.";
             yield break;
         }
 
@@ -295,6 +335,7 @@ public sealed partial class RegistroCiudadanoViewModel(
     {
         if (string.IsNullOrWhiteSpace(value))
         {
+            yield return "Numero de identificacion es obligatorio.";
             yield break;
         }
 
@@ -314,6 +355,10 @@ public sealed partial class RegistroCiudadanoViewModel(
         if (value?.Date > DateTime.Today)
         {
             yield return "Fecha de nacimiento no puede ser una fecha futura.";
+        }
+        else if (!value.HasValue)
+        {
+            yield return "Fecha de nacimiento es obligatoria.";
         }
     }
 
@@ -432,6 +477,17 @@ public sealed partial class RegistroCiudadanoViewModel(
         return string.IsNullOrWhiteSpace(currentError)
             ? newError
             : $"{currentError} {newError}";
+    }
+
+    private static void ValidateRequiredSelect(
+        int? value,
+        string fieldName,
+        ICollection<string> errors)
+    {
+        if (!value.HasValue || value.Value <= 0)
+        {
+            errors.Add($"{fieldName} es obligatorio.");
+        }
     }
 
     [GeneratedRegex(@"^\+?[0-9\s-]{7,30}$")]

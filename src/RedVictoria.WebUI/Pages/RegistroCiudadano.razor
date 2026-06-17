@@ -2,7 +2,7 @@
 @page "/registro-ciudadano/{CodigoReferido}"
 @layout RegistroCiudadanoLayout
 @inject RegistroCiudadanoViewModel ViewModel
-@inject ISnackbar Snackbar
+@inject IJSRuntime JSRuntime
 @inject NavigationManager Navigation
 
 <PageTitle>Registro ciudadano</PageTitle>
@@ -38,40 +38,44 @@ else
                                 <MudDatePicker @bind-Date="ViewModel.Request.FechaNacimiento"
                                                Label="Fecha de nacimiento"
                                                Variant="Variant.Outlined"
+                                               Required="true"
+                                               RequiredError="Fecha de nacimiento es obligatoria."
                                                MaxDate="@DateTime.Today"
                                                Validation="@(new Func<DateTime?, IEnumerable<string>>(ViewModel.ValidateFechaNacimiento))" />
                             </MudItem>
 
                             <MudItem xs="12" sm="6">
-                                <MudSelect T="int?"
-                                           Label="Departamento de Nacimiento"
-                                           Variant="Variant.Outlined"
-                                           Clearable="true"
-                                           Value="@ViewModel.Request.DepartamentoId"
-                                           ValueChanged="@ViewModel.OnDepartamentoChangedAsync"
-                                           Disabled="@ViewModel.IsLoading">
-                                    @foreach (var departamento in ViewModel.Departamentos)
-                                    {
-                                        <MudSelectItem T="int?" Value="@((int?)departamento.DepartamentoId)">
-                                            @departamento.DepartamentoNombre
-                                        </MudSelectItem>
-                                    }
-                                </MudSelect>
+                                <MudAutocomplete T="int?"
+                                                 Label="Departamento de Nacimiento"
+                                                 Variant="Variant.Outlined"
+                                                 Clearable="true"
+                                                 Required="true"
+                                                 RequiredError="Departamento de nacimiento es obligatorio."
+                                                 Value="@ViewModel.Request.DepartamentoId"
+                                                 ValueChanged="@ViewModel.OnDepartamentoChangedAsync"
+                                                 Disabled="@ViewModel.IsLoading"
+                                                 SearchFunc="SearchDepartamentosAsync"
+                                                 ToStringFunc="GetDepartamentoText"
+                                                 MaxItems="null"
+                                                 MinCharacters="0"
+                                                 ResetValueOnEmptyText="true"
+                                                 Strict="false" />
                             </MudItem>
                             <MudItem xs="12" sm="6">
-                                <MudSelect T="int?"
-                                           Label="Ciudad de Nacimiento"
-                                           Variant="Variant.Outlined"
-                                           Clearable="true"
-                                           Disabled="@(!ViewModel.PuedeSeleccionarCiudad)"
-                                           @bind-Value="ViewModel.Request.MunicipioId">
-                                    @foreach (var ciudad in ViewModel.Ciudades)
-                                    {
-                                        <MudSelectItem T="int?" Value="@((int?)ciudad.CiudadId)">
-                                            @ciudad.CiudadNombre
-                                        </MudSelectItem>
-                                    }
-                                </MudSelect>
+                                <MudAutocomplete T="int?"
+                                                 Label="Ciudad de Nacimiento"
+                                                 Variant="Variant.Outlined"
+                                                 Clearable="true"
+                                                 Required="true"
+                                                 RequiredError="Ciudad de nacimiento es obligatoria."
+                                                 Disabled="@(!ViewModel.PuedeSeleccionarCiudad)"
+                                                 @bind-Value="ViewModel.Request.MunicipioId"
+                                                 SearchFunc="SearchCiudadesAsync"
+                                                 ToStringFunc="GetCiudadText"
+                                                 MaxItems="null"
+                                                 MinCharacters="0"
+                                                 ResetValueOnEmptyText="true"
+                                                 Strict="false" />
                             </MudItem>
 
                             @if (ViewModel.IsLoadingCiudades)
@@ -91,7 +95,9 @@ else
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdTipoIdentificacion"
                                            Label="Tipo de identificacion"
                                            Variant="Variant.Outlined"
-                                           Clearable="true">
+                                           Clearable="true"
+                                           Required="true"
+                                           RequiredError="Tipo de identificacion es obligatorio.">
                                     @foreach (var opcion in ViewModel.Parametros.TiposIdentificacion)
                                     {
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
@@ -103,6 +109,7 @@ else
                                 <MudTextField @bind-Value="ViewModel.Request.NumeroIdentificacion"
                                               Label="Numero de identificacion"
                                               Variant="Variant.Outlined"
+                                              Required="true"
                                               Immediate="true"
                                               MaxLength="50"
                                               Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateNumeroIdentificacion))" />
@@ -124,7 +131,9 @@ else
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdGenero"
                                            Label="Genero"
                                            Variant="Variant.Outlined"
-                                           Clearable="true">
+                                           Clearable="true"
+                                           Required="true"
+                                           RequiredError="Genero es obligatorio.">
                                     @foreach (var opcion in ViewModel.Parametros.Generos)
                                     {
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
@@ -136,7 +145,9 @@ else
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdSoy"
                                            Label="Soy"
                                            Variant="Variant.Outlined"
-                                           Clearable="true">
+                                           Clearable="true"
+                                           Required="true"
+                                           RequiredError="Soy es obligatorio.">
                                     @foreach (var opcion in ViewModel.Parametros.Soy)
                                     {
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
@@ -157,6 +168,7 @@ else
                             <MudTextField @bind-Value="ViewModel.Request.Email"
                                           Label="Email"
                                           Variant="Variant.Outlined"
+                                          Required="true"
                                           Immediate="true"
                                           MaxLength="150"
                                           Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateEmail))" />
@@ -164,6 +176,7 @@ else
                             <MudTextField @bind-Value="ViewModel.Request.Celular"
                                           Label="Celular"
                                           Variant="Variant.Outlined"
+                                          Required="true"
                                           Immediate="true"
                                           MaxLength="30"
                                           Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateCelular))" />
@@ -171,7 +184,9 @@ else
                             <MudSelect T="bool?" @bind-Value="ViewModel.Request.TieneWhatsapp"
                                        Label="Tiene WhatsApp"
                                        Variant="Variant.Outlined"
-                                       Clearable="true">
+                                       Clearable="true"
+                                       Required="true"
+                                       RequiredError="Tiene WhatsApp es obligatorio.">
                                 <MudSelectItem T="bool?" Value="true">Si</MudSelectItem>
                                 <MudSelectItem T="bool?" Value="false">No</MudSelectItem>
                             </MudSelect>
@@ -179,7 +194,9 @@ else
                             <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdDondeVive"
                                        Label="Donde vive"
                                        Variant="Variant.Outlined"
-                                       Clearable="true">
+                                       Clearable="true"
+                                       Required="true"
+                                       RequiredError="Donde vive es obligatorio.">
                                 @foreach (var opcion in ViewModel.Parametros.DondeVive)
                                 {
                                     <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
@@ -189,22 +206,27 @@ else
                             <MudTextField @bind-Value="ViewModel.Request.Direccion"
                                           Label="Direccion"
                                           Variant="Variant.Outlined"
+                                          Required="true"
                                           Immediate="true"
                                           MaxLength="250" />       
                                           
-                            <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdVereda"
-                                       Label="Vereda"
-                                       Variant="Variant.Outlined"
-                                       Clearable="true">
-                                @foreach (var opcion in ViewModel.Parametros.Veredas)
-                                {
-                                    <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
-                                }
-                            </MudSelect>
+                            <MudAutocomplete T="int?" @bind-Value="ViewModel.Request.ParametroIdVereda"
+                                             Label="Vereda"
+                                             Variant="Variant.Outlined"
+                                             Clearable="true"
+                                             Required="true"
+                                             RequiredError="Vereda es obligatoria."
+                                             SearchFunc="SearchVeredasAsync"
+                                             ToStringFunc="GetVeredaText"
+                                             MaxItems="null"
+                                             MinCharacters="0"
+                                             ResetValueOnEmptyText="true"
+                                             Strict="false" />
 
                             <MudTextField @bind-Value="ViewModel.Request.PuestoVotacion"
                                           Label="Puesto de votacion"
                                           Variant="Variant.Outlined"
+                                          Required="true"
                                           Immediate="true"
                                           MaxLength="150" />
                         </MudStack>
@@ -238,6 +260,7 @@ else
                                                   Label="Contrasena"
                                                   Variant="Variant.Outlined"
                                                   InputType="InputType.Password"
+                                                  Required="@ViewModel.Request.TieneAcceso"
                                                   Immediate="true"
                                                   Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidatePasswordField))" />
                                 </MudItem>
@@ -246,6 +269,7 @@ else
                                                   Label="Confirmar contrasena"
                                                   Variant="Variant.Outlined"
                                                   InputType="InputType.Password"
+                                                  Required="@ViewModel.Request.TieneAcceso"
                                                   Immediate="true"
                                                   Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateConfirmPasswordField))" />
                                 </MudItem>
@@ -277,13 +301,75 @@ else
 
 @code {
     private MudForm? _form;
+    private bool _showReferidoInvalidoAlert;
 
     [Parameter]
     public string? CodigoReferido { get; set; }
 
+    private Task<IEnumerable<int?>> SearchDepartamentosAsync(string? value, CancellationToken cancellationToken)
+    {
+        var items = ViewModel.Departamentos
+            .Where(departamento => Matches(value, departamento.DepartamentoNombre, departamento.Descripcion))
+            .Select(departamento => (int?)departamento.DepartamentoId);
+
+        return Task.FromResult(items);
+    }
+
+    private Task<IEnumerable<int?>> SearchCiudadesAsync(string? value, CancellationToken cancellationToken)
+    {
+        var items = ViewModel.Ciudades
+            .Where(ciudad => Matches(value, ciudad.CiudadNombre, ciudad.Descripcion))
+            .Select(ciudad => (int?)ciudad.CiudadId);
+
+        return Task.FromResult(items);
+    }
+
+    private Task<IEnumerable<int?>> SearchVeredasAsync(string? value, CancellationToken cancellationToken)
+    {
+        var items = ViewModel.Parametros.Veredas
+            .Where(opcion => Matches(value, opcion.Descripcion))
+            .Select(opcion => (int?)opcion.ParametroId);
+
+        return Task.FromResult(items);
+    }
+
+    private string GetDepartamentoText(int? departamentoId) =>
+        ViewModel.Departamentos.FirstOrDefault(departamento => departamento.DepartamentoId == departamentoId)?.DepartamentoNombre
+        ?? string.Empty;
+
+    private string GetCiudadText(int? ciudadId) =>
+        ViewModel.Ciudades.FirstOrDefault(ciudad => ciudad.CiudadId == ciudadId)?.CiudadNombre
+        ?? string.Empty;
+
+    private string GetVeredaText(int? parametroId) =>
+        ViewModel.Parametros.Veredas.FirstOrDefault(opcion => opcion.ParametroId == parametroId)?.Descripcion
+        ?? string.Empty;
+
+    private static bool Matches(string? search, params string?[] values) =>
+        string.IsNullOrWhiteSpace(search)
+        || values.Any(value => !string.IsNullOrWhiteSpace(value)
+            && value.Contains(search, StringComparison.OrdinalIgnoreCase));
+
     protected override async Task OnParametersSetAsync()
     {
         await ViewModel.InitializeAsync(ResolveCodigoReferido());
+
+        if (ViewModel.BloquearRegistroPorReferido)
+        {
+            _showReferidoInvalidoAlert = true;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_showReferidoInvalidoAlert)
+        {
+            _showReferidoInvalidoAlert = false;
+            await ShowAlertAsync(
+                "warning",
+                "Referido invalido",
+                "No puede continuar porque el referido ingresado no existe.");
+        }
     }
 
     private string? ResolveCodigoReferido()
@@ -329,20 +415,41 @@ else
             await _form.Validate();
             if (!_form.IsValid)
             {
-                Snackbar.Add("Revisa los datos del formulario antes de guardar.", Severity.Warning);
+                await ShowAlertAsync(
+                    "warning",
+                    "Formulario incompleto",
+                    "Revisa los datos del formulario antes de guardar.");
                 return;
             }
+        }
+
+        if (ViewModel.BloquearRegistroPorReferido)
+        {
+            await ShowAlertAsync(
+                "warning",
+                "Referido invalido",
+                "No puede continuar porque el referido ingresado no existe.");
+            return;
         }
 
         var registrado = await ViewModel.RegistrarAsync();
         if (registrado)
         {
-            Snackbar.Add(ViewModel.SuccessMessage ?? "Ciudadano registrado correctamente.", Severity.Success);
+            await ShowAlertAsync(
+                "success",
+                "Registro exitoso",
+                ViewModel.SuccessMessage ?? "Ciudadano registrado correctamente.");
             ViewModel.LimpiarFormulario();
             _form?.ResetValidation();
             return;
         }
 
-        Snackbar.Add(ViewModel.ErrorMessage ?? "No fue posible registrar el ciudadano.", Severity.Error);
+        await ShowAlertAsync(
+            "error",
+            "No fue posible registrar",
+            ViewModel.ErrorMessage ?? "No fue posible registrar el ciudadano.");
     }
+
+    private ValueTask ShowAlertAsync(string icon, string title, string text) =>
+        JSRuntime.InvokeVoidAsync("RedVictoriaSweetAlert.fire", icon, title, text);
 }

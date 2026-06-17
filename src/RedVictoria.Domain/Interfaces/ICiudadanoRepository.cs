@@ -7,4 +7,8 @@ public interface ICiudadanoRepository
     Task<RegistroCiudadanoResult> RegistrarAsync(
         RegistroCiudadanoCommand command,
         CancellationToken cancellationToken = default);
+
+    Task<bool> ExisteCodigoReferidoAsync(
+        string codigoReferido,
+        CancellationToken cancellationToken = default);
 }
