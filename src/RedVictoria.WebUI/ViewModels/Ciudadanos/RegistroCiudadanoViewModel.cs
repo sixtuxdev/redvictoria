@@ -276,6 +276,19 @@ public sealed partial class RegistroCiudadanoViewModel(
             errors.Add("Celular solo debe contener numeros y puede iniciar con +.");
         }
 
+        if (!string.IsNullOrWhiteSpace(Request.Celular2))
+        {
+            if (!PhoneRegex().IsMatch(Request.Celular2.Trim()))
+            {
+                errors.Add("Celular 2 solo debe contener numeros y puede iniciar con +.");
+            }
+
+            if (!Request.TieneWhatsapp2.HasValue)
+            {
+                errors.Add("Tiene WhatsApp del celular 2 es obligatorio cuando se ingresa Celular 2.");
+            }
+        }
+
         if (!string.IsNullOrWhiteSpace(Request.NumeroIdentificacion)
             && !DocumentRegex().IsMatch(Request.NumeroIdentificacion.Trim()))
         {
@@ -334,6 +347,34 @@ public sealed partial class RegistroCiudadanoViewModel(
         if (!PhoneRegex().IsMatch(value.Trim()))
         {
             yield return "Celular solo debe contener numeros y puede iniciar con +.";
+        }
+    }
+
+    public IEnumerable<string> ValidateCelular2(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            yield break;
+        }
+
+        if (value.Trim().Length > 30)
+        {
+            yield return "Celular 2 no puede superar 30 caracteres.";
+        }
+
+        if (!PhoneRegex().IsMatch(value.Trim()))
+        {
+            yield return "Celular 2 solo debe contener numeros y puede iniciar con +.";
+        }
+    }
+
+    public void OnCelular2Changed(string? value)
+    {
+        Request.Celular2 = value;
+
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            Request.TieneWhatsapp2 = null;
         }
     }
 
@@ -417,6 +458,8 @@ public sealed partial class RegistroCiudadanoViewModel(
         Request.Email = null;
         Request.Celular = null;
         Request.TieneWhatsapp = null;
+        Request.Celular2 = null;
+        Request.TieneWhatsapp2 = null;
         Request.ParametroIdDondeVive = null;
         Request.ParametroIdVereda = null;
         Request.PuestoVotacion = null;

@@ -9,6 +9,8 @@ public sealed class RegistroCiudadanoResponseModel
     public string? Email { get; init; }
     public string? Celular { get; init; }
     public bool? TieneWhatsapp { get; init; }
+    public string? Celular2 { get; init; }
+    public bool? TieneWhatsapp2 { get; init; }
     public int? ParametroIdDondeVive { get; init; }
     public string? PuestoVotacion { get; init; }
     public int? ParametroIdTipoIdentificacion { get; init; }

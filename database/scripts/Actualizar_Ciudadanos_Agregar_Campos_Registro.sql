@@ -39,6 +39,20 @@ BEGIN TRY
         ALTER TABLE dbo.Ciudadanos
             ALTER COLUMN TieneWhatsapp BIT NULL;
 
+    IF COL_LENGTH(N'dbo.Ciudadanos', N'Celular2') IS NULL
+        ALTER TABLE dbo.Ciudadanos
+            ADD Celular2 NVARCHAR(30) NULL;
+    ELSE
+        ALTER TABLE dbo.Ciudadanos
+            ALTER COLUMN Celular2 NVARCHAR(30) NULL;
+
+    IF COL_LENGTH(N'dbo.Ciudadanos', N'TieneWhatsapp2') IS NULL
+        ALTER TABLE dbo.Ciudadanos
+            ADD TieneWhatsapp2 BIT NULL;
+    ELSE
+        ALTER TABLE dbo.Ciudadanos
+            ALTER COLUMN TieneWhatsapp2 BIT NULL;
+
     IF COL_LENGTH(N'dbo.Ciudadanos', N'ParametroIdDondeVive') IS NULL
         ALTER TABLE dbo.Ciudadanos
             ADD ParametroIdDondeVive INT NULL;

@@ -4,9 +4,11 @@ public class RegistroCiudadanoCommand
 {
     public string NombresCompletos { get; init; } = string.Empty;
     public string? Celular { get; init; }
+    public string? Celular2 { get; init; }
     public DateTime? FechaNacimiento { get; init; }
     public string? LugarNacimiento { get; init; }
     public bool? TieneWhatsapp { get; init; }
+    public bool? TieneWhatsapp2 { get; init; }
     public int? ParametroIdDondeVive { get; init; }
     public string? PuestoVotacion { get; init; }
     public string? Email { get; init; }

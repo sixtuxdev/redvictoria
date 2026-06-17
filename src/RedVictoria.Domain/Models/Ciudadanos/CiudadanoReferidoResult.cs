@@ -6,6 +6,8 @@ public class CiudadanoReferidoResult
     public string NombresCompletos { get; init; } = string.Empty;
     public string? Email { get; init; }
     public string? Celular { get; init; }
+    public string? Celular2 { get; init; }
+    public bool? TieneWhatsapp2 { get; init; }
     public string? NumeroIdentificacion { get; init; }
     public string CodigoReferido { get; init; } = string.Empty;
     public int? CiudadanoReferidorId { get; init; }

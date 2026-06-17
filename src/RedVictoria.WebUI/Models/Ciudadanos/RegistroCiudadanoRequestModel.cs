@@ -26,6 +26,11 @@ public sealed class RegistroCiudadanoRequestModel
     [Required(ErrorMessage = "Tiene WhatsApp es obligatorio.")]
     public bool? TieneWhatsapp { get; set; }
 
+    [MaxLength(30, ErrorMessage = "Celular 2 no puede superar 30 caracteres.")]
+    public string? Celular2 { get; set; }
+
+    public bool? TieneWhatsapp2 { get; set; }
+
     [Required(ErrorMessage = "Donde vive es obligatorio.")]
     public int? ParametroIdDondeVive { get; set; }
 

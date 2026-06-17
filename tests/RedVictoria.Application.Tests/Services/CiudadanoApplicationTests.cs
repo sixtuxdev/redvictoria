@@ -204,6 +204,8 @@ public class CiudadanoApplicationTests
             LugarNacimiento = "Bogota",
             Celular = "3001234567",
             TieneWhatsapp = true,
+            Celular2 = "3107654321",
+            TieneWhatsapp2 = false,
             ParametroIdDondeVive = 8,
             PuestoVotacion = "Colegio Central",
             ParametroIdSoy = 4,
@@ -215,6 +217,8 @@ public class CiudadanoApplicationTests
         var request = ValidRequest();
         request.FechaNacimiento = fechaNacimiento;
         request.LugarNacimiento = " Bogota ";
+        request.Celular2 = " 3107654321 ";
+        request.TieneWhatsapp2 = false;
         request.TieneWhatsapp = true;
         request.ParametroIdDondeVive = 8;
         request.PuestoVotacion = " Colegio Central ";
@@ -229,6 +233,8 @@ public class CiudadanoApplicationTests
         Assert.Equal("Bogota", repository.Command.LugarNacimiento);
         Assert.Equal("3001234567", repository.Command.Celular);
         Assert.True(repository.Command.TieneWhatsapp);
+        Assert.Equal("3107654321", repository.Command.Celular2);
+        Assert.False(repository.Command.TieneWhatsapp2);
         Assert.Equal(8, repository.Command.ParametroIdDondeVive);
         Assert.Equal("Colegio Central", repository.Command.PuestoVotacion);
         Assert.Equal(4, repository.Command.ParametroIdSoy);
@@ -238,6 +244,8 @@ public class CiudadanoApplicationTests
         Assert.Equal("Bogota", response.Data.LugarNacimiento);
         Assert.Equal("3001234567", response.Data.Celular);
         Assert.True(response.Data.TieneWhatsapp);
+        Assert.Equal("3107654321", response.Data.Celular2);
+        Assert.False(response.Data.TieneWhatsapp2);
         Assert.Equal(8, response.Data.ParametroIdDondeVive);
         Assert.Equal("Colegio Central", response.Data.PuestoVotacion);
         Assert.Equal(4, response.Data.ParametroIdSoy);
@@ -355,6 +363,42 @@ public class CiudadanoApplicationTests
     }
 
     [Fact]
+    public async Task RegistrarAsync_SinCelular2_RegistraCelularPrincipalSinWhatsapp2()
+    {
+        var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: false));
+        var application = CreateApplication(repository);
+        var request = ValidRequest();
+        request.Celular = "3001234567";
+        request.TieneWhatsapp = true;
+        request.Celular2 = null;
+        request.TieneWhatsapp2 = true;
+
+        var response = await application.RegistrarAsync(request);
+
+        Assert.True(response.IsSuccess);
+        Assert.Equal("3001234567", repository.Command!.Celular);
+        Assert.True(repository.Command.TieneWhatsapp);
+        Assert.Null(repository.Command.Celular2);
+        Assert.Null(repository.Command.TieneWhatsapp2);
+    }
+
+    [Fact]
+    public async Task RegistrarAsync_ConCelular2SinTieneWhatsapp2_RetornaError()
+    {
+        var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: false));
+        var application = CreateApplication(repository);
+        var request = ValidRequest();
+        request.Celular2 = "3107654321";
+        request.TieneWhatsapp2 = null;
+
+        var response = await application.RegistrarAsync(request);
+
+        Assert.False(response.IsSuccess);
+        Assert.Contains("TieneWhatsapp2 es obligatorio cuando se ingresa Celular2.", response.Errors);
+        Assert.Null(repository.Command);
+    }
+
+    [Fact]
     public async Task ValidarCodigoReferidoAsync_ConCodigoExistente_RetornaExiste()
     {
         var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: false))
@@ -458,6 +502,8 @@ public class CiudadanoApplicationTests
             Email = "ciudadano@example.com",
             Celular = "3001234567",
             TieneWhatsapp = true,
+            Celular2 = null,
+            TieneWhatsapp2 = null,
             ParametroIdDondeVive = 8,
             PuestoVotacion = "Colegio Central",
             ParametroIdTipoIdentificacion = 1,

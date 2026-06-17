@@ -137,6 +137,7 @@ public sealed class DashboardViewModel(
         return Contains(item.NombresCompletos, search)
             || Contains(item.NumeroIdentificacion, search)
             || Contains(item.Celular, search)
+            || Contains(item.Celular2, search)
             || Contains(item.Email, search)
             || Contains(item.CodigoReferido, search)
             || Contains(item.Referidor, search)

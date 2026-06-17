@@ -9,6 +9,8 @@ public class Ciudadano
     public string? Email { get; set; }
     public string? Celular { get; set; }
     public bool? TieneWhatsapp { get; set; }
+    public string? Celular2 { get; set; }
+    public bool? TieneWhatsapp2 { get; set; }
     public int? ParametroIdDondeVive { get; set; }
     public string? PuestoVotacion { get; set; }
     public int? ParametroIdTipoIdentificacion { get; set; }

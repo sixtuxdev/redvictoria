@@ -26,9 +26,11 @@ public class CiudadanoRepository : ICiudadanoRepository
             {
                 command.NombresCompletos,
                 command.Celular,
+                command.Celular2,
                 command.FechaNacimiento,
                 command.LugarNacimiento,
                 command.TieneWhatsapp,
+                command.TieneWhatsapp2,
                 command.ParametroIdDondeVive,
                 command.PuestoVotacion,
                 command.Email,

@@ -45,9 +45,13 @@ public class CiudadanoApplication : ICiudadanoApplication
         {
             NombresCompletos = request.NombresCompletos.Trim(),
             Celular = Normalize(request.Celular),
+            Celular2 = Normalize(request.Celular2),
             FechaNacimiento = request.FechaNacimiento,
             LugarNacimiento = Normalize(request.LugarNacimiento),
             TieneWhatsapp = request.TieneWhatsapp,
+            TieneWhatsapp2 = string.IsNullOrWhiteSpace(request.Celular2)
+                ? null
+                : request.TieneWhatsapp2,
             ParametroIdDondeVive = request.ParametroIdDondeVive,
             PuestoVotacion = Normalize(request.PuestoVotacion),
             Email = Normalize(request.Email)?.ToLowerInvariant(),
@@ -80,6 +84,8 @@ public class CiudadanoApplication : ICiudadanoApplication
                 Email = result.Email,
                 Celular = result.Celular,
                 TieneWhatsapp = result.TieneWhatsapp,
+                Celular2 = result.Celular2,
+                TieneWhatsapp2 = result.TieneWhatsapp2,
                 ParametroIdDondeVive = result.ParametroIdDondeVive,
                 PuestoVotacion = result.PuestoVotacion,
                 ParametroIdTipoIdentificacion = result.ParametroIdTipoIdentificacion,
@@ -223,6 +229,7 @@ public class CiudadanoApplication : ICiudadanoApplication
         ValidateRequiredValue(request.ParametroIdVereda, "ParametroIdVereda", errors);
 
         ValidateMaximumLength(request.Celular, 30, "Celular", errors);
+        ValidateMaximumLength(request.Celular2, 30, "Celular2", errors);
         ValidateMaximumLength(request.Email, 150, "Email", errors);
         ValidateMaximumLength(request.NumeroIdentificacion, 50, "NumeroIdentificacion", errors);
         ValidateMaximumLength(request.Direccion, 250, "Direccion", errors);
@@ -232,6 +239,12 @@ public class CiudadanoApplication : ICiudadanoApplication
 
         if (request.FechaNacimiento?.Date > DateTime.Today)
             errors.Add("FechaNacimiento no puede ser una fecha futura.");
+
+        if (!string.IsNullOrWhiteSpace(request.Celular2)
+            && !request.TieneWhatsapp2.HasValue)
+        {
+            errors.Add("TieneWhatsapp2 es obligatorio cuando se ingresa Celular2.");
+        }
 
         if (!string.IsNullOrWhiteSpace(request.Email)
             && !new EmailAddressAttribute().IsValid(request.Email.Trim()))
@@ -299,6 +312,8 @@ public class CiudadanoApplication : ICiudadanoApplication
             NombresCompletos = result.NombresCompletos,
             Email = result.Email,
             Celular = result.Celular,
+            Celular2 = result.Celular2,
+            TieneWhatsapp2 = result.TieneWhatsapp2,
             NumeroIdentificacion = result.NumeroIdentificacion,
             CodigoReferido = result.CodigoReferido,
             CiudadanoReferidorId = result.CiudadanoReferidorId,

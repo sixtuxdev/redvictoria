@@ -164,7 +164,7 @@
 
                             <MudTextField @bind-Value="ViewModel.Request.Celular"
                                           Disabled="@ViewModel.IsBusy"
-                                          Label="Celular"
+                                          Label="Celular 1"
                                           Variant="Variant.Outlined"
                                           Required="true"
                                           Immediate="true"
@@ -173,11 +173,30 @@
 
                             <MudSelect T="bool?" @bind-Value="ViewModel.Request.TieneWhatsapp"
                                        Disabled="@ViewModel.IsBusy"
-                                       Label="Tiene WhatsApp"
+                                       Label="Celular 1 tiene WhatsApp"
                                        Variant="Variant.Outlined"
                                        Clearable="true"
                                        Required="true"
-                                       RequiredError="Tiene WhatsApp es obligatorio.">
+                                       RequiredError="Indica si el celular 1 tiene WhatsApp.">
+                                <MudSelectItem T="bool?" Value="true">Si</MudSelectItem>
+                                <MudSelectItem T="bool?" Value="false">No</MudSelectItem>
+                            </MudSelect>
+
+                            <MudTextField T="string"
+                                          Value="@ViewModel.Request.Celular2"
+                                          ValueChanged="@((string? value) => ViewModel.OnCelular2Changed(value))"
+                                          Disabled="@ViewModel.IsBusy"
+                                          Label="Celular 2"
+                                          Variant="Variant.Outlined"
+                                          Immediate="true"
+                                          MaxLength="30"
+                                          Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateCelular2))" />
+
+                            <MudSelect T="bool?" @bind-Value="ViewModel.Request.TieneWhatsapp2"
+                                       Disabled="@(ViewModel.IsBusy || string.IsNullOrWhiteSpace(ViewModel.Request.Celular2))"
+                                       Label="Celular 2 tiene WhatsApp"
+                                       Variant="Variant.Outlined"
+                                       Clearable="true">
                                 <MudSelectItem T="bool?" Value="true">Si</MudSelectItem>
                                 <MudSelectItem T="bool?" Value="false">No</MudSelectItem>
                             </MudSelect>
