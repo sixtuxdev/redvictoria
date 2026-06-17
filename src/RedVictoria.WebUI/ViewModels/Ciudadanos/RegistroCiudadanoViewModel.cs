@@ -124,7 +124,7 @@ public sealed partial class RegistroCiudadanoViewModel(
         }
         catch
         {
-            ErrorMessage = "No fue posible cargar la informacion inicial del formulario.";
+            ErrorMessage = "No fue posible cargar la información inicial del formulario.";
         }
         finally
         {
@@ -257,8 +257,8 @@ public sealed partial class RegistroCiudadanoViewModel(
 
         ValidateRequiredSelect(Request.DepartamentoId, "Departamento de nacimiento", errors);
         ValidateRequiredSelect(Request.MunicipioId, "Ciudad de nacimiento", errors);
-        ValidateRequiredSelect(Request.ParametroIdTipoIdentificacion, "Tipo de identificacion", errors);
-        ValidateRequiredSelect(Request.ParametroIdGenero, "Genero", errors);
+        ValidateRequiredSelect(Request.ParametroIdTipoIdentificacion, "Tipo de identificación", errors);
+        ValidateRequiredSelect(Request.ParametroIdGenero, "Género", errors);
         ValidateRequiredSelect(Request.ParametroIdSoy, "Soy", errors);
         ValidateRequiredSelect(Request.ParametroIdDondeVive, "Donde vive", errors);
         ValidateRequiredSelect(Request.ParametroIdVereda, "Vereda", errors);
@@ -277,7 +277,7 @@ public sealed partial class RegistroCiudadanoViewModel(
         if (!string.IsNullOrWhiteSpace(Request.NumeroIdentificacion)
             && !DocumentRegex().IsMatch(Request.NumeroIdentificacion.Trim()))
         {
-            errors.Add("Numero de identificacion solo debe contener letras, numeros, puntos o guiones.");
+            errors.Add("Número de identificación solo debe contener letras, números, puntos o guiones.");
         }
 
         ValidatePassword(errors);
@@ -312,7 +312,7 @@ public sealed partial class RegistroCiudadanoViewModel(
 
         if (!new EmailAddressAttribute().IsValid(value.Trim()))
         {
-            yield return "Email no tiene un formato valido.";
+            yield return "Email no tiene un formato válido.";
         }
     }
 
@@ -339,18 +339,18 @@ public sealed partial class RegistroCiudadanoViewModel(
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            yield return "Numero de identificacion es obligatorio.";
+            yield return "Número de identificación es obligatorio.";
             yield break;
         }
 
         if (value.Trim().Length > 50)
         {
-            yield return "Numero de identificacion no puede superar 50 caracteres.";
+            yield return "Número de identificación no puede superar 50 caracteres.";
         }
 
         if (!DocumentRegex().IsMatch(value.Trim()))
         {
-            yield return "Numero de identificacion solo debe contener letras, numeros, puntos o guiones.";
+            yield return "Número de identificación solo debe contener letras, números, puntos o guiones.";
         }
     }
 
@@ -375,7 +375,7 @@ public sealed partial class RegistroCiudadanoViewModel(
 
         if (!string.IsNullOrWhiteSpace(value) && value.Length < PasswordMinimumLength)
         {
-            yield return $"Contrasena debe tener minimo {PasswordMinimumLength} caracteres.";
+            yield return $"Contraseña debe tener mínimo {PasswordMinimumLength} caracteres.";
         }
     }
 
@@ -388,7 +388,7 @@ public sealed partial class RegistroCiudadanoViewModel(
 
         if (string.IsNullOrWhiteSpace(value))
         {
-            yield return "Confirmacion de contrasena es obligatoria.";
+            yield return "Confirmación de contraseña es obligatoria.";
         }
         else if (!string.Equals(Request.Password, value, StringComparison.Ordinal))
         {
@@ -450,17 +450,17 @@ public sealed partial class RegistroCiudadanoViewModel(
         {
             if (string.IsNullOrWhiteSpace(Request.Email))
             {
-                errors.Add("Email es obligatorio cuando se ingresa una contrasena.");
+                errors.Add("Email es obligatorio cuando se ingresa una contraseña.");
             }
 
             if (Request.Password.Length < PasswordMinimumLength)
             {
-                errors.Add($"Contrasena debe tener minimo {PasswordMinimumLength} caracteres.");
+                errors.Add($"Contraseña debe tener mínimo {PasswordMinimumLength} caracteres.");
             }
 
             if (string.IsNullOrWhiteSpace(Request.ConfirmPassword))
             {
-                errors.Add("Confirmacion de contrasena es obligatoria.");
+                errors.Add("Confirmación de contraseña es obligatoria.");
             }
             else if (!string.Equals(Request.Password, Request.ConfirmPassword, StringComparison.Ordinal))
             {

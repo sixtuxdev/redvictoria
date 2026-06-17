@@ -93,11 +93,11 @@ else
 
                             <MudItem xs="12" sm="6">
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdTipoIdentificacion"
-                                           Label="Tipo de identificacion"
+                                           Label="Tipo de identificación"
                                            Variant="Variant.Outlined"
                                            Clearable="true"
                                            Required="true"
-                                           RequiredError="Tipo de identificacion es obligatorio.">
+                                           RequiredError="Tipo de identificación es obligatorio.">
                                     @foreach (var opcion in ViewModel.Parametros.TiposIdentificacion)
                                     {
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
@@ -107,7 +107,7 @@ else
 
                             <MudItem xs="12" sm="6">
                                 <MudTextField @bind-Value="ViewModel.Request.NumeroIdentificacion"
-                                              Label="Numero de identificacion"
+                                              Label="Número de identificación"
                                               Variant="Variant.Outlined"
                                               Required="true"
                                               Immediate="true"
@@ -129,11 +129,11 @@ else
 
                             <MudItem xs="12" sm="6">
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdGenero"
-                                           Label="Genero"
+                                           Label="Género"
                                            Variant="Variant.Outlined"
                                            Clearable="true"
                                            Required="true"
-                                           RequiredError="Genero es obligatorio.">
+                                           RequiredError="Género es obligatorio.">
                                     @foreach (var opcion in ViewModel.Parametros.Generos)
                                     {
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
@@ -204,7 +204,7 @@ else
                             </MudSelect>
 
                             <MudTextField @bind-Value="ViewModel.Request.Direccion"
-                                          Label="Direccion"
+                                          Label="Dirección"
                                           Variant="Variant.Outlined"
                                           Required="true"
                                           Immediate="true"
@@ -224,7 +224,7 @@ else
                                              Strict="false" />
 
                             <MudTextField @bind-Value="ViewModel.Request.PuestoVotacion"
-                                          Label="Puesto de votacion"
+                                          Label="Puesto de votación"
                                           Variant="Variant.Outlined"
                                           Required="true"
                                           Immediate="true"
@@ -266,7 +266,7 @@ else
                                 </MudItem>
                                 <MudItem xs="12" md="6">
                                     <MudTextField @bind-Value="ViewModel.Request.ConfirmPassword"
-                                                  Label="Confirmar contrasena"
+                                                  Label="Confirmar contraseña"
                                                   Variant="Variant.Outlined"
                                                   InputType="InputType.Password"
                                                   Required="@ViewModel.Request.TieneAcceso"
@@ -367,7 +367,7 @@ else
             _showReferidoInvalidoAlert = false;
             await ShowAlertAsync(
                 "warning",
-                "Referido invalido",
+                "Referido inválido",
                 "No puede continuar porque el referido ingresado no existe.");
         }
     }
@@ -427,7 +427,7 @@ else
         {
             await ShowAlertAsync(
                 "warning",
-                "Referido invalido",
+                "Referido inválido",
                 "No puede continuar porque el referido ingresado no existe.");
             return;
         }
@@ -441,7 +441,7 @@ else
                 await ShowAlertAsync(
                     "error",
                     "Registro exitoso",
-                    "El ciudadano fue registrado, pero no fue posible obtener el codigo referido generado.");
+                    "El ciudadano fue registrado, pero no fue posible obtener el código referido generado.");
                 return;
             }
 

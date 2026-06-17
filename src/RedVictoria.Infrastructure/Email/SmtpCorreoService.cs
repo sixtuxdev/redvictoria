@@ -38,10 +38,10 @@ public sealed class SmtpCorreoService : ICorreoService
             throw new InvalidOperationException("El destinatario del correo es obligatorio.");
 
         if (string.IsNullOrWhiteSpace(codigoReferido))
-            throw new InvalidOperationException("El codigo referido es obligatorio para enviar el correo.");
+            throw new InvalidOperationException("El código referido es obligatorio para enviar el correo.");
 
         if (string.IsNullOrWhiteSpace(_settings.Host) || string.IsNullOrWhiteSpace(_settings.FromEmail))
-            throw new InvalidOperationException("La configuracion SMTP no esta completa.");
+            throw new InvalidOperationException("La configuración SMTP no está completa.");
 
         var linkRegistro = $"{RegistroCiudadanoBaseUrl}/{Uri.EscapeDataString(codigoReferido)}";
         var linkCrearPassword = $"{CrearPasswordBaseUrl}/{Uri.EscapeDataString(codigoReferido)}";
@@ -115,7 +115,7 @@ public sealed class SmtpCorreoService : ICorreoService
                                         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;background-color:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;">
                                             <tr>
                                                 <td style="padding:18px 20px;">
-                                                    <p style="margin:0 0 6px;color:#64748b;font-size:13px;line-height:18px;text-transform:uppercase;font-weight:700;">Codigo referido</p>
+                                                    <p style="margin:0 0 6px;color:#64748b;font-size:13px;line-height:18px;text-transform:uppercase;font-weight:700;">Código referido</p>
                                                     <p style="margin:0;color:#0f172a;font-size:22px;line-height:28px;font-weight:700;letter-spacing:1px;">{{codigo}}</p>
                                                 </td>
                                             </tr>
@@ -127,7 +127,7 @@ public sealed class SmtpCorreoService : ICorreoService
                                         </p>
 
                                         <p style="margin:0 0 18px;font-size:15px;line-height:23px;color:#334155;">
-                                            Si aun no tienes contraseña asignada, puedes crearla usando el siguiente boton:
+                                            Si aún no tienes contraseña asignada, puedes crearla usando el siguiente botón:
                                         </p>
 
                                         <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 26px;">
@@ -139,7 +139,7 @@ public sealed class SmtpCorreoService : ICorreoService
                                         </table>
 
                                         <p style="margin:0;color:#64748b;font-size:13px;line-height:20px;">
-                                            Si el boton no funciona, copia y pega este enlace en tu navegador:<br>
+                                            Si el botón no funciona, copia y pega este enlace en tu navegador:<br>
                                             <a href="{{passwordUrl}}" style="color:#0f4c81;text-decoration:underline;word-break:break-word;">{{passwordUrl}}</a>
                                         </p>
                                     </td>
@@ -147,7 +147,7 @@ public sealed class SmtpCorreoService : ICorreoService
                                 <tr>
                                     <td style="background-color:#f8fafc;padding:20px 32px;border-top:1px solid #e5e7eb;text-align:center;">
                                         <p style="margin:0;color:#64748b;font-size:12px;line-height:18px;">
-                                            Este mensaje fue enviado automaticamente por Red Victoria. Por favor no respondas a este correo.
+                                            Este mensaje fue enviado automáticamente por Red Victoria. Por favor no respondas a este correo.
                                         </p>
                                     </td>
                                 </tr>

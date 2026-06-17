@@ -55,7 +55,7 @@ public class UsuarioApplicationTests
 
         Assert.False(response.IsSuccess);
         Assert.Contains(
-            "La contraseÃ±a y la confirmaciÃ³n no coinciden.",
+            "La contraseña y la confirmación no coinciden.",
             response.Errors);
         Assert.Null(repository.Command);
     }

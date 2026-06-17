@@ -20,7 +20,7 @@ public class ExceptionHandlingMiddlewareTests
         Assert.Equal(StatusCodes.Status500InternalServerError, result.Context.Response.StatusCode);
         Assert.Equal("UNEXPECTED_ERROR", result.Response.ErrorCode);
         Assert.Equal(
-            "OcurriÃ³ un error inesperado. Intente nuevamente o contacte al administrador.",
+            "Ocurrió un error inesperado. Intente nuevamente o contacte al administrador.",
             result.Response.Message);
         Assert.Equal(result.Context.TraceIdentifier, result.Response.TraceId);
         Assert.DoesNotContain(exception.Message, result.Body);
@@ -51,7 +51,7 @@ public class ExceptionHandlingMiddlewareTests
 
         Assert.Equal(StatusCodes.Status400BadRequest, result.Context.Response.StatusCode);
         Assert.Equal("VALIDATION_ERROR", result.Response.ErrorCode);
-        Assert.Equal("La solicitud contiene datos invÃ¡lidos.", result.Response.Message);
+        Assert.Equal("La solicitud contiene datos inválidos.", result.Response.Message);
     }
 
     [Fact]
@@ -63,7 +63,7 @@ public class ExceptionHandlingMiddlewareTests
         Assert.Equal(StatusCodes.Status401Unauthorized, result.Context.Response.StatusCode);
         Assert.Equal("UNAUTHORIZED_ERROR", result.Response.ErrorCode);
         Assert.Equal(
-            "No tiene permisos para realizar esta acciÃ³n.",
+            "No tiene permisos para realizar esta acción.",
             result.Response.Message);
     }
 

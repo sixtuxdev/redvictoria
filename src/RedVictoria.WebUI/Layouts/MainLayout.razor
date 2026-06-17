@@ -1,4 +1,6 @@
 @inherits LayoutComponentBase
+@inject IAuthSessionService AuthSessionService
+@inject NavigationManager Navigation
 
 <MudLayout>
     <MudAppBar Elevation="1" Dense="true">
@@ -8,18 +10,30 @@
                        OnClick="@ToggleDrawer" />
         <MudText Typo="Typo.h6" Class="ml-2">RedVictoria</MudText>
         <MudSpacer />
-        <MudButton Href="@AppRoutes.Dashboard"
-                   Color="Color.Inherit"
-                   Variant="Variant.Text"
-                   StartIcon="@Icons.Material.Filled.Dashboard">
-            Dashboard
-        </MudButton>
-        <MudButton Href="@AppRoutes.Login"
-                   Color="Color.Inherit"
-                   Variant="Variant.Text"
-                   StartIcon="@Icons.Material.Filled.Login">
-            Iniciar sesion
-        </MudButton>
+        @if (_isAuthenticated)
+        {
+            <MudButton Href="@AppRoutes.Dashboard"
+                       Color="Color.Inherit"
+                       Variant="Variant.Text"
+                       StartIcon="@Icons.Material.Filled.Dashboard">
+                Dashboard
+            </MudButton>
+            <MudButton Color="Color.Inherit"
+                       Variant="Variant.Text"
+                       StartIcon="@Icons.Material.Filled.Logout"
+                       OnClick="LogoutAsync">
+                Cerrar sesión
+            </MudButton>
+        }
+        else
+        {
+            <MudButton Href="@AppRoutes.Login"
+                       Color="Color.Inherit"
+                       Variant="Variant.Text"
+                       StartIcon="@Icons.Material.Filled.Login">
+                Iniciar sesión
+            </MudButton>
+        }
     </MudAppBar>
 
     <MudDrawer @bind-Open="_drawerOpen"
@@ -38,9 +52,23 @@
 
 @code {
     private bool _drawerOpen = true;
+    private bool _isAuthenticated;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var session = await AuthSessionService.GetSessionAsync();
+        _isAuthenticated = session?.IsValid == true;
+    }
 
     private void ToggleDrawer()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    private async Task LogoutAsync()
+    {
+        await AuthSessionService.ClearSessionAsync();
+        _isAuthenticated = false;
+        Navigation.NavigateTo(AppRoutes.Login, replace: true);
     }
 }

@@ -23,7 +23,7 @@ public sealed class CiudadanoService(
             cancellationToken);
         if (request is null)
         {
-            return ReferidosResultModel.Failure("Debes iniciar sesion para consultar el dashboard.");
+            return ReferidosResultModel.Failure("Debes iniciar sesión para consultar el dashboard.");
         }
 
         var response = await httpClient.SendAsync(request, cancellationToken);
@@ -60,7 +60,7 @@ public sealed class CiudadanoService(
             cancellationToken);
         if (request is null)
         {
-            return OperationResultModel.Failure("Debes iniciar sesion para desactivar un referido.");
+            return OperationResultModel.Failure("Debes iniciar sesión para desactivar un referido.");
         }
 
         var response = await httpClient.SendAsync(request, cancellationToken);
@@ -109,11 +109,11 @@ public sealed class CiudadanoService(
         }
         catch (JsonException)
         {
-            return OperationResultModel.Failure("No fue posible interpretar la validacion del referido.");
+            return OperationResultModel.Failure("No fue posible interpretar la validación del referido.");
         }
         catch (NotSupportedException)
         {
-            return OperationResultModel.Failure("El servicio de validacion del referido no devolvio una respuesta JSON valida.");
+            return OperationResultModel.Failure("El servicio de validación del referido no devolvió una respuesta JSON válida.");
         }
 
         if (apiResponse?.IsSuccess == true && apiResponse.Data?.Existe == true)

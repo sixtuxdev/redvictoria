@@ -49,7 +49,7 @@ public sealed class DashboardViewModel(
             Session = await authSessionService.GetSessionAsync(cancellationToken);
             if (!IsAuthenticated)
             {
-                ErrorMessage = "Debes iniciar sesion para consultar el dashboard.";
+                ErrorMessage = "Debes iniciar sesión para consultar el dashboard.";
                 return;
             }
 

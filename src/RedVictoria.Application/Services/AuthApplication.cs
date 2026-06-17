@@ -10,7 +10,7 @@ namespace RedVictoria.Application.Services;
 public class AuthApplication : IAuthApplication
 {
     private const int PasswordMinimumLength = 6;
-    private const string InvalidCredentialsMessage = "Credenciales invÃ¡lidas.";
+    private const string InvalidCredentialsMessage = "Credenciales inválidas.";
     private readonly IAuthRepository _authRepository;
     private readonly IPasswordHasher _passwordHasher;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
@@ -33,7 +33,7 @@ public class AuthApplication : IAuthApplication
         if (errors.Count > 0)
         {
             return Response<LoginResponse>.Failure(
-                "La solicitud contiene datos invÃ¡lidos.",
+                "La solicitud contiene datos inválidos.",
                 errors);
         }
 
@@ -85,7 +85,7 @@ public class AuthApplication : IAuthApplication
 
         return Response<LoginResponse>.Success(
             response,
-            "Inicio de sesiÃ³n exitoso.");
+            "Inicio de sesión exitoso.");
     }
 
     private static List<string> Validate(LoginRequest request)
@@ -98,7 +98,7 @@ public class AuthApplication : IAuthApplication
         }
         else if (!new EmailAddressAttribute().IsValid(request.Email.Trim()))
         {
-            errors.Add("Email no tiene un formato vÃ¡lido.");
+            errors.Add("Email no tiene un formato válido.");
         }
 
         if (string.IsNullOrWhiteSpace(request.Password))
@@ -107,7 +107,7 @@ public class AuthApplication : IAuthApplication
         }
         else if (request.Password.Length < PasswordMinimumLength)
         {
-            errors.Add($"Password debe tener mÃ­nimo {PasswordMinimumLength} caracteres.");
+            errors.Add($"Password debe tener mínimo {PasswordMinimumLength} caracteres.");
         }
 
         return errors;

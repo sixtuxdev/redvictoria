@@ -16,7 +16,7 @@ public static class AuthenticationExtensions
         if (string.IsNullOrWhiteSpace(secretKey) || secretKey.Length < MinimumSecretKeyLength)
         {
             throw new InvalidOperationException(
-                "La clave JWT no estÃ¡ configurada o no tiene una longitud segura.");
+                "La clave JWT no está configurada o no tiene una longitud segura.");
         }
 
         services

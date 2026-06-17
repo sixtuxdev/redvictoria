@@ -27,11 +27,11 @@ public sealed class AuthService(
         }
         catch (JsonException)
         {
-            return AuthResultModel.Failure("No fue posible interpretar la respuesta de inicio de sesion.");
+            return AuthResultModel.Failure("No fue posible interpretar la respuesta de inicio de sesión.");
         }
         catch (NotSupportedException)
         {
-            return AuthResultModel.Failure("El servicio de inicio de sesion no devolvio una respuesta valida.");
+            return AuthResultModel.Failure("El servicio de inicio de sesión no devolvió una respuesta válida.");
         }
 
         if (response.IsSuccessStatusCode && apiResponse?.IsSuccess == true && apiResponse.Data is not null)
@@ -53,7 +53,7 @@ public sealed class AuthService(
         }
 
         return AuthResultModel.Failure(
-            apiResponse?.Message ?? "No fue posible iniciar sesion con las credenciales suministradas.");
+            apiResponse?.Message ?? "No fue posible iniciar sesión con las credenciales suministradas.");
     }
 
     private sealed record LoginApiRequest(string Email, string Password);

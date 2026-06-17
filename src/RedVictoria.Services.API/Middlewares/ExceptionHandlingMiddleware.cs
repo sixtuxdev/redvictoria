@@ -68,19 +68,19 @@ public class ExceptionHandlingMiddleware
                 "SQL_ERROR"),
             TimeoutException => new(
                 StatusCodes.Status504GatewayTimeout,
-                "La operaciÃ³n tardÃ³ demasiado tiempo en responder.",
+                "La operación tardó demasiado tiempo en responder.",
                 "TIMEOUT_ERROR"),
             InvalidOperationException or ArgumentException => new(
                 StatusCodes.Status400BadRequest,
-                "La solicitud contiene datos invÃ¡lidos.",
+                "La solicitud contiene datos inválidos.",
                 "VALIDATION_ERROR"),
             UnauthorizedAccessException => new(
                 StatusCodes.Status401Unauthorized,
-                "No tiene permisos para realizar esta acciÃ³n.",
+                "No tiene permisos para realizar esta acción.",
                 "UNAUTHORIZED_ERROR"),
             _ => new(
                 StatusCodes.Status500InternalServerError,
-                "OcurriÃ³ un error inesperado. Intente nuevamente o contacte al administrador.",
+                "Ocurrió un error inesperado. Intente nuevamente o contacte al administrador.",
                 "UNEXPECTED_ERROR")
         };
 

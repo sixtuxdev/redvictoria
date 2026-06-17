@@ -4,12 +4,12 @@
 @inject ISnackbar Snackbar
 @inject NavigationManager Navigation
 
-<PageTitle>Iniciar sesion</PageTitle>
+<PageTitle>Iniciar sesión</PageTitle>
 
 <MudPaper Elevation="8" Class="pa-6 pa-md-8 rounded-xl">
     <MudStack Spacing="4">
         <div>
-            <MudText Typo="Typo.h4">Iniciar sesion</MudText>
+            <MudText Typo="Typo.h4">Iniciar sesión</MudText>
             <MudText Typo="Typo.body2" Color="Color.Secondary">
                 Ingresa con tu usuario, correo o documento.
             </MudText>
@@ -34,12 +34,12 @@
                               AdornmentIcon="@Icons.Material.Filled.Person" />
 
                 <MudTextField @bind-Value="ViewModel.Request.Password"
-                              Label="Contrasena"
+                              Label="Contraseña"
                               Variant="Variant.Outlined"
                               InputType="InputType.Password"
                               Immediate="true"
                               Required="true"
-                              RequiredError="Ingresa tu contrasena."
+                              RequiredError="Ingresa tu contraseña."
                               Adornment="Adornment.Start"
                               AdornmentIcon="@Icons.Material.Filled.Lock" />
 
@@ -56,7 +56,7 @@
                     }
                     else
                     {
-                        <span>Iniciar sesion</span>
+                        <span>Iniciar sesión</span>
                     }
                 </MudButton>
             </MudStack>
@@ -87,7 +87,7 @@
             return;
         }
 
-        Snackbar.Add(ViewModel.SuccessMessage ?? "Inicio de sesion exitoso.", Severity.Success);
+        Snackbar.Add(ViewModel.SuccessMessage ?? "Inicio de sesión exitoso.", Severity.Success);
         await InvokeAsync(() => Navigation.NavigateTo(AppRoutes.Dashboard, replace: true));
     }
 }

@@ -52,7 +52,7 @@ public sealed class LoginViewModel(IAuthService authService)
                 return false;
             }
 
-            SuccessMessage = result.Message ?? "Inicio de sesion exitoso.";
+            SuccessMessage = result.Message ?? "Inicio de sesión exitoso.";
             return true;
         }
         catch (OperationCanceledException)

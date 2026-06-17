@@ -112,7 +112,7 @@ public class CiudadanoApplication : ICiudadanoApplication
             }
             catch
             {
-                message = $"{message} No fue posible enviar el correo de confirmacion.";
+                message = $"{message} No fue posible enviar el correo de confirmación.";
             }
         }
 
@@ -143,7 +143,7 @@ public class CiudadanoApplication : ICiudadanoApplication
         return Response<ValidarCodigoReferidoResponse>.Success(
             response,
             existe
-                ? "El codigo de referido existe."
+                ? "El código de referido existe."
                 : "No puede continuar porque el referido ingresado no existe.");
     }
 
@@ -182,7 +182,7 @@ public class CiudadanoApplication : ICiudadanoApplication
 
         if (ciudadanoReferidoId <= 0)
         {
-            return Response<bool>.Failure("El ciudadano referido no es valido.");
+            return Response<bool>.Failure("El ciudadano referido no es válido.");
         }
 
         var desactivado = await _ciudadanoRepository.DesactivarReferidoAsync(
@@ -240,7 +240,7 @@ public class CiudadanoApplication : ICiudadanoApplication
         }
 
         if (request.TieneAcceso && string.IsNullOrWhiteSpace(request.Password))
-            errors.Add("Password es obligatorio cuando el ciudadano tendra acceso.");
+            errors.Add("Password es obligatorio cuando el ciudadano tendrá acceso.");
 
         if (!string.IsNullOrWhiteSpace(request.Password))
         {

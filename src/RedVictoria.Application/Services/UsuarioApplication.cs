@@ -30,7 +30,7 @@ public class UsuarioApplication : IUsuarioApplication
         if (errors.Count > 0)
         {
             return Response<RegistroUsuarioResponse>.Failure(
-                "La solicitud contiene datos invÃ¡lidos.",
+                "La solicitud contiene datos inválidos.",
                 errors);
         }
 
@@ -115,18 +115,18 @@ public class UsuarioApplication : IUsuarioApplication
             if (email.Length > 150)
                 errors.Add("Email no puede superar 150 caracteres.");
             if (!new EmailAddressAttribute().IsValid(email))
-                errors.Add("Email no tiene un formato vÃ¡lido.");
+                errors.Add("Email no tiene un formato válido.");
         }
 
         if (string.IsNullOrWhiteSpace(request.Password))
             errors.Add("Password es obligatorio.");
         else if (request.Password.Length < PasswordMinimumLength)
-            errors.Add($"Password debe tener mÃ­nimo {PasswordMinimumLength} caracteres.");
+            errors.Add($"Password debe tener mínimo {PasswordMinimumLength} caracteres.");
 
         if (string.IsNullOrWhiteSpace(request.ConfirmPassword))
             errors.Add("ConfirmPassword es obligatorio.");
         else if (!string.Equals(request.Password, request.ConfirmPassword, StringComparison.Ordinal))
-            errors.Add("La contraseÃ±a y la confirmaciÃ³n no coinciden.");
+            errors.Add("La contraseña y la confirmación no coinciden.");
 
         if (!string.IsNullOrWhiteSpace(request.Rol) && request.Rol.Trim().Length > 50)
             errors.Add("Rol no puede superar 50 caracteres.");

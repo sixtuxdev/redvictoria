@@ -101,7 +101,7 @@ public class CiudadanoApplicationTests
     [Theory]
     [InlineData("El email ya se encuentra registrado en ciudadanos.")]
     [InlineData("El celular ya se encuentra registrado en ciudadanos.")]
-    [InlineData("El numero de identificacion ya se encuentra registrado en ciudadanos.")]
+    [InlineData("El número de identificación ya se encuentra registrado en ciudadanos.")]
     public async Task RegistrarAsync_ConDatoUnicoDuplicado_RetornaMensajeEsperado(string expectedMessage)
     {
         var repository = new CiudadanoRepositoryFake(new RegistroCiudadanoResult

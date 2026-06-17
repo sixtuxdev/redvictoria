@@ -37,7 +37,7 @@ public class AuthApplicationTests
         var response = await application.LoginAsync(request);
 
         Assert.False(response.IsSuccess);
-        Assert.Equal("Credenciales invÃ¡lidas.", response.Message);
+        Assert.Equal("Credenciales inválidas.", response.Message);
         Assert.Null(response.Data);
     }
 
@@ -49,7 +49,7 @@ public class AuthApplicationTests
         var response = await application.LoginAsync(ValidRequest());
 
         Assert.False(response.IsSuccess);
-        Assert.Equal("Credenciales invÃ¡lidas.", response.Message);
+        Assert.Equal("Credenciales inválidas.", response.Message);
         Assert.Null(response.Data);
     }
 
@@ -94,7 +94,7 @@ public class AuthApplicationTests
         var response = await application.LoginAsync(ValidRequest());
 
         Assert.False(response.IsSuccess);
-        Assert.Equal("Credenciales invÃ¡lidas.", response.Message);
+        Assert.Equal("Credenciales inválidas.", response.Message);
         Assert.Null(response.Data);
     }
 

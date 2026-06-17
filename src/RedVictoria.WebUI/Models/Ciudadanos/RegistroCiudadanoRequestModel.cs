@@ -15,7 +15,7 @@ public sealed class RegistroCiudadanoRequestModel
     public string? LugarNacimiento { get; set; }
 
     [Required(ErrorMessage = "Email es obligatorio.")]
-    [EmailAddress(ErrorMessage = "Email no tiene un formato valido.")]
+    [EmailAddress(ErrorMessage = "Email no tiene un formato válido.")]
     [MaxLength(150, ErrorMessage = "Email no puede superar 150 caracteres.")]
     public string? Email { get; set; }
 
@@ -29,19 +29,19 @@ public sealed class RegistroCiudadanoRequestModel
     [Required(ErrorMessage = "Donde vive es obligatorio.")]
     public int? ParametroIdDondeVive { get; set; }
 
-    [Required(ErrorMessage = "Puesto de votacion es obligatorio.")]
-    [MaxLength(150, ErrorMessage = "Puesto de votacion no puede superar 150 caracteres.")]
+    [Required(ErrorMessage = "Puesto de votación es obligatorio.")]
+    [MaxLength(150, ErrorMessage = "Puesto de votación no puede superar 150 caracteres.")]
     public string? PuestoVotacion { get; set; }
 
-    [Required(ErrorMessage = "Tipo de identificacion es obligatorio.")]
+    [Required(ErrorMessage = "Tipo de identificación es obligatorio.")]
     public int? ParametroIdTipoIdentificacion { get; set; }
 
-    [Required(ErrorMessage = "Numero de identificacion es obligatorio.")]
-    [MaxLength(50, ErrorMessage = "Numero de identificacion no puede superar 50 caracteres.")]
+    [Required(ErrorMessage = "Número de identificación es obligatorio.")]
+    [MaxLength(50, ErrorMessage = "Número de identificación no puede superar 50 caracteres.")]
     public string? NumeroIdentificacion { get; set; }
 
-    [Required(ErrorMessage = "Direccion es obligatoria.")]
-    [MaxLength(250, ErrorMessage = "Direccion no puede superar 250 caracteres.")]
+    [Required(ErrorMessage = "Dirección es obligatoria.")]
+    [MaxLength(250, ErrorMessage = "Dirección no puede superar 250 caracteres.")]
     public string? Direccion { get; set; }
 
     [Required(ErrorMessage = "Departamento de nacimiento es obligatorio.")]
@@ -52,7 +52,7 @@ public sealed class RegistroCiudadanoRequestModel
 
     public int? ParametroIdGrupoEdad { get; set; }
 
-    [Required(ErrorMessage = "Genero es obligatorio.")]
+    [Required(ErrorMessage = "Género es obligatorio.")]
     public int? ParametroIdGenero { get; set; }
 
     [Required(ErrorMessage = "Soy es obligatorio.")]
