@@ -18,7 +18,7 @@ else
 {
     <MudForm @ref="_form">
         <MudGrid Spacing="3">
-            <MudItem xs="12">
+            @* <MudItem xs="12">
                 @if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
                 {
                     <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" Class="mb-3">
@@ -45,7 +45,7 @@ else
                         Algunas listas requeridas no cargaron. No podras registrar el ciudadano hasta completar los datos de los select.
                     </MudAlert>
                 }
-            </MudItem>
+            </MudItem> *@
 
             <MudItem xs="12" lg="8">
                 <MudCard Elevation="2">
@@ -237,12 +237,12 @@ else
                 <MudCard Elevation="2">
                     <MudCardContent>
                         <MudGrid Spacing="3">
-                            <MudItem xs="12" md="8">
+                            @* <MudItem xs="12" md="8">
                                 <MudText Typo="Typo.h5">Referido y acceso</MudText>
                                 <MudText Typo="Typo.body2" Color="Color.Secondary">
                                     El codigo referido se toma de la URL y se enviara al backend.
                                 </MudText>
-                            </MudItem>
+                            </MudItem> *@
 
                             <MudItem xs="12" md="4">
                                 <MudSwitch T="bool"
@@ -348,12 +348,20 @@ else
         if (_form is not null)
         {
             await _form.Validate();
+            if (!_form.IsValid)
+            {
+                Snackbar.Add("Revisa los datos del formulario antes de guardar.", Severity.Warning);
+                return;
+            }
         }
 
         var registrado = await ViewModel.RegistrarAsync();
         if (registrado)
         {
             Snackbar.Add(ViewModel.SuccessMessage ?? "Ciudadano registrado correctamente.", Severity.Success);
+            return;
         }
+
+        Snackbar.Add(ViewModel.ErrorMessage ?? "No fue posible registrar el ciudadano.", Severity.Error);
     }
 }
