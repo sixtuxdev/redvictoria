@@ -206,6 +206,7 @@ public class CiudadanoApplicationTests
             ParametroIdDondeVive = 8,
             PuestoVotacion = "Colegio Central",
             ParametroIdSoy = 4,
+            ParametroIdVereda = 15,
             Estado = true,
             FechaRegistro = fechaRegistro
         });
@@ -217,6 +218,7 @@ public class CiudadanoApplicationTests
         request.ParametroIdDondeVive = 8;
         request.PuestoVotacion = " Colegio Central ";
         request.ParametroIdSoy = 4;
+        request.ParametroIdVereda = 15;
         request.Estado = true;
 
         var response = await application.RegistrarAsync(request);
@@ -229,6 +231,7 @@ public class CiudadanoApplicationTests
         Assert.Equal(8, repository.Command.ParametroIdDondeVive);
         Assert.Equal("Colegio Central", repository.Command.PuestoVotacion);
         Assert.Equal(4, repository.Command.ParametroIdSoy);
+        Assert.Equal(15, repository.Command.ParametroIdVereda);
         Assert.True(repository.Command.Estado);
         Assert.Equal(fechaNacimiento, response.Data!.FechaNacimiento);
         Assert.Equal("Bogota", response.Data.LugarNacimiento);
@@ -237,6 +240,7 @@ public class CiudadanoApplicationTests
         Assert.Equal(8, response.Data.ParametroIdDondeVive);
         Assert.Equal("Colegio Central", response.Data.PuestoVotacion);
         Assert.Equal(4, response.Data.ParametroIdSoy);
+        Assert.Equal(15, response.Data.ParametroIdVereda);
         Assert.True(response.Data.Estado);
         Assert.Equal(fechaRegistro, response.Data.FechaRegistro);
     }

@@ -42,14 +42,16 @@ public sealed partial class RegistroCiudadanoViewModel(
         || Parametros.TiposIdentificacion.Count > 0
         || Parametros.GruposEdad.Count > 0
         || Parametros.Generos.Count > 0
-        || Parametros.Soy.Count > 0;
+        || Parametros.Soy.Count > 0
+        || Parametros.Veredas.Count > 0;
 
     public bool AreRequiredParametrosLoaded =>
         Parametros.TiposIdentificacion.Count > 0
         && Parametros.GruposEdad.Count > 0
         && Parametros.Generos.Count > 0
         && Parametros.Soy.Count > 0
-        && Parametros.DondeVive.Count > 0;
+        && Parametros.DondeVive.Count > 0
+        && Parametros.Veredas.Count > 0;
 
     public bool CanSubmit => AreRequiredParametrosLoaded && !IsSubmitting;
 
@@ -365,6 +367,7 @@ public sealed partial class RegistroCiudadanoViewModel(
         Request.Celular = null;
         Request.TieneWhatsapp = null;
         Request.ParametroIdDondeVive = null;
+        Request.ParametroIdVereda = null;
         Request.PuestoVotacion = null;
         Request.ParametroIdTipoIdentificacion = null;
         Request.NumeroIdentificacion = null;

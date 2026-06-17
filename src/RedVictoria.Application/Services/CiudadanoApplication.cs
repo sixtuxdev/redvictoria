@@ -57,6 +57,7 @@ public class CiudadanoApplication : ICiudadanoApplication
             ParametroIdGrupoEdad = request.ParametroIdGrupoEdad,
             ParametroIdGenero = request.ParametroIdGenero,
             ParametroIdSoy = request.ParametroIdSoy,
+            ParametroIdVereda = request.ParametroIdVereda,
             Estado = request.Estado,
             CodigoReferidoInvitacion = Normalize(codigoReferidoUrl)
                 ?? Normalize(request.CodigoReferido),
@@ -88,6 +89,7 @@ public class CiudadanoApplication : ICiudadanoApplication
                 ParametroIdGrupoEdad = result.ParametroIdGrupoEdad,
                 ParametroIdGenero = result.ParametroIdGenero,
                 ParametroIdSoy = result.ParametroIdSoy,
+                ParametroIdVereda = result.ParametroIdVereda,
                 CodigoReferido = result.CodigoReferido!,
                 CiudadanoReferidorId = result.CiudadanoReferidorId,
                 TieneAcceso = result.TieneAcceso,

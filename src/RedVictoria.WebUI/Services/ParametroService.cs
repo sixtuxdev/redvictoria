@@ -18,7 +18,8 @@ public sealed class ParametroService(HttpClient httpClient, IConfiguration confi
             GruposEdad = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.GrupoEdad, cancellationToken),
             Generos = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.Genero, cancellationToken),
             Soy = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.Soy, cancellationToken),
-            DondeVive = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.DondeVive, cancellationToken)
+            DondeVive = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.DondeVive, cancellationToken),
+            Veredas = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.Veredas, cancellationToken)
         };
     }
 

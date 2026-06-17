@@ -22,6 +22,7 @@ public class Ciudadano
     public string CodigoReferido { get; set; } = string.Empty;
     public int? CiudadanoReferidorId { get; set; }
     public bool TieneAcceso { get; set; }
+    public int? ParametroIdVereda { get; set; }
     public bool Estado { get; set; }
     public DateTime FechaRegistro { get; set; }
 }

@@ -21,6 +21,7 @@ public class RegistroCiudadanoResult
     public int? ParametroIdGrupoEdad { get; init; }
     public int? ParametroIdGenero { get; init; }
     public int? ParametroIdSoy { get; init; }
+    public int? ParametroIdVereda { get; init; }
     public string? CodigoReferido { get; init; }
     public int? CiudadanoReferidorId { get; init; }
     public bool TieneAcceso { get; init; }

@@ -15,6 +15,7 @@ CREATE OR ALTER PROCEDURE dbo.usp_Ciudadanos_Registrar
     @ParametroIdGrupoEdad INT = NULL,
     @ParametroIdGenero INT = NULL,
     @ParametroIdSoy INT = NULL,
+    @ParametroIdVereda INT = NULL,
     @Estado BIT = 1,
     @CodigoReferidoInvitacion NVARCHAR(50) = NULL,
     @PasswordHash NVARCHAR(500) = NULL
@@ -53,6 +54,7 @@ BEGIN
                     CAST(NULL AS NVARCHAR(30)) AS Celular,
                     CAST(NULL AS BIT) AS TieneWhatsapp,
                     CAST(NULL AS INT) AS ParametroIdDondeVive,
+                    CAST(NULL AS INT) AS ParametroIdVereda,
                     CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
                 RETURN;
             END
@@ -78,6 +80,7 @@ BEGIN
                 CAST(NULL AS NVARCHAR(30)) AS Celular,
                 CAST(NULL AS BIT) AS TieneWhatsapp,
                 CAST(NULL AS INT) AS ParametroIdDondeVive,
+                CAST(NULL AS INT) AS ParametroIdVereda,
                 CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
             RETURN;
         END
@@ -102,6 +105,7 @@ BEGIN
                 CAST(NULL AS NVARCHAR(30)) AS Celular,
                 CAST(NULL AS BIT) AS TieneWhatsapp,
                 CAST(NULL AS INT) AS ParametroIdDondeVive,
+                CAST(NULL AS INT) AS ParametroIdVereda,
                 CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
             RETURN;
         END
@@ -126,6 +130,7 @@ BEGIN
                 CAST(NULL AS NVARCHAR(30)) AS Celular,
                 CAST(NULL AS BIT) AS TieneWhatsapp,
                 CAST(NULL AS INT) AS ParametroIdDondeVive,
+                CAST(NULL AS INT) AS ParametroIdVereda,
                 CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
             RETURN;
         END
@@ -150,6 +155,7 @@ BEGIN
                 CAST(NULL AS NVARCHAR(30)) AS Celular,
                 CAST(NULL AS BIT) AS TieneWhatsapp,
                 CAST(NULL AS INT) AS ParametroIdDondeVive,
+                CAST(NULL AS INT) AS ParametroIdVereda,
                 CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
             RETURN;
         END
@@ -184,6 +190,7 @@ BEGIN
             ParametroIdGrupoEdad,
             ParametroIdGenero,
             ParametroIdSoy,
+            ParametroIdVereda,
             CodigoReferido,
             CiudadanoReferidorId,
             TieneAcceso,
@@ -208,6 +215,7 @@ BEGIN
             @ParametroIdGrupoEdad,
             @ParametroIdGenero,
             @ParametroIdSoy,
+            @ParametroIdVereda,
             @CodigoReferido,
             @CiudadanoReferidorId,
             @TieneAcceso,
@@ -259,6 +267,7 @@ BEGIN
             @ParametroIdGrupoEdad AS ParametroIdGrupoEdad,
             @ParametroIdGenero AS ParametroIdGenero,
             @ParametroIdSoy AS ParametroIdSoy,
+            @ParametroIdVereda AS ParametroIdVereda,
             @CodigoReferido AS CodigoReferido,
             @CiudadanoReferidorId AS CiudadanoReferidorId,
             @TieneAcceso AS TieneAcceso,

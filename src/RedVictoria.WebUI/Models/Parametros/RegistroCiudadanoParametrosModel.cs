@@ -7,4 +7,5 @@ public sealed class RegistroCiudadanoParametrosModel
     public IReadOnlyCollection<ParametroOptionModel> GruposEdad { get; init; } = [];
     public IReadOnlyCollection<ParametroOptionModel> Generos { get; init; } = [];
     public IReadOnlyCollection<ParametroOptionModel> Soy { get; init; } = [];
+    public IReadOnlyCollection<ParametroOptionModel> Veredas { get; init; } = [];
 }

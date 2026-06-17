@@ -40,6 +40,7 @@ public class CiudadanoRepository : ICiudadanoRepository
                 command.ParametroIdGrupoEdad,
                 command.ParametroIdGenero,
                 command.ParametroIdSoy,
+                command.ParametroIdVereda,
                 command.Estado,
                 command.CodigoReferidoInvitacion,
                 command.PasswordHash

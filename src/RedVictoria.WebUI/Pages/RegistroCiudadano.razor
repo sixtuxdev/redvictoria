@@ -17,36 +17,7 @@
 else
 {
     <MudForm @ref="_form">
-        <MudGrid Spacing="3">
-            @* <MudItem xs="12">
-                @if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
-                {
-                    <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" Class="mb-3">
-                        @ViewModel.ErrorMessage
-                    </MudAlert>
-                }
-
-                @if (!string.IsNullOrWhiteSpace(ViewModel.SuccessMessage))
-                {
-                    <MudAlert Severity="Severity.Success" Variant="Variant.Filled" Class="mb-3">
-                        @ViewModel.SuccessMessage
-                    </MudAlert>
-                }
-
-                @if (!ViewModel.HasParametroOptions)
-                {
-                    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">
-                        Las listas de parametros no tienen datos disponibles. Verifica que el endpoint de parametros y las clases requeridas esten disponibles.
-                    </MudAlert>
-                }
-                else if (!ViewModel.AreRequiredParametrosLoaded)
-                {
-                    <MudAlert Severity="Severity.Warning" Variant="Variant.Outlined">
-                        Algunas listas requeridas no cargaron. No podras registrar el ciudadano hasta completar los datos de los select.
-                    </MudAlert>
-                }
-            </MudItem> *@
-
+        <MudGrid Spacing="3">            
             <MudItem xs="12" lg="8">
                 <MudCard Elevation="2">
                     <MudCardContent>
@@ -70,6 +41,43 @@ else
                                                MaxDate="@DateTime.Today"
                                                Validation="@(new Func<DateTime?, IEnumerable<string>>(ViewModel.ValidateFechaNacimiento))" />
                             </MudItem>
+
+                            <MudItem xs="12" sm="6">
+                                <MudSelect T="int?"
+                                           Label="Departamento de Nacimiento"
+                                           Variant="Variant.Outlined"
+                                           Clearable="true"
+                                           Value="@ViewModel.Request.DepartamentoId"
+                                           ValueChanged="@ViewModel.OnDepartamentoChangedAsync"
+                                           Disabled="@ViewModel.IsLoading">
+                                    @foreach (var departamento in ViewModel.Departamentos)
+                                    {
+                                        <MudSelectItem T="int?" Value="@((int?)departamento.DepartamentoId)">
+                                            @departamento.DepartamentoNombre
+                                        </MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+                            <MudItem xs="12" sm="6">
+                                <MudSelect T="int?"
+                                           Label="Ciudad de Nacimiento"
+                                           Variant="Variant.Outlined"
+                                           Clearable="true"
+                                           Disabled="@(!ViewModel.PuedeSeleccionarCiudad)"
+                                           @bind-Value="ViewModel.Request.MunicipioId">
+                                    @foreach (var ciudad in ViewModel.Ciudades)
+                                    {
+                                        <MudSelectItem T="int?" Value="@((int?)ciudad.CiudadId)">
+                                            @ciudad.CiudadNombre
+                                        </MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                            @if (ViewModel.IsLoadingCiudades)
+                            {
+                                <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mt-n2" />
+                            }
 
                             <MudItem xs="12" sm="6">
                                 <MudTextField @bind-Value="ViewModel.Request.LugarNacimiento"
@@ -182,46 +190,17 @@ else
                                           Label="Direccion"
                                           Variant="Variant.Outlined"
                                           Immediate="true"
-                                          MaxLength="250" />
-
-                            <MudGrid Spacing="2">
-                                <MudItem xs="12" sm="6">
-                                    <MudSelect T="int?"
-                                               Label="Departamento"
-                                               Variant="Variant.Outlined"
-                                               Clearable="true"
-                                               Value="@ViewModel.Request.DepartamentoId"
-                                               ValueChanged="@ViewModel.OnDepartamentoChangedAsync"
-                                               Disabled="@ViewModel.IsLoading">
-                                        @foreach (var departamento in ViewModel.Departamentos)
-                                        {
-                                            <MudSelectItem T="int?" Value="@((int?)departamento.DepartamentoId)">
-                                                @departamento.DepartamentoNombre
-                                            </MudSelectItem>
-                                        }
-                                    </MudSelect>
-                                </MudItem>
-                                <MudItem xs="12" sm="6">
-                                    <MudSelect T="int?"
-                                               Label="Ciudad"
-                                               Variant="Variant.Outlined"
-                                               Clearable="true"
-                                               Disabled="@(!ViewModel.PuedeSeleccionarCiudad)"
-                                               @bind-Value="ViewModel.Request.MunicipioId">
-                                        @foreach (var ciudad in ViewModel.Ciudades)
-                                        {
-                                            <MudSelectItem T="int?" Value="@((int?)ciudad.CiudadId)">
-                                                @ciudad.CiudadNombre
-                                            </MudSelectItem>
-                                        }
-                                    </MudSelect>
-                                </MudItem>
-                            </MudGrid>
-
-                            @if (ViewModel.IsLoadingCiudades)
-                            {
-                                <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mt-n2" />
-                            }
+                                          MaxLength="250" />       
+                                          
+                            <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdVereda"
+                                       Label="Vereda"
+                                       Variant="Variant.Outlined"
+                                       Clearable="true">
+                                @foreach (var opcion in ViewModel.Parametros.Veredas)
+                                {
+                                    <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
+                                }
+                            </MudSelect>
 
                             <MudTextField @bind-Value="ViewModel.Request.PuestoVotacion"
                                           Label="Puesto de votacion"
@@ -237,12 +216,12 @@ else
                 <MudCard Elevation="2">
                     <MudCardContent>
                         <MudGrid Spacing="3">
-                            @* <MudItem xs="12" md="8">
+                            <MudItem xs="12" md="8">
                                 <MudText Typo="Typo.h5">Referido y acceso</MudText>
                                 <MudText Typo="Typo.body2" Color="Color.Secondary">
-                                    El codigo referido se toma de la URL y se enviara al backend.
+                                    Establezca una contraseña de acceso para gestionar y consultar su red de simpatizantes de forma segura.
                                 </MudText>
-                            </MudItem> *@
+                            </MudItem>
 
                             <MudItem xs="12" md="4">
                                 <MudSwitch T="bool"

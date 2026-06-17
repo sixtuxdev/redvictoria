@@ -54,6 +54,10 @@ BEGIN TRY
         ALTER TABLE dbo.Ciudadanos
             ADD ParametroIdSoy INT NULL;
 
+    IF COL_LENGTH(N'dbo.Ciudadanos', N'ParametroIdVereda') IS NULL
+        ALTER TABLE dbo.Ciudadanos
+            ADD ParametroIdVereda INT NULL;
+
     IF COL_LENGTH(N'dbo.Ciudadanos', N'Email') IS NULL
         ALTER TABLE dbo.Ciudadanos
             ADD Email NVARCHAR(150) NULL;

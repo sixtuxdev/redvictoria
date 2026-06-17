@@ -21,6 +21,7 @@ public class RegistroCiudadanoRequest
     public string? CodigoReferido { get; set; }
     public int? CiudadanoReferidorId { get; set; }
     public bool TieneAcceso { get; set; }
+    public int? ParametroIdVereda { get; set; }
     public bool Estado { get; set; } = true;
     public string? Password { get; set; }
     public string? ConfirmPassword { get; set; }

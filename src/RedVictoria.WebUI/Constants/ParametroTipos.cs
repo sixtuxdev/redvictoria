@@ -7,4 +7,5 @@ public static class ParametroTipos
     public const string Genero = "Genero";
     public const string Soy = "Quien Soy";
     public const string DondeVive = "Donde Vive";
+    public const string Veredas = "Veredas";
 }

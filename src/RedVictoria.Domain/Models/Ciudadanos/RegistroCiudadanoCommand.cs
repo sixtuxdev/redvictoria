@@ -18,6 +18,7 @@ public class RegistroCiudadanoCommand
     public int? ParametroIdGrupoEdad { get; init; }
     public int? ParametroIdGenero { get; init; }
     public int? ParametroIdSoy { get; init; }
+    public int? ParametroIdVereda { get; init; }
     public bool Estado { get; init; } = true;
     public string? CodigoReferidoInvitacion { get; init; }
     public string? PasswordHash { get; init; }
