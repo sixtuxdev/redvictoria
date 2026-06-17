@@ -32,6 +32,8 @@ public sealed partial class RegistroCiudadanoViewModel(
 
     public bool IsSubmitting { get; private set; }
 
+    public bool IsBusy => IsLoading || IsLoadingCiudades || IsSubmitting;
+
     public string? CodigoReferido { get; private set; }
 
     public string? ErrorMessage { get; private set; }
@@ -63,7 +65,7 @@ public sealed partial class RegistroCiudadanoViewModel(
     public bool CanSubmit =>
         AreRequiredParametrosLoaded
         && IsCodigoReferidoValido
-        && !IsSubmitting;
+        && !IsBusy;
 
     public bool PuedeSeleccionarCiudad =>
         Request.DepartamentoId.HasValue

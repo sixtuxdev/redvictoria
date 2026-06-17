@@ -6,24 +6,31 @@
 
 <PageTitle>Iniciar sesión</PageTitle>
 
-<MudPaper Elevation="8" Class="pa-6 pa-md-8 rounded-xl">
-    <MudStack Spacing="4">
-        <div>
-            <MudText Typo="Typo.h4">Iniciar sesión</MudText>
-            <MudText Typo="Typo.body2" Color="Color.Secondary">
-                Ingresa con tu usuario, correo o documento.
+<MudPaper Elevation="10" Class="login-card">
+    <div class="login-card-accent"></div>
+    <MudStack Spacing="5">
+        <MudStack Spacing="2" AlignItems="AlignItems.Center" Class="login-heading">
+            <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="Size.Large" Class="login-avatar">
+                <MudIcon Icon="@Icons.Material.Filled.HowToVote" Size="Size.Medium" />
+            </MudAvatar>
+            <MudText Typo="Typo.h4" Align="Align.Center" Class="login-title">Iniciar sesión</MudText>
+            <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Secondary" Class="login-subtitle">
+                Accede a RedVictoria para consultar tu red de referidos y gestionar tu participación ciudadana.
             </MudText>
-        </div>
+        </MudStack>
 
         @if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
         {
-            <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">
+            <MudAlert Severity="Severity.Error"
+                      Variant="Variant.Filled"
+                      Dense="true"
+                      Class="login-alert">
                 @ViewModel.ErrorMessage
             </MudAlert>
         }
 
-        <MudForm @ref="_form" Model="@ViewModel.Request" @onsubmit="HandleLoginAsync">
-            <MudStack Spacing="3">
+        <MudForm @ref="_form" Model="@ViewModel.Request" @onsubmit="HandleLoginAsync" Class="login-form">
+            <MudStack Spacing="4">
                 <MudTextField @bind-Value="ViewModel.Request.UserIdentifier"
                               Label="Usuario, correo o documento"
                               Variant="Variant.Outlined"
@@ -31,24 +38,31 @@
                               Required="true"
                               RequiredError="Ingresa tu usuario, correo o documento."
                               Adornment="Adornment.Start"
-                              AdornmentIcon="@Icons.Material.Filled.Person" />
+                              AdornmentIcon="@Icons.Material.Filled.Person"
+                              Disabled="@ViewModel.IsBusy"
+                              Class="login-field" />
 
                 <MudTextField @bind-Value="ViewModel.Request.Password"
                               Label="Contraseña"
                               Variant="Variant.Outlined"
-                              InputType="InputType.Password"
+                              InputType="@PasswordInputType"
                               Immediate="true"
                               Required="true"
                               RequiredError="Ingresa tu contraseña."
-                              Adornment="Adornment.Start"
-                              AdornmentIcon="@Icons.Material.Filled.Lock" />
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@PasswordAdornmentIcon"
+                              OnAdornmentClick="TogglePasswordVisibility"
+                              AdornmentAriaLabel="@PasswordAdornmentLabel"
+                              Disabled="@ViewModel.IsBusy"
+                              Class="login-field" />
 
                 <MudButton ButtonType="ButtonType.Submit"
                            Color="Color.Primary"
                            Variant="Variant.Filled"
                            Size="Size.Large"
                            FullWidth="true"
-                           Disabled="@ViewModel.IsBusy">
+                           Disabled="@ViewModel.IsBusy"
+                           Class="login-submit">
                     @if (ViewModel.IsBusy)
                     {
                         <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
@@ -56,6 +70,7 @@
                     }
                     else
                     {
+                        <MudIcon Icon="@Icons.Material.Filled.Login" Class="mr-2" />
                         <span>Iniciar sesión</span>
                     }
                 </MudButton>
@@ -68,9 +83,25 @@
 
 @code {
     private MudForm? _form;
+    private bool _showPassword;
+
+    private InputType PasswordInputType => _showPassword ? InputType.Text : InputType.Password;
+
+    private string PasswordAdornmentIcon => _showPassword
+        ? Icons.Material.Filled.VisibilityOff
+        : Icons.Material.Filled.Visibility;
+
+    private string PasswordAdornmentLabel => _showPassword
+        ? "Ocultar contraseña"
+        : "Mostrar contraseña";
 
     private async Task HandleLoginAsync()
     {
+        if (ViewModel.IsBusy)
+        {
+            return;
+        }
+
         if (_form is not null)
         {
             await _form.Validate();
@@ -89,5 +120,10 @@
 
         Snackbar.Add(ViewModel.SuccessMessage ?? "Inicio de sesión exitoso.", Severity.Success);
         await InvokeAsync(() => Navigation.NavigateTo(AppRoutes.Dashboard, replace: true));
+    }
+
+    private void TogglePasswordVisibility()
+    {
+        _showPassword = !_showPassword;
     }
 }

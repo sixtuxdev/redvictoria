@@ -7,16 +7,23 @@
 
 <PageTitle>Registro ciudadano</PageTitle>
 
-@if (ViewModel.IsLoading)
-{
-    <MudPaper Elevation="1" Class="pa-8 text-center">
-        <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
-        <MudText Typo="Typo.body1" Class="mt-3">Cargando formulario...</MudText>
-    </MudPaper>
-}
-else
-{
-    <MudForm @ref="_form">
+<MudOverlay Visible="@ViewModel.IsBusy"
+            DarkBackground="true"
+            AutoClose="false"
+            Class="registro-loading-overlay">
+    <MudStack AlignItems="AlignItems.Center" Justify="Justify.Center" Spacing="3" Class="registro-loading-content">
+        <MudProgressCircular Indeterminate="true"
+                             Color="Color.Primary"
+                             Size="Size.Large"
+                             StrokeWidth="4" />
+        <MudText Typo="Typo.h6" Align="Align.Center">@LoadingMessage</MudText>
+        <MudText Typo="Typo.body2" Align="Align.Center" Color="Color.Secondary">
+            Por favor espera un momento.
+        </MudText>
+    </MudStack>
+</MudOverlay>
+
+<MudForm @ref="_form">
         <MudGrid Spacing="3">            
             <MudItem xs="12" lg="8">
                 <MudCard Elevation="2">
@@ -30,6 +37,7 @@ else
                                               Variant="Variant.Outlined"
                                               Required="true"
                                               Immediate="true"
+                                              Disabled="@ViewModel.IsBusy"
                                               MaxLength="200"
                                               Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateNombresCompletos))" />
                             </MudItem>
@@ -40,6 +48,7 @@ else
                                                Variant="Variant.Outlined"
                                                Required="true"
                                                RequiredError="Fecha de nacimiento es obligatoria."
+                                               Disabled="@ViewModel.IsBusy"
                                                MaxDate="@DateTime.Today"
                                                Validation="@(new Func<DateTime?, IEnumerable<string>>(ViewModel.ValidateFechaNacimiento))" />
                             </MudItem>
@@ -53,7 +62,7 @@ else
                                                  RequiredError="Departamento de nacimiento es obligatorio."
                                                  Value="@ViewModel.Request.DepartamentoId"
                                                  ValueChanged="@ViewModel.OnDepartamentoChangedAsync"
-                                                 Disabled="@ViewModel.IsLoading"
+                                                 Disabled="@ViewModel.IsBusy"
                                                  SearchFunc="SearchDepartamentosAsync"
                                                  ToStringFunc="GetDepartamentoText"
                                                  MaxItems="null"
@@ -68,7 +77,7 @@ else
                                                  Clearable="true"
                                                  Required="true"
                                                  RequiredError="Ciudad de nacimiento es obligatoria."
-                                                 Disabled="@(!ViewModel.PuedeSeleccionarCiudad)"
+                                                 Disabled="@(!ViewModel.PuedeSeleccionarCiudad || ViewModel.IsBusy)"
                                                  @bind-Value="ViewModel.Request.MunicipioId"
                                                  SearchFunc="SearchCiudadesAsync"
                                                  ToStringFunc="GetCiudadText"
@@ -78,21 +87,9 @@ else
                                                  Strict="false" />
                             </MudItem>
 
-                            @if (ViewModel.IsLoadingCiudades)
-                            {
-                                <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mt-n2" />
-                            }
-
-                            <MudItem xs="12" sm="6">
-                                <MudTextField @bind-Value="ViewModel.Request.LugarNacimiento"
-                                              Label="Lugar de nacimiento"
-                                              Variant="Variant.Outlined"
-                                              Immediate="true"
-                                              MaxLength="150" />
-                            </MudItem>
-
                             <MudItem xs="12" sm="6">
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdTipoIdentificacion"
+                                           Disabled="@ViewModel.IsBusy"
                                            Label="Tipo de identificación"
                                            Variant="Variant.Outlined"
                                            Clearable="true"
@@ -107,28 +104,18 @@ else
 
                             <MudItem xs="12" sm="6">
                                 <MudTextField @bind-Value="ViewModel.Request.NumeroIdentificacion"
+                                              Disabled="@ViewModel.IsBusy"
                                               Label="Número de identificación"
                                               Variant="Variant.Outlined"
                                               Required="true"
                                               Immediate="true"
                                               MaxLength="50"
                                               Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateNumeroIdentificacion))" />
-                            </MudItem>
-
-                            @* <MudItem xs="12" sm="6">
-                                <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdGrupoEdad"
-                                           Label="Grupo de edad"
-                                           Variant="Variant.Outlined"
-                                           Clearable="true">
-                                    @foreach (var opcion in ViewModel.Parametros.GruposEdad)
-                                    {
-                                        <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
-                                    }
-                                </MudSelect>
-                            </MudItem> *@
+                            </MudItem>                           
 
                             <MudItem xs="12" sm="6">
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdGenero"
+                                           Disabled="@ViewModel.IsBusy"
                                            Label="Género"
                                            Variant="Variant.Outlined"
                                            Clearable="true"
@@ -143,6 +130,7 @@ else
 
                             <MudItem xs="12" sm="6">
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdSoy"
+                                           Disabled="@ViewModel.IsBusy"
                                            Label="Soy"
                                            Variant="Variant.Outlined"
                                            Clearable="true"
@@ -166,6 +154,7 @@ else
 
                         <MudStack Spacing="3">
                             <MudTextField @bind-Value="ViewModel.Request.Email"
+                                          Disabled="@ViewModel.IsBusy"
                                           Label="Email"
                                           Variant="Variant.Outlined"
                                           Required="true"
@@ -174,6 +163,7 @@ else
                                           Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateEmail))" />
 
                             <MudTextField @bind-Value="ViewModel.Request.Celular"
+                                          Disabled="@ViewModel.IsBusy"
                                           Label="Celular"
                                           Variant="Variant.Outlined"
                                           Required="true"
@@ -182,6 +172,7 @@ else
                                           Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateCelular))" />
 
                             <MudSelect T="bool?" @bind-Value="ViewModel.Request.TieneWhatsapp"
+                                       Disabled="@ViewModel.IsBusy"
                                        Label="Tiene WhatsApp"
                                        Variant="Variant.Outlined"
                                        Clearable="true"
@@ -192,6 +183,7 @@ else
                             </MudSelect>
 
                             <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdDondeVive"
+                                       Disabled="@ViewModel.IsBusy"
                                        Label="Donde vive"
                                        Variant="Variant.Outlined"
                                        Clearable="true"
@@ -204,6 +196,7 @@ else
                             </MudSelect>
 
                             <MudTextField @bind-Value="ViewModel.Request.Direccion"
+                                          Disabled="@ViewModel.IsBusy"
                                           Label="Dirección"
                                           Variant="Variant.Outlined"
                                           Required="true"
@@ -211,6 +204,7 @@ else
                                           MaxLength="250" />       
                                           
                             <MudAutocomplete T="int?" @bind-Value="ViewModel.Request.ParametroIdVereda"
+                                             Disabled="@ViewModel.IsBusy"
                                              Label="Vereda"
                                              Variant="Variant.Outlined"
                                              Clearable="true"
@@ -224,6 +218,7 @@ else
                                              Strict="false" />
 
                             <MudTextField @bind-Value="ViewModel.Request.PuestoVotacion"
+                                          Disabled="@ViewModel.IsBusy"
                                           Label="Puesto de votación"
                                           Variant="Variant.Outlined"
                                           Required="true"
@@ -247,6 +242,7 @@ else
 
                             <MudItem xs="12" md="4">
                                 <MudSwitch T="bool"
+                                           Disabled="@ViewModel.IsBusy"
                                            Value="@ViewModel.Request.TieneAcceso"
                                            ValueChanged="@ViewModel.ToggleTieneAcceso"
                                            Color="Color.Primary"
@@ -257,6 +253,7 @@ else
                             {
                                 <MudItem xs="12" md="6">
                                     <MudTextField @bind-Value="ViewModel.Request.Password"
+                                                  Disabled="@ViewModel.IsBusy"
                                                   Label="Contrasena"
                                                   Variant="Variant.Outlined"
                                                   InputType="InputType.Password"
@@ -266,6 +263,7 @@ else
                                 </MudItem>
                                 <MudItem xs="12" md="6">
                                     <MudTextField @bind-Value="ViewModel.Request.ConfirmPassword"
+                                                  Disabled="@ViewModel.IsBusy"
                                                   Label="Confirmar contraseña"
                                                   Variant="Variant.Outlined"
                                                   InputType="InputType.Password"
@@ -296,8 +294,7 @@ else
                 </MudCard>
             </MudItem>
         </MudGrid>
-    </MudForm>
-}
+</MudForm>
 
 @code {
     private MudForm? _form;
@@ -305,6 +302,24 @@ else
 
     [Parameter]
     public string? CodigoReferido { get; set; }
+
+    private string LoadingMessage
+    {
+        get
+        {
+            if (ViewModel.IsSubmitting)
+            {
+                return "Guardando registro...";
+            }
+
+            if (ViewModel.IsLoadingCiudades)
+            {
+                return "Cargando ciudades...";
+            }
+
+            return "Cargando información...";
+        }
+    }
 
     private Task<IEnumerable<int?>> SearchDepartamentosAsync(string? value, CancellationToken cancellationToken)
     {
@@ -410,6 +425,11 @@ else
 
     private async Task HandleRegistroAsync()
     {
+        if (ViewModel.IsBusy)
+        {
+            return;
+        }
+
         if (_form is not null)
         {
             await _form.Validate();

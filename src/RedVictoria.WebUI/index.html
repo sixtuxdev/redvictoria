@@ -1,0 +1,295 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pablo Emilio Otero Miranda</title>
+
+    <style>
+
+                :root {
+                    --yellow: #FCDE02;
+                    --green: #018A13;
+                    --dark: #00470A;
+                    --white: #ffffff;
+                }
+
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    font-family: 'Segoe UI',sans-serif;
+                }
+
+                body {
+                    min-height: 100vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 30px;
+                    background: radial-gradient(circle at top left,#FCDE02 0%,transparent 35%), linear-gradient(135deg,#018A13,#003d09);
+                }
+
+
+                /* CONTENEDOR PRINCIPAL */
+                .poster {
+                    width: 100%;
+                    max-width: 1150px;
+                    min-height: 650px;
+                    background: white;
+                    border-radius: 35px;
+                    display: grid;
+                    grid-template-columns: 48% 52%;
+                    overflow: hidden;
+                    box-shadow: 0 40px 100px rgba(0,0,0,.35);
+                }
+
+
+                /* =========================
+           LADO IZQUIERDO FOTO
+        ==========================*/
+
+                .photo-section {
+                    position: relative;
+                    overflow: hidden;
+                    background: linear-gradient( 160deg, var(--green), var(--dark) );
+                }
+
+
+                    /* fondo decorativo */
+                    .photo-section::before {
+                        content: "";
+                        position: absolute;
+                        width: 500px;
+                        height: 500px;
+                        background: radial-gradient( circle, rgba(252,222,2,.8), transparent 65% );
+                        left: -180px;
+                        top: -160px;
+                    }
+
+
+                /* imagen grande */
+                .candidate-photo {
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    height: 100%;
+                    width: auto;
+                    max-width: 100%;
+                    object-fit: cover;
+                    z-index: 2;
+                    filter: drop-shadow(0 25px 35px rgba(0,0,0,.45));
+                }
+
+
+                /* barra inferior elegante */
+                .photo-info {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    padding: 25px;
+                    z-index: 3;
+                    background: linear-gradient( transparent, rgba(0,0,0,.65) );
+                    color: white;
+                }
+
+
+                    .photo-info span {
+                        background: var(--yellow);
+                        color: #00470A;
+                        padding: 8px 18px;
+                        border-radius: 40px;
+                        font-weight: 900;
+                    }
+
+
+                /* =========================
+           LADO DERECHO
+        ==========================*/
+
+                .content {
+                    padding: 70px 65px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+
+
+                .badge {
+                    width: max-content;
+                    background: linear-gradient( 135deg, var(--yellow), #fff6a8 );
+                    padding: 12px 25px;
+                    border-radius: 50px;
+                    color: #005C0D;
+                    font-weight: 900;
+                    margin-bottom: 30px;
+                }
+
+
+                h1 {
+                    font-size: 58px;
+                    line-height: .95;
+                    color: #005C0D;
+                    margin-bottom: 20px;
+                }
+
+
+                h2 {
+                    color: var(--green);
+                    font-size: 30px;
+                    margin-bottom: 30px;
+                }
+
+
+                .message {
+                    font-size: 24px;
+                    font-weight: 800;
+                    margin-bottom: 20px;
+                    color: #1d351f;
+                }
+
+
+                .description {
+                    font-size: 18px;
+                    line-height: 1.7;
+                    color: #59665c;
+                    margin-bottom: 35px;
+                }
+
+
+
+                .construction {
+                    width: max-content;
+                    padding: 18px 32px;
+                    border-radius: 20px;
+                    background: linear-gradient( 135deg, var(--green), #00470A );
+                    color: white;
+                    font-size: 20px;
+                    font-weight: 900;
+                    box-shadow: 0 15px 35px rgba(1,138,19,.35);
+                }
+
+
+
+                /* FOOTER */
+                .footer {
+                    margin-top: 35px;
+                    border-top: solid 1px #ddd;
+                    padding-top: 20px;
+                    color: #6b6b6b;
+                }
+
+
+
+                /* RESPONSIVE */
+                @media(max-width:850px) {
+
+
+                    .poster {
+                        grid-template-columns: 1fr;
+                    }
+
+
+                    .photo-section {
+                        height: 500px;
+                    }
+
+
+                    .content {
+                        padding: 40px 30px;
+                        text-align: center;
+                        align-items: center;
+                    }
+
+
+                    h1 {
+                        font-size: 42px;
+                    }
+                }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="poster">
+
+
+        <!-- FOTO IZQUIERDA -->
+        <section class="photo-section">
+
+
+            <img src="wwwroot/image/PabloEmilioBandera.png"
+                 class="candidate-photo"
+                 alt="Pablo Emilio Otero Miranda">
+
+
+            <div class="photo-info">
+                <span>El Bagre avanza</span>
+            </div>
+
+
+        </section>
+
+
+
+        <!-- INFORMACIÓN DERECHA -->
+        <section class="content">
+
+
+            <div class="badge">
+                Página oficial en preparación
+            </div>
+
+
+            <h1>
+                Pablo Emilio<br>
+                Otero Miranda
+            </h1>
+
+
+            <h2>
+                Próximo alcalde de El Bagre
+            </h2>
+
+
+            <p class="message">
+                Un nuevo camino para nuestra gente.
+            </p>
+
+
+            <p class="description">
+                Estamos construyendo un espacio digital moderno,
+                cercano y participativo donde conocerás nuestras
+                propuestas, proyectos y visión para transformar
+                El Bagre, Antioquia.
+            </p>
+
+
+
+            <div class="construction">
+                🚧 Página en construcción
+            </div>
+
+
+
+            <div class="footer">
+
+                El Bagre, Antioquia · Colombia
+
+            </div>
+
+
+        </section>
+
+
+    </div>
+
+
+</body>
+</html>

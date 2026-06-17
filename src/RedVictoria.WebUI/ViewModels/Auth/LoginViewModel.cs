@@ -61,7 +61,7 @@ public sealed class LoginViewModel(IAuthService authService)
         }
         catch
         {
-            ErrorMessage = "El servicio de autenticacion no esta disponible en este momento.";
+            ErrorMessage = "El servicio de autenticación no está disponible en este momento.";
             return false;
         }
         finally

@@ -2,18 +2,41 @@
 
 <MudLayout>
     <MudMainContent Class="login-layout">
-        <MudContainer MaxWidth="MaxWidth.Large" Class="login-container">
-            <MudGrid Justify="Justify.Center" Class="min-vh-100 align-center">
-                <MudItem xs="12" md="5" lg="4">
-                    @Body
-                </MudItem>
-                <MudItem xs="12" md="6" lg="5" Class="d-none d-md-flex">
-                    <MudPaper Elevation="0" Class="login-hero">
-                        <MudText Typo="Typo.h3" Class="mb-4">RedVictoria</MudText>
-                        <MudText Typo="Typo.h6">
-                            Gestión política y ciudadana con una experiencia clara, segura y moderna.
-                        </MudText>
+        <MudContainer MaxWidth="MaxWidth.False" Class="login-container">
+            <MudGrid Justify="Justify.Center" Class="login-shell">
+                <MudItem xs="12" md="6" lg="5" Class="login-brand-column d-none d-md-flex">
+                    <MudPaper Elevation="0" Class="login-brand-panel">
+                        <div class="login-brand-pattern"></div>
+                        <MudStack Spacing="5" Class="login-brand-content">
+                            <MudAvatar Color="Color.Success" Variant="Variant.Filled" Size="Size.Large" Class="login-brand-icon">
+                                <MudIcon Icon="@Icons.Material.Filled.Groups" />
+                            </MudAvatar>
+                            <div>
+                                <MudText Typo="Typo.h2" Class="login-hero-title">RedVictoria</MudText>
+                                <MudText Typo="Typo.h6" Class="login-hero-copy">
+                                    Gestión política y ciudadana con una experiencia clara, segura y moderna.
+                                </MudText>
+                            </div>
+                            <MudDivider Class="login-hero-divider" />
+                            <MudGrid Spacing="2">
+                                <MudItem xs="6">
+                                    <div class="login-hero-metric">
+                                        <MudText Typo="Typo.h5">24/7</MudText>
+                                        <MudText Typo="Typo.caption">Acceso seguro</MudText>
+                                    </div>
+                                </MudItem>
+                                <MudItem xs="6">
+                                    <div class="login-hero-metric">
+                                        <MudText Typo="Typo.h5">Red</MudText>
+                                        <MudText Typo="Typo.caption">Referidos activos</MudText>
+                                    </div>
+                                </MudItem>
+                            </MudGrid>
+                        </MudStack>
                     </MudPaper>
+                </MudItem>
+                <MudItem xs="12" sm="10" md="6" lg="4" Class="login-form-column">
+                    @Body
                 </MudItem>
             </MudGrid>
         </MudContainer>
