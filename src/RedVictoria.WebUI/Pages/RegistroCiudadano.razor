@@ -435,10 +435,17 @@ else
         var registrado = await ViewModel.RegistrarAsync();
         if (registrado)
         {
-            await ShowAlertAsync(
-                "success",
-                "Registro exitoso",
-                ViewModel.SuccessMessage ?? "Ciudadano registrado correctamente.");
+            var referidoUrl = BuildReferralUrl(ViewModel.CodigoReferidoRegistrado);
+            if (string.IsNullOrWhiteSpace(referidoUrl))
+            {
+                await ShowAlertAsync(
+                    "error",
+                    "Registro exitoso",
+                    "El ciudadano fue registrado, pero no fue posible obtener el codigo referido generado.");
+                return;
+            }
+
+            await ShowReferralLinkAlertAsync(referidoUrl);
             ViewModel.LimpiarFormulario();
             _form?.ResetValidation();
             return;
@@ -452,4 +459,17 @@ else
 
     private ValueTask ShowAlertAsync(string icon, string title, string text) =>
         JSRuntime.InvokeVoidAsync("RedVictoriaSweetAlert.fire", icon, title, text);
+
+    private ValueTask ShowReferralLinkAlertAsync(string url) =>
+        JSRuntime.InvokeVoidAsync("RedVictoriaSweetAlert.fireReferralLink", url);
+
+    private static string? BuildReferralUrl(string? codigoReferido)
+    {
+        if (string.IsNullOrWhiteSpace(codigoReferido))
+        {
+            return null;
+        }
+
+        return $"https://localhost:7206/registro-ciudadano/{Uri.EscapeDataString(codigoReferido.Trim())}";
+    }
 }

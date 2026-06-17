@@ -84,7 +84,9 @@ public sealed class CiudadanoService(HttpClient httpClient, IConfiguration confi
 
         if (response.IsSuccessStatusCode && apiResponse?.IsSuccess == true)
         {
-            return OperationResultModel.Success(apiResponse.Message);
+            return OperationResultModel.Success(
+                apiResponse.Message,
+                apiResponse.Data?.CodigoReferido);
         }
 
         var errors = apiResponse?.Errors?.Where(error => !string.IsNullOrWhiteSpace(error)).ToArray() ?? [];

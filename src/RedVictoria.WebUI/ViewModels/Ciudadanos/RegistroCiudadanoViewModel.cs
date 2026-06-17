@@ -38,6 +38,8 @@ public sealed partial class RegistroCiudadanoViewModel(
 
     public string? SuccessMessage { get; private set; }
 
+    public string? CodigoReferidoRegistrado { get; private set; }
+
     public bool IsCodigoReferidoValido { get; private set; }
 
     public bool BloquearRegistroPorReferido => !IsCodigoReferidoValido;
@@ -177,6 +179,7 @@ public sealed partial class RegistroCiudadanoViewModel(
     {
         ErrorMessage = null;
         SuccessMessage = null;
+        CodigoReferidoRegistrado = null;
 
         if (!AreRequiredParametrosLoaded)
         {
@@ -217,6 +220,7 @@ public sealed partial class RegistroCiudadanoViewModel(
             }
 
             SuccessMessage = result.Message ?? "Ciudadano registrado correctamente.";
+            CodigoReferidoRegistrado = Normalize(result.CodigoReferido);
             return true;
         }
         catch (OperationCanceledException)
@@ -431,6 +435,8 @@ public sealed partial class RegistroCiudadanoViewModel(
 
         Ciudades = [];
         ErrorMessage = null;
+        SuccessMessage = null;
+        CodigoReferidoRegistrado = null;
     }
 
     private void ValidatePassword(ICollection<string> errors)
