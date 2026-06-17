@@ -104,6 +104,39 @@ code {
     color: #c02d76;
 }
 
+.dashboard-header {
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.dashboard-summary {
+    border-radius: 8px;
+    border-left: 4px solid transparent;
+    min-height: 104px;
+}
+
+.dashboard-summary .mud-typography-caption {
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.summary-direct {
+    border-left-color: #1E3A8A;
+}
+
+.summary-indirect {
+    border-left-color: #0284C7;
+}
+
+.summary-active {
+    border-left-color: #16A34A;
+}
+
+.summary-inactive {
+    border-left-color: #64748B;
+}
+
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
     color: var(--bs-secondary-color);
     text-align: end;

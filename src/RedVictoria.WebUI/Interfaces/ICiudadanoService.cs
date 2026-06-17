@@ -13,4 +13,11 @@ public interface ICiudadanoService
     Task<OperationResultModel> ValidarCodigoReferidoAsync(
         string? codigoReferido,
         CancellationToken cancellationToken = default);
+
+    Task<ReferidosResultModel> ObtenerRedReferidosAsync(
+        CancellationToken cancellationToken = default);
+
+    Task<OperationResultModel> DesactivarReferidoAsync(
+        int ciudadanoReferidoId,
+        CancellationToken cancellationToken = default);
 }

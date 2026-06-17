@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using RedVictoria.Application.DTOs.Ciudadanos;
 using RedVictoria.Application.Interfaces;
 
@@ -39,5 +41,50 @@ public class CiudadanosController : ControllerBase
             cancellationToken);
 
         return response.IsSuccess ? Ok(response) : BadRequest(response);
+    }
+
+    [Authorize]
+    [HttpGet("referidos")]
+    public async Task<IActionResult> ObtenerRedReferidos(CancellationToken cancellationToken)
+    {
+        var ciudadanoId = GetCiudadanoId();
+        if (!ciudadanoId.HasValue)
+        {
+            return Unauthorized();
+        }
+
+        var response = await _ciudadanoApplication.ObtenerRedReferidosAsync(
+            ciudadanoId.Value,
+            cancellationToken);
+
+        return response.IsSuccess ? Ok(response) : BadRequest(response);
+    }
+
+    [Authorize]
+    [HttpPut("referidos/{ciudadanoReferidoId:int}/desactivar")]
+    public async Task<IActionResult> DesactivarReferido(
+        [FromRoute] int ciudadanoReferidoId,
+        CancellationToken cancellationToken)
+    {
+        var ciudadanoId = GetCiudadanoId();
+        if (!ciudadanoId.HasValue)
+        {
+            return Unauthorized();
+        }
+
+        var response = await _ciudadanoApplication.DesactivarReferidoAsync(
+            ciudadanoId.Value,
+            ciudadanoReferidoId,
+            cancellationToken);
+
+        return response.IsSuccess ? Ok(response) : BadRequest(response);
+    }
+
+    private int? GetCiudadanoId()
+    {
+        var value = User.FindFirstValue("CiudadanoId");
+        return int.TryParse(value, out var ciudadanoId)
+            ? ciudadanoId
+            : null;
     }
 }

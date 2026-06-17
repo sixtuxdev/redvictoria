@@ -2,6 +2,7 @@
 @layout LoginLayout
 @inject LoginViewModel ViewModel
 @inject ISnackbar Snackbar
+@inject NavigationManager Navigation
 
 <PageTitle>Iniciar sesion</PageTitle>
 
@@ -83,5 +84,6 @@
         }
 
         Snackbar.Add(ViewModel.SuccessMessage ?? "Inicio de sesion exitoso.", Severity.Success);
+        Navigation.NavigateTo(AppRoutes.Dashboard, replace: true);
     }
 }

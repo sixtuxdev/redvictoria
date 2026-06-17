@@ -147,6 +147,54 @@ public class CiudadanoApplication : ICiudadanoApplication
                 : "No puede continuar porque el referido ingresado no existe.");
     }
 
+    public async Task<Response<IReadOnlyCollection<CiudadanoReferidoResponse>>> ObtenerRedReferidosAsync(
+        int ciudadanoId,
+        CancellationToken cancellationToken = default)
+    {
+        if (ciudadanoId <= 0)
+        {
+            return Response<IReadOnlyCollection<CiudadanoReferidoResponse>>.Failure(
+                "No fue posible identificar el ciudadano autenticado.");
+        }
+
+        var referidos = await _ciudadanoRepository.ObtenerRedReferidosAsync(
+            ciudadanoId,
+            cancellationToken);
+
+        var response = referidos
+            .Select(MapReferido)
+            .ToArray();
+
+        return Response<IReadOnlyCollection<CiudadanoReferidoResponse>>.Success(
+            response,
+            "Red de referidos consultada correctamente.");
+    }
+
+    public async Task<Response<bool>> DesactivarReferidoAsync(
+        int ciudadanoAutenticadoId,
+        int ciudadanoReferidoId,
+        CancellationToken cancellationToken = default)
+    {
+        if (ciudadanoAutenticadoId <= 0)
+        {
+            return Response<bool>.Failure("No fue posible identificar el ciudadano autenticado.");
+        }
+
+        if (ciudadanoReferidoId <= 0)
+        {
+            return Response<bool>.Failure("El ciudadano referido no es valido.");
+        }
+
+        var desactivado = await _ciudadanoRepository.DesactivarReferidoAsync(
+            ciudadanoAutenticadoId,
+            ciudadanoReferidoId,
+            cancellationToken);
+
+        return desactivado
+            ? Response<bool>.Success(true, "Referido desactivado correctamente.")
+            : Response<bool>.Failure("No fue posible desactivar el referido o no pertenece a tu red.");
+    }
+
     private static List<string> Validate(
         RegistroCiudadanoRequest request,
         string? codigoReferido)
@@ -243,4 +291,21 @@ public class CiudadanoApplication : ICiudadanoApplication
 
     private static string? Normalize(string? value) =>
         string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+
+    private static CiudadanoReferidoResponse MapReferido(CiudadanoReferidoResult result) =>
+        new()
+        {
+            CiudadanoId = result.CiudadanoId,
+            NombresCompletos = result.NombresCompletos,
+            Email = result.Email,
+            Celular = result.Celular,
+            NumeroIdentificacion = result.NumeroIdentificacion,
+            CodigoReferido = result.CodigoReferido,
+            CiudadanoReferidorId = result.CiudadanoReferidorId,
+            Referidor = result.Referidor,
+            FechaRegistro = result.FechaRegistro,
+            Estado = result.Estado,
+            Nivel = result.Nivel,
+            TipoReferido = result.TipoReferido
+        };
 }

@@ -11,4 +11,13 @@ public interface ICiudadanoRepository
     Task<bool> ExisteCodigoReferidoAsync(
         string codigoReferido,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyCollection<CiudadanoReferidoResult>> ObtenerRedReferidosAsync(
+        int ciudadanoId,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> DesactivarReferidoAsync(
+        int ciudadanoAutenticadoId,
+        int ciudadanoReferidoId,
+        CancellationToken cancellationToken = default);
 }

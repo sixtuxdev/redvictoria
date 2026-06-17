@@ -1,0 +1,230 @@
+@page "/dashboard"
+@inject DashboardViewModel ViewModel
+@inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Dashboard</PageTitle>
+
+@if (ViewModel.IsLoading)
+{
+    <MudStack AlignItems="AlignItems.Center" Class="py-10">
+        <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+        <MudText Typo="Typo.body2" Color="Color.Secondary">Cargando dashboard...</MudText>
+    </MudStack>
+}
+else
+{
+    <MudStack Spacing="4">
+        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="dashboard-header">
+            <div>
+                <MudText Typo="Typo.h4">Dashboard</MudText>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">
+                    Hola, @ViewModel.Session?.Nombre. Esta es la actividad de tu red de simpatizantes.
+                </MudText>
+            </div>
+            <MudButton Color="Color.Primary"
+                       Variant="Variant.Outlined"
+                       StartIcon="@Icons.Material.Filled.Refresh"
+                       Disabled="@ViewModel.IsBusy"
+                       OnClick="ReloadAsync">
+                Actualizar
+            </MudButton>
+        </MudStack>
+
+        @if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">
+                @ViewModel.ErrorMessage
+            </MudAlert>
+        }
+
+        <MudGrid Spacing="3">
+            <MudItem xs="12" sm="6" lg="3">
+                <MudPaper Elevation="1" Class="pa-4 dashboard-summary summary-direct">
+                    <MudText Typo="Typo.caption">Referidos directos</MudText>
+                    <MudText Typo="Typo.h4">@ViewModel.TotalDirectos</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="6" lg="3">
+                <MudPaper Elevation="1" Class="pa-4 dashboard-summary summary-indirect">
+                    <MudText Typo="Typo.caption">Referidos indirectos</MudText>
+                    <MudText Typo="Typo.h4">@ViewModel.TotalIndirectos</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="6" lg="3">
+                <MudPaper Elevation="1" Class="pa-4 dashboard-summary summary-active">
+                    <MudText Typo="Typo.caption">Activos</MudText>
+                    <MudText Typo="Typo.h4">@ViewModel.TotalActivos</MudText>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="6" lg="3">
+                <MudPaper Elevation="1" Class="pa-4 dashboard-summary summary-inactive">
+                    <MudText Typo="Typo.caption">Inactivos</MudText>
+                    <MudText Typo="Typo.h4">@ViewModel.TotalInactivos</MudText>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+
+        <MudPaper Elevation="1" Class="pa-4">
+            <MudGrid Spacing="2" AlignItems="Center">
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="ViewModel.SearchText"
+                                  Label="Buscar"
+                                  Placeholder="Nombre, documento, celular, email, codigo, estado o tipo"
+                                  Variant="Variant.Outlined"
+                                  Immediate="true"
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Search" />
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
+                    <MudSelect T="string" @bind-Value="ViewModel.EstadoFiltro"
+                               Label="Estado"
+                               Variant="Variant.Outlined">
+                        <MudSelectItem Value="@("Todos")">Todos</MudSelectItem>
+                        <MudSelectItem Value="@("Activos")">Activos</MudSelectItem>
+                        <MudSelectItem Value="@("Inactivos")">Inactivos</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="3">
+                    <MudSelect T="string" @bind-Value="ViewModel.TipoFiltro"
+                               Label="Tipo de referido"
+                               Variant="Variant.Outlined">
+                        <MudSelectItem Value="@("Todos")">Todos</MudSelectItem>
+                        <MudSelectItem Value="@("Directo")">Directo</MudSelectItem>
+                        <MudSelectItem Value="@("Indirecto")">Indirecto</MudSelectItem>
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+
+        <MudPaper Elevation="1">
+            <MudTable Items="@ViewModel.ObtenerReferidosFiltrados()"
+                      Hover="true"
+                      Dense="true"
+                      Breakpoint="Breakpoint.Md"
+                      Loading="@ViewModel.IsBusy"
+                      Elevation="0">
+                <HeaderContent>
+                    <MudTh>Simpatizante</MudTh>
+                    <MudTh>Contacto</MudTh>
+                    <MudTh>Codigo</MudTh>
+                    <MudTh>Referidor</MudTh>
+                    <MudTh>Registro</MudTh>
+                    <MudTh>Estado</MudTh>
+                    <MudTh>Tipo</MudTh>
+                    <MudTh>Acciones</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Simpatizante">
+                        <MudStack Spacing="0">
+                            <MudText Typo="Typo.subtitle2">@context.NombresCompletos</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">@context.NumeroIdentificacion</MudText>
+                        </MudStack>
+                    </MudTd>
+                    <MudTd DataLabel="Contacto">
+                        <MudStack Spacing="0">
+                            <MudText Typo="Typo.body2">@Display(context.Email)</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">@Display(context.Celular)</MudText>
+                        </MudStack>
+                    </MudTd>
+                    <MudTd DataLabel="Codigo">
+                        <MudText Typo="Typo.body2">@context.CodigoReferido</MudText>
+                    </MudTd>
+                    <MudTd DataLabel="Referidor">@Display(context.Referidor)</MudTd>
+                    <MudTd DataLabel="Registro">@context.FechaRegistro.ToString("yyyy-MM-dd")</MudTd>
+                    <MudTd DataLabel="Estado">
+                        <MudChip T="string"
+                                 Color="@(context.Estado ? Color.Success : Color.Default)"
+                                 Variant="Variant.Filled"
+                                 Size="Size.Small">
+                            @(context.Estado ? "Activo" : "Inactivo")
+                        </MudChip>
+                    </MudTd>
+                    <MudTd DataLabel="Tipo">
+                        <MudChip T="string"
+                                 Color="@(context.Nivel == 1 ? Color.Primary : Color.Info)"
+                                 Variant="Variant.Outlined"
+                                 Size="Size.Small">
+                            @context.TipoReferido
+                        </MudChip>
+                    </MudTd>
+                    <MudTd DataLabel="Acciones">
+                        <MudStack Row="true" Spacing="1">
+                            <MudTooltip Text="Copiar enlace de referido">
+                                <MudIconButton Icon="@Icons.Material.Filled.ContentCopy"
+                                               Color="Color.Primary"
+                                               Size="Size.Small"
+                                               OnClick="@(() => CopyReferralUrlAsync(context))" />
+                            </MudTooltip>
+                            <MudTooltip Text="Desactivar referido">
+                                <MudIconButton Icon="@Icons.Material.Filled.Block"
+                                               Color="Color.Error"
+                                               Size="Size.Small"
+                                               Disabled="@(!context.Estado || ViewModel.IsBusy)"
+                                               OnClick="@(() => DeactivateAsync(context))" />
+                            </MudTooltip>
+                        </MudStack>
+                    </MudTd>
+                </RowTemplate>
+                <NoRecordsContent>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary" Class="pa-4">
+                        No hay referidos que coincidan con los filtros.
+                    </MudText>
+                </NoRecordsContent>
+            </MudTable>
+        </MudPaper>
+    </MudStack>
+}
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await ViewModel.InitializeAsync();
+        if (!ViewModel.IsAuthenticated)
+        {
+            Navigation.NavigateTo(AppRoutes.Login, replace: true);
+        }
+    }
+
+    private async Task ReloadAsync()
+    {
+        await ViewModel.CargarReferidosAsync();
+    }
+
+    private async Task CopyReferralUrlAsync(CiudadanoReferidoModel referido)
+    {
+        var url = DashboardViewModel.BuildReferralUrl(referido.CodigoReferido);
+        await JSRuntime.InvokeVoidAsync("RedVictoriaSweetAlert.copyText", url);
+    }
+
+    private async Task DeactivateAsync(CiudadanoReferidoModel referido)
+    {
+        var confirmed = await JSRuntime.InvokeAsync<bool>(
+            "RedVictoriaSweetAlert.confirmDeactivate",
+            referido.NombresCompletos);
+        if (!confirmed)
+        {
+            return;
+        }
+
+        var success = await ViewModel.DesactivarReferidoAsync(referido);
+        if (success)
+        {
+            await JSRuntime.InvokeVoidAsync(
+                "RedVictoriaSweetAlert.fire",
+                "success",
+                "Referido desactivado",
+                "El referido fue desactivado correctamente.");
+            return;
+        }
+
+        await JSRuntime.InvokeVoidAsync(
+            "RedVictoriaSweetAlert.fire",
+            "error",
+            "No fue posible desactivar",
+            ViewModel.ErrorMessage ?? "No fue posible desactivar el referido.");
+    }
+
+    private static string Display(string? value) =>
+        string.IsNullOrWhiteSpace(value) ? "-" : value;
+}

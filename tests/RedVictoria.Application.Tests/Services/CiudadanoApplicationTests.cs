@@ -386,6 +386,62 @@ public class CiudadanoApplicationTests
         Assert.Equal("No puede continuar porque el referido ingresado no existe.", response.Message);
     }
 
+    [Fact]
+    public async Task ObtenerRedReferidosAsync_RetornaDirectosEIndirectos()
+    {
+        var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: false))
+        {
+            RedReferidos =
+            [
+                new CiudadanoReferidoResult
+                {
+                    CiudadanoId = 11,
+                    NombresCompletos = "Directo Uno",
+                    CodigoReferido = "RV-DIRECTO",
+                    Referidor = "Padre",
+                    FechaRegistro = new DateTime(2026, 6, 17),
+                    Estado = true,
+                    Nivel = 1,
+                    TipoReferido = "Directo"
+                },
+                new CiudadanoReferidoResult
+                {
+                    CiudadanoId = 12,
+                    NombresCompletos = "Indirecto Uno",
+                    CodigoReferido = "RV-INDIRECTO",
+                    Referidor = "Directo Uno",
+                    FechaRegistro = new DateTime(2026, 6, 17),
+                    Estado = true,
+                    Nivel = 2,
+                    TipoReferido = "Indirecto"
+                }
+            ]
+        };
+        var application = CreateApplication(repository);
+
+        var response = await application.ObtenerRedReferidosAsync(10);
+
+        Assert.True(response.IsSuccess);
+        Assert.Equal(2, response.Data!.Count);
+        Assert.Contains(response.Data, item => item.TipoReferido == "Directo");
+        Assert.Contains(response.Data, item => item.TipoReferido == "Indirecto");
+    }
+
+    [Fact]
+    public async Task DesactivarReferidoAsync_CuandoNoPerteneceARed_RetornaError()
+    {
+        var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: false))
+        {
+            DesactivarReferidoResult = false
+        };
+        var application = CreateApplication(repository);
+
+        var response = await application.DesactivarReferidoAsync(10, 99);
+
+        Assert.False(response.IsSuccess);
+        Assert.Contains("no pertenece", response.Message);
+    }
+
     private static CiudadanoApplication CreateApplication(ICiudadanoRepository repository) =>
         CreateApplication(repository, new CorreoServiceFake());
 
@@ -445,6 +501,8 @@ public class CiudadanoApplicationTests
         public RegistroCiudadanoCommand? Command { get; private set; }
 
         public bool ExisteCodigoReferido { get; init; } = true;
+        public IReadOnlyCollection<CiudadanoReferidoResult> RedReferidos { get; init; } = [];
+        public bool DesactivarReferidoResult { get; init; } = true;
 
         public Task<RegistroCiudadanoResult> RegistrarAsync(
             RegistroCiudadanoCommand command,
@@ -459,6 +517,21 @@ public class CiudadanoApplicationTests
             CancellationToken cancellationToken = default)
         {
             return Task.FromResult(ExisteCodigoReferido);
+        }
+
+        public Task<IReadOnlyCollection<CiudadanoReferidoResult>> ObtenerRedReferidosAsync(
+            int ciudadanoId,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(RedReferidos);
+        }
+
+        public Task<bool> DesactivarReferidoAsync(
+            int ciudadanoAutenticadoId,
+            int ciudadanoReferidoId,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(DesactivarReferidoResult);
         }
     }
 
@@ -515,6 +588,21 @@ public class CiudadanoApplicationTests
 
         public Task<bool> ExisteCodigoReferidoAsync(
             string codigoReferido,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromException<bool>(_exception);
+        }
+
+        public Task<IReadOnlyCollection<CiudadanoReferidoResult>> ObtenerRedReferidosAsync(
+            int ciudadanoId,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromException<IReadOnlyCollection<CiudadanoReferidoResult>>(_exception);
+        }
+
+        public Task<bool> DesactivarReferidoAsync(
+            int ciudadanoAutenticadoId,
+            int ciudadanoReferidoId,
             CancellationToken cancellationToken = default)
         {
             return Task.FromException<bool>(_exception);

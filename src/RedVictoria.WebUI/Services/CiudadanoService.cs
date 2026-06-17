@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using RedVictoria.WebUI.Constants;
@@ -8,8 +9,81 @@ using RedVictoria.WebUI.Models.Common;
 
 namespace RedVictoria.WebUI.Services;
 
-public sealed class CiudadanoService(HttpClient httpClient, IConfiguration configuration) : ICiudadanoService
+public sealed class CiudadanoService(
+    HttpClient httpClient,
+    IConfiguration configuration,
+    IAuthSessionService authSessionService) : ICiudadanoService
 {
+    public async Task<ReferidosResultModel> ObtenerRedReferidosAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var request = await CreateAuthorizedRequestAsync(
+            HttpMethod.Get,
+            ApiEndpoints.Referidos,
+            cancellationToken);
+        if (request is null)
+        {
+            return ReferidosResultModel.Failure("Debes iniciar sesion para consultar el dashboard.");
+        }
+
+        var response = await httpClient.SendAsync(request, cancellationToken);
+        ApiResponseModel<IReadOnlyCollection<CiudadanoReferidoModel>>? apiResponse;
+        try
+        {
+            apiResponse = await response.Content.ReadFromJsonAsync<ApiResponseModel<IReadOnlyCollection<CiudadanoReferidoModel>>>(
+                cancellationToken: cancellationToken);
+        }
+        catch (JsonException)
+        {
+            return ReferidosResultModel.Failure("No fue posible interpretar la red de referidos.");
+        }
+        catch (NotSupportedException)
+        {
+            return ReferidosResultModel.Failure("El servicio de referidos no devolvio una respuesta valida.");
+        }
+
+        if (response.IsSuccessStatusCode && apiResponse?.IsSuccess == true)
+        {
+            return ReferidosResultModel.Success(apiResponse.Data ?? [], apiResponse.Message);
+        }
+
+        return ReferidosResultModel.Failure(apiResponse?.Message ?? "No fue posible consultar la red de referidos.");
+    }
+
+    public async Task<OperationResultModel> DesactivarReferidoAsync(
+        int ciudadanoReferidoId,
+        CancellationToken cancellationToken = default)
+    {
+        var request = await CreateAuthorizedRequestAsync(
+            HttpMethod.Put,
+            $"{ApiEndpoints.Referidos}/{ciudadanoReferidoId}/desactivar",
+            cancellationToken);
+        if (request is null)
+        {
+            return OperationResultModel.Failure("Debes iniciar sesion para desactivar un referido.");
+        }
+
+        var response = await httpClient.SendAsync(request, cancellationToken);
+        ApiResponseModel<bool>? apiResponse;
+        try
+        {
+            apiResponse = await response.Content.ReadFromJsonAsync<ApiResponseModel<bool>>(
+                cancellationToken: cancellationToken);
+        }
+        catch (JsonException)
+        {
+            return OperationResultModel.Failure("No fue posible interpretar la respuesta de desactivacion.");
+        }
+        catch (NotSupportedException)
+        {
+            return OperationResultModel.Failure("El servicio de desactivacion no devolvio una respuesta valida.");
+        }
+
+        return response.IsSuccessStatusCode && apiResponse?.IsSuccess == true
+            ? OperationResultModel.Success(apiResponse.Message)
+            : OperationResultModel.Failure(apiResponse?.Message ?? "No fue posible desactivar el referido.");
+    }
+
     public async Task<OperationResultModel> ValidarCodigoReferidoAsync(
         string? codigoReferido,
         CancellationToken cancellationToken = default)
@@ -95,5 +169,22 @@ public sealed class CiudadanoService(HttpClient httpClient, IConfiguration confi
             : apiResponse?.Message ?? "No fue posible registrar el ciudadano.";
 
         return OperationResultModel.Failure(message);
+    }
+
+    private async Task<HttpRequestMessage?> CreateAuthorizedRequestAsync(
+        HttpMethod method,
+        string relativeEndpoint,
+        CancellationToken cancellationToken)
+    {
+        var token = await authSessionService.GetTokenAsync(cancellationToken);
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            return null;
+        }
+
+        var endpoint = ApiEndpointBuilder.Build(configuration, relativeEndpoint);
+        var request = new HttpRequestMessage(method, endpoint);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        return request;
     }
 }

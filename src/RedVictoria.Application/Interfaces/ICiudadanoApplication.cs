@@ -13,4 +13,13 @@ public interface ICiudadanoApplication
     Task<Response<ValidarCodigoReferidoResponse>> ValidarCodigoReferidoAsync(
         string? codigoReferido,
         CancellationToken cancellationToken = default);
+
+    Task<Response<IReadOnlyCollection<CiudadanoReferidoResponse>>> ObtenerRedReferidosAsync(
+        int ciudadanoId,
+        CancellationToken cancellationToken = default);
+
+    Task<Response<bool>> DesactivarReferidoAsync(
+        int ciudadanoAutenticadoId,
+        int ciudadanoReferidoId,
+        CancellationToken cancellationToken = default);
 }

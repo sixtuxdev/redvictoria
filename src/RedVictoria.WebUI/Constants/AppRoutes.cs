@@ -4,6 +4,7 @@ public static class AppRoutes
 {
     public const string Home = "/";
     public const string Login = "/login";
+    public const string Dashboard = "/dashboard";
     public const string RecoverPassword = "/recuperar-password";
     public const string ActivateAccount = "/activar-cuenta";
     public const string RegistroCiudadano = "/registro-ciudadano";

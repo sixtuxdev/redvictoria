@@ -62,6 +62,37 @@ window.RedVictoriaSweetAlert = {
                 });
             }
         });
+    },
+    confirmDeactivate: async (name) => {
+        if (!window.Swal) {
+            return window.confirm(`Deseas desactivar a ${name}?`);
+        }
+
+        const result = await window.Swal.fire({
+            icon: "warning",
+            title: "Desactivar referido",
+            text: `Deseas desactivar a ${name}? Esta accion no elimina el registro, solo lo marca como inactivo.`,
+            showCancelButton: true,
+            confirmButtonText: "Desactivar",
+            cancelButtonText: "Cancelar",
+            reverseButtons: true,
+            confirmButtonColor: "#E11D48"
+        });
+
+        return result.isConfirmed === true;
+    },
+    copyText: async (text) => {
+        await navigator.clipboard.writeText(text);
+
+        if (window.Swal) {
+            await window.Swal.fire({
+                icon: "success",
+                title: "Enlace copiado",
+                text: "El enlace fue copiado correctamente.",
+                timer: 1700,
+                showConfirmButton: false
+            });
+        }
     }
 };
 

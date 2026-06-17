@@ -64,4 +64,38 @@ public class CiudadanoRepository : ICiudadanoRepository
 
         return await connection.QuerySingleAsync<bool>(databaseCommand);
     }
+
+    public async Task<IReadOnlyCollection<CiudadanoReferidoResult>> ObtenerRedReferidosAsync(
+        int ciudadanoId,
+        CancellationToken cancellationToken = default)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        var databaseCommand = new CommandDefinition(
+            "dbo.usp_Ciudadanos_ObtenerRedReferidos",
+            new { CiudadanoId = ciudadanoId },
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
+
+        var result = await connection.QueryAsync<CiudadanoReferidoResult>(databaseCommand);
+        return result.ToArray();
+    }
+
+    public async Task<bool> DesactivarReferidoAsync(
+        int ciudadanoAutenticadoId,
+        int ciudadanoReferidoId,
+        CancellationToken cancellationToken = default)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        var databaseCommand = new CommandDefinition(
+            "dbo.usp_Ciudadanos_DesactivarReferido",
+            new
+            {
+                CiudadanoAutenticadoId = ciudadanoAutenticadoId,
+                CiudadanoReferidoId = ciudadanoReferidoId
+            },
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
+
+        return await connection.QuerySingleAsync<bool>(databaseCommand);
+    }
 }
