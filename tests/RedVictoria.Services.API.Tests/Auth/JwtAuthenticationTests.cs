@@ -50,6 +50,7 @@ public class JwtAuthenticationTests
         Assert.Contains(jwt.Claims, claim => claim.Type == "UsuarioId" && claim.Value == "1");
         Assert.Contains(jwt.Claims, claim => claim.Type == "CiudadanoId" && claim.Value == "2");
         Assert.Contains(jwt.Claims, claim => claim.Type == "Nombre" && claim.Value == "Juan Perez");
+        Assert.Contains(jwt.Claims, claim => claim.Type == "CodigoReferido" && claim.Value == "RV-ABC123");
         Assert.Contains(jwt.Claims, claim => claim.Type == ClaimTypes.Email && claim.Value == "usuario@email.com");
         Assert.Contains(jwt.Claims, claim => claim.Type == ClaimTypes.Role && claim.Value == "Ciudadano");
     }
@@ -82,6 +83,7 @@ public class JwtAuthenticationTests
             UsuarioId = 1,
             CiudadanoId = 2,
             Nombre = "Juan Perez",
+            CodigoReferido = "RV-ABC123",
             Email = "usuario@email.com",
             Rol = "Ciudadano"
         });

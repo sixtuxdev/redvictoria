@@ -74,6 +74,10 @@
         if (_form is not null)
         {
             await _form.Validate();
+            if (!_form.IsValid)
+            {
+                return;
+            }
         }
 
         var loggedIn = await ViewModel.LoginAsync();
@@ -84,6 +88,6 @@
         }
 
         Snackbar.Add(ViewModel.SuccessMessage ?? "Inicio de sesion exitoso.", Severity.Success);
-        Navigation.NavigateTo(AppRoutes.Dashboard, replace: true);
+        await InvokeAsync(() => Navigation.NavigateTo(AppRoutes.Dashboard, replace: true));
     }
 }

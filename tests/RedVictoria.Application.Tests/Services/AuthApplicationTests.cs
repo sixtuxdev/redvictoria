@@ -21,6 +21,7 @@ public class AuthApplicationTests
         Assert.Equal("token-test", response.Data!.Token);
         Assert.True(response.Data.UsuarioId > 0);
         Assert.True(response.Data.CiudadanoId > 0);
+        Assert.Equal("RV-ABC123", response.Data.CodigoReferido);
         Assert.Equal("Ciudadano", response.Data.Rol);
         Assert.True(response.Data.FechaExpiracion > DateTime.UtcNow);
         Assert.Equal("usuario@email.com", repository.Email);
@@ -65,6 +66,19 @@ public class AuthApplicationTests
         Assert.Null(response.Data);
     }
 
+    [Fact]
+    public async Task LoginAsync_SinCodigoReferido_RetornaMensajeControlado()
+    {
+        var user = ValidUser(codigoReferido: string.Empty);
+        var application = CreateApplication(new AuthRepositoryFake(user));
+
+        var response = await application.LoginAsync(ValidRequest());
+
+        Assert.False(response.IsSuccess);
+        Assert.Equal("El usuario no tiene un ciudadano asociado.", response.Message);
+        Assert.Null(response.Data);
+    }
+
     [Theory]
     [InlineData(false, true)]
     [InlineData(true, false)]
@@ -97,12 +111,14 @@ public class AuthApplicationTests
     private static UsuarioLoginResult ValidUser(
         bool usuarioEstado = true,
         bool ciudadanoEstado = true,
-        bool tieneAcceso = true) =>
+        bool tieneAcceso = true,
+        string codigoReferido = "RV-ABC123") =>
         new()
         {
             UsuarioId = 1,
             CiudadanoId = 2,
             NombresCompletos = "Juan Perez",
+            CodigoReferido = codigoReferido,
             Email = "usuario@email.com",
             PasswordHash = "hash:123456",
             Rol = "Ciudadano",

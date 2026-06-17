@@ -7,15 +7,16 @@ BEGIN
     SELECT TOP (1)
         u.UsuarioId,
         u.CiudadanoId,
-        c.NombresCompletos,
+        COALESCE(c.NombresCompletos, N'') AS NombresCompletos,
+        COALESCE(c.CodigoReferido, N'') AS CodigoReferido,
         u.Email,
         u.PasswordHash,
         COALESCE(u.Rol, N'Ciudadano') AS Rol,
         u.Estado AS UsuarioEstado,
-        c.Estado AS CiudadanoEstado,
-        c.TieneAcceso
+        CAST(COALESCE(c.Estado, 0) AS BIT) AS CiudadanoEstado,
+        CAST(COALESCE(c.TieneAcceso, 0) AS BIT) AS TieneAcceso
     FROM dbo.Usuarios AS u
-    INNER JOIN dbo.Ciudadanos AS c
+    LEFT JOIN dbo.Ciudadanos AS c
         ON c.CiudadanoId = u.CiudadanoId
     WHERE u.Email = @Email;
 END;

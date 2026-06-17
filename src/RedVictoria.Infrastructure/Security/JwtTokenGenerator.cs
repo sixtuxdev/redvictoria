@@ -40,6 +40,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new Claim("UsuarioId", user.UsuarioId.ToString()),
             new Claim("CiudadanoId", user.CiudadanoId.ToString()),
             new Claim("Nombre", user.Nombre),
+            new Claim("CodigoReferido", user.CodigoReferido),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Role, user.Rol),
             new Claim(JwtRegisteredClaimNames.Sub, user.UsuarioId.ToString()),

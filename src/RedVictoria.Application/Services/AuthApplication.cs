@@ -45,6 +45,12 @@ public class AuthApplication : IAuthApplication
         }
 
         var user = Map(userResult);
+        if (string.IsNullOrWhiteSpace(user.CodigoReferido))
+        {
+            return Response<LoginResponse>.Failure(
+                "El usuario no tiene un ciudadano asociado.");
+        }
+
         if (!user.UsuarioEstado || !user.CiudadanoEstado)
         {
             return Response<LoginResponse>.Failure(InvalidCredentialsMessage);
@@ -69,6 +75,7 @@ public class AuthApplication : IAuthApplication
             UsuarioId = user.UsuarioId,
             CiudadanoId = user.CiudadanoId,
             Nombre = user.NombresCompletos,
+            CodigoReferido = user.CodigoReferido,
             Email = user.Email,
             Rol = user.Rol
         };
@@ -112,6 +119,7 @@ public class AuthApplication : IAuthApplication
             UsuarioId = user.UsuarioId,
             CiudadanoId = user.CiudadanoId,
             NombresCompletos = user.NombresCompletos,
+            CodigoReferido = user.CodigoReferido,
             Email = user.Email,
             PasswordHash = user.PasswordHash,
             Rol = user.Rol,

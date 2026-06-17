@@ -39,25 +39,54 @@ else
         }
 
         <MudGrid Spacing="3">
-            <MudItem xs="12" sm="6" lg="3">
+            <MudItem xs="12" lg="4">
+                <MudPaper Elevation="1" Class="pa-4 own-referral-card">
+                    <MudStack Spacing="2">
+                        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
+                            <MudAvatar Color="Color.Primary" Variant="Variant.Filled">
+                                <MudIcon Icon="@Icons.Material.Filled.Share" />
+                            </MudAvatar>
+                            <div>
+                                <MudText Typo="Typo.subtitle1">Comparte tu referido</MudText>
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                                    Invita nuevos simpatizantes bajo tu red.
+                                </MudText>
+                            </div>
+                        </MudStack>
+
+                        <MudText Typo="Typo.body2" Class="own-referral-url">
+                            @Display(ViewModel.MiUrlReferido)
+                        </MudText>
+
+                        <MudButton Color="Color.Primary"
+                                   Variant="Variant.Filled"
+                                   StartIcon="@Icons.Material.Filled.ContentCopy"
+                                   Disabled="@string.IsNullOrWhiteSpace(ViewModel.MiUrlReferido)"
+                                   OnClick="CopyOwnReferralUrlAsync">
+                            Copiar mi enlace de referido
+                        </MudButton>
+                    </MudStack>
+                </MudPaper>
+            </MudItem>
+            <MudItem xs="12" sm="6" lg="2">
                 <MudPaper Elevation="1" Class="pa-4 dashboard-summary summary-direct">
                     <MudText Typo="Typo.caption">Referidos directos</MudText>
                     <MudText Typo="Typo.h4">@ViewModel.TotalDirectos</MudText>
                 </MudPaper>
             </MudItem>
-            <MudItem xs="12" sm="6" lg="3">
+            <MudItem xs="12" sm="6" lg="2">
                 <MudPaper Elevation="1" Class="pa-4 dashboard-summary summary-indirect">
                     <MudText Typo="Typo.caption">Referidos indirectos</MudText>
                     <MudText Typo="Typo.h4">@ViewModel.TotalIndirectos</MudText>
                 </MudPaper>
             </MudItem>
-            <MudItem xs="12" sm="6" lg="3">
+            <MudItem xs="12" sm="6" lg="2">
                 <MudPaper Elevation="1" Class="pa-4 dashboard-summary summary-active">
                     <MudText Typo="Typo.caption">Activos</MudText>
                     <MudText Typo="Typo.h4">@ViewModel.TotalActivos</MudText>
                 </MudPaper>
             </MudItem>
-            <MudItem xs="12" sm="6" lg="3">
+            <MudItem xs="12" sm="6" lg="2">
                 <MudPaper Elevation="1" Class="pa-4 dashboard-summary summary-inactive">
                     <MudText Typo="Typo.caption">Inactivos</MudText>
                     <MudText Typo="Typo.h4">@ViewModel.TotalInactivos</MudText>
@@ -195,6 +224,21 @@ else
     {
         var url = DashboardViewModel.BuildReferralUrl(referido.CodigoReferido);
         await JSRuntime.InvokeVoidAsync("RedVictoriaSweetAlert.copyText", url);
+    }
+
+    private async Task CopyOwnReferralUrlAsync()
+    {
+        if (string.IsNullOrWhiteSpace(ViewModel.MiUrlReferido))
+        {
+            await JSRuntime.InvokeVoidAsync(
+                "RedVictoriaSweetAlert.fire",
+                "error",
+                "No fue posible copiar",
+                "No encontramos tu codigo referido en la sesion actual. Inicia sesion nuevamente.");
+            return;
+        }
+
+        await JSRuntime.InvokeVoidAsync("RedVictoriaSweetAlert.copyText", ViewModel.MiUrlReferido);
     }
 
     private async Task DeactivateAsync(CiudadanoReferidoModel referido)

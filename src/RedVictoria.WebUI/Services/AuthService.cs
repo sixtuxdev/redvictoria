@@ -42,6 +42,7 @@ public sealed class AuthService(
                 UsuarioId = apiResponse.Data.UsuarioId,
                 CiudadanoId = apiResponse.Data.CiudadanoId,
                 Nombre = apiResponse.Data.Nombre,
+                CodigoReferido = apiResponse.Data.CodigoReferido,
                 Email = apiResponse.Data.Email,
                 Rol = apiResponse.Data.Rol,
                 FechaExpiracion = apiResponse.Data.FechaExpiracion

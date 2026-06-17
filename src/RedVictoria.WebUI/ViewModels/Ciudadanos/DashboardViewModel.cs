@@ -34,6 +34,11 @@ public sealed class DashboardViewModel(
 
     public bool IsAuthenticated => Session?.IsValid == true;
 
+    public string? MiUrlReferido =>
+        string.IsNullOrWhiteSpace(Session?.CodigoReferido)
+            ? null
+            : BuildReferralUrl(Session.CodigoReferido);
+
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
         IsLoading = true;

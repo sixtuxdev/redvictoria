@@ -6,6 +6,7 @@ public class LoginResponse
     public int UsuarioId { get; set; }
     public int CiudadanoId { get; set; }
     public string Nombre { get; set; } = string.Empty;
+    public string CodigoReferido { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string Rol { get; set; } = string.Empty;
     public DateTime FechaExpiracion { get; set; }
