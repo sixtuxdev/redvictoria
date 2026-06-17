@@ -108,7 +108,7 @@ else
                                               Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateNumeroIdentificacion))" />
                             </MudItem>
 
-                            <MudItem xs="12" sm="6">
+                            @* <MudItem xs="12" sm="6">
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdGrupoEdad"
                                            Label="Grupo de edad"
                                            Variant="Variant.Outlined"
@@ -118,7 +118,7 @@ else
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
                                     }
                                 </MudSelect>
-                            </MudItem>
+                            </MudItem> *@
 
                             <MudItem xs="12" sm="6">
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdGenero"
@@ -132,7 +132,7 @@ else
                                 </MudSelect>
                             </MudItem>
 
-                            <MudItem xs="12">
+                            <MudItem xs="12" sm="6">
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdSoy"
                                            Label="Soy"
                                            Variant="Variant.Outlined"
@@ -265,7 +265,7 @@ else
                             }
                             else
                             {
-                                <span>Registrar ciudadano</span>
+                                <span>Registrarme</span>
                             }
                         </MudButton>
                     </MudCardActions>
