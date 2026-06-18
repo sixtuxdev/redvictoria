@@ -6,80 +6,253 @@
 
 <PageTitle>Iniciar sesión</PageTitle>
 
-<MudPaper Elevation="10" Class="login-card">
-    <div class="login-card-accent"></div>
-    <MudStack Spacing="5">
-        <MudStack Spacing="2" AlignItems="AlignItems.Center" Class="login-heading">
-            <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="Size.Large" Class="login-avatar">
-                <MudIcon Icon="@Icons.Material.Filled.HowToVote" Size="Size.Medium" />
-            </MudAvatar>
-            <MudText Typo="Typo.h4" Align="Align.Center" Class="login-title">Iniciar sesión</MudText>
-            <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Secondary" Class="login-subtitle">
-                Accede a RedVictoria para consultar tu red de referidos y gestionar tu participación ciudadana.
-            </MudText>
-        </MudStack>
+<div class="login-page">
+    <div class="login-background login-background-one"></div>
+    <div class="login-background login-background-two"></div>
 
-        @if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
-        {
-            <MudAlert Severity="Severity.Error"
-                      Variant="Variant.Filled"
-                      Dense="true"
-                      Class="login-alert">
-                @ViewModel.ErrorMessage
-            </MudAlert>
+    <MudPaper Elevation="12" Class="login-card">
+        <div class="login-left-panel">
+            <div class="login-left-content">
+                <MudAvatar Color="Color.Default" Variant="Variant.Filled" Size="Size.Large" Class="login-brand-avatar">
+                    <MudIcon Icon="@Icons.Material.Filled.HowToVote" Size="Size.Medium" />
+                </MudAvatar>
+
+                <MudText Typo="Typo.h3" Align="Align.Center" Class="login-brand-title">
+                    El Equipo Ganador
+                </MudText>
+
+                <MudText Typo="Typo.body1" Align="Align.Center" Class="login-brand-description">
+                    Gestiona tu red de referidos, consulta tus simpatizantes y fortalece la participación ciudadana.
+                </MudText>
+
+                <div class="login-info-card">
+                    <MudIcon Icon="@Icons.Material.Filled.Groups" Class="login-info-icon" />
+                    <MudText Typo="Typo.body2" Class="login-info-text">
+                        Construyendo comunidad con organización, liderazgo y participación.
+                    </MudText>
+                </div>
+            </div>
+
+            <div class="login-wave"></div>
+        </div>
+
+        <div class="login-right-panel">
+            <div class="login-form-wrapper">
+                <MudStack Spacing="5">
+                    <MudStack Spacing="2" AlignItems="AlignItems.Center" Class="login-heading">
+                        <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="Size.Large" Class="login-avatar">
+                            <MudIcon Icon="@Icons.Material.Filled.LockOpen" Size="Size.Medium" />
+                        </MudAvatar>
+
+                        <MudText Typo="Typo.h4" Align="Align.Center" Class="login-title">
+                            Iniciar sesión
+                        </MudText>
+
+                        <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Secondary" Class="login-subtitle">
+                            Accede a el equipo ganador para consultar tu red de referidos y gestionar tu participación ciudadana.
+                        </MudText>
+                    </MudStack>
+
+                    @if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
+                    {
+                        <MudAlert Severity="Severity.Error"
+                                  Variant="Variant.Filled"
+                                  Dense="true"
+                                  Class="login-alert">
+                            @ViewModel.ErrorMessage
+                        </MudAlert>
+                    }
+
+                    <MudForm @ref="_form" Model="@ViewModel.Request" @onsubmit="HandleLoginAsync" Class="login-form">
+                        <MudStack Spacing="4">
+                            <MudTextField @bind-Value="ViewModel.Request.UserIdentifier"
+                                          Label="Usuario, correo o documento"
+                                          Variant="Variant.Outlined"
+                                          Immediate="true"
+                                          Required="true"
+                                          RequiredError="Ingresa tu usuario, correo o documento."
+                                          Adornment="Adornment.Start"
+                                          AdornmentIcon="@Icons.Material.Filled.Person"
+                                          Disabled="@ViewModel.IsBusy"
+                                          Class="login-field" />
+
+                            <MudTextField @bind-Value="ViewModel.Request.Password"
+                                          Label="Contraseña"
+                                          Variant="Variant.Outlined"
+                                          InputType="@PasswordInputType"
+                                          Immediate="true"
+                                          Required="true"
+                                          RequiredError="Ingresa tu contraseña."
+                                          Adornment="Adornment.End"
+                                          AdornmentIcon="@PasswordAdornmentIcon"
+                                          OnAdornmentClick="TogglePasswordVisibility"
+                                          AdornmentAriaLabel="@PasswordAdornmentLabel"
+                                          Disabled="@ViewModel.IsBusy"
+                                          Class="login-field" />
+
+                            <MudButton ButtonType="ButtonType.Submit"
+                                       Color="Color.Primary"
+                                       Variant="Variant.Filled"
+                                       Size="Size.Large"
+                                       FullWidth="true"
+                                       Disabled="@ViewModel.IsBusy"
+                                       Class="login-submit">
+                                @if (ViewModel.IsBusy)
+                                {
+                                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                                    <span>Validando...</span>
+                                }
+                                else
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Login" Class="mr-2" />
+                                    <span>Iniciar sesión</span>
+                                }
+                            </MudButton>
+                        </MudStack>
+                    </MudForm>
+
+                    <AuthLinks />
+                </MudStack>
+            </div>
+        </div>
+    </MudPaper>
+</div>
+
+<style>
+    .login-page {
+        min-height: 100vh;
+        width: 100%;
+        padding: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ffffff 0%, #eef3ff 45%, #dbe6ff 100%);
+    }
+
+    .login-background {
+        position: absolute;
+        border-radius: 999px;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .login-background-one {
+        width: 520px;
+        height: 520px;
+        top: -190px;
+        right: -180px;
+        background: rgba(4, 67, 255, .14);
+    }
+
+    .login-background-two {
+        width: 460px;
+        height: 460px;
+        left: -180px;
+        bottom: -190px;
+        background: rgba(4, 67, 255, .08);
+    }
+
+    .login-left-panel {
+        position: relative;
+        overflow: hidden;
+        padding: 56px 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        background: linear-gradient(155deg, #ffffff 0%, #dce7ff 35%, #0443FF 100%);
+    }
+
+        .login-left-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 15%, rgba(255,255,255,.55), transparent 28%), radial-gradient(circle at 78% 25%, rgba(4,67,255,.22), transparent 30%), linear-gradient(180deg, rgba(4,67,255,.08), rgba(4,67,255,.28));
+            z-index: 1;
         }
 
-        <MudForm @ref="_form" Model="@ViewModel.Request" @onsubmit="HandleLoginAsync" Class="login-form">
-            <MudStack Spacing="4">
-                <MudTextField @bind-Value="ViewModel.Request.UserIdentifier"
-                              Label="Usuario, correo o documento"
-                              Variant="Variant.Outlined"
-                              Immediate="true"
-                              Required="true"
-                              RequiredError="Ingresa tu usuario, correo o documento."
-                              Adornment="Adornment.Start"
-                              AdornmentIcon="@Icons.Material.Filled.Person"
-                              Disabled="@ViewModel.IsBusy"
-                              Class="login-field" />
+        .login-left-panel::after {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            border: 42px solid rgba(255,255,255,.18);
+            right: -120px;
+            top: -90px;
+            z-index: 1;
+        }
 
-                <MudTextField @bind-Value="ViewModel.Request.Password"
-                              Label="Contraseña"
-                              Variant="Variant.Outlined"
-                              InputType="@PasswordInputType"
-                              Immediate="true"
-                              Required="true"
-                              RequiredError="Ingresa tu contraseña."
-                              Adornment="Adornment.End"
-                              AdornmentIcon="@PasswordAdornmentIcon"
-                              OnAdornmentClick="TogglePasswordVisibility"
-                              AdornmentAriaLabel="@PasswordAdornmentLabel"
-                              Disabled="@ViewModel.IsBusy"
-                              Class="login-field" />
+    .login-brand-avatar {
+        background: rgba(4,67,255,.16) !important;
+        color: #0443FF !important;
+        border: 1px solid rgba(255,255,255,.55);
+        box-shadow: 0 18px 38px rgba(4,67,255,.22);
+    }
 
-                <MudButton ButtonType="ButtonType.Submit"
-                           Color="Color.Primary"
-                           Variant="Variant.Filled"
-                           Size="Size.Large"
-                           FullWidth="true"
-                           Disabled="@ViewModel.IsBusy"
-                           Class="login-submit">
-                    @if (ViewModel.IsBusy)
-                    {
-                        <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
-                        <span>Validando...</span>
-                    }
-                    else
-                    {
-                        <MudIcon Icon="@Icons.Material.Filled.Login" Class="mr-2" />
-                        <span>Iniciar sesión</span>
-                    }
-                </MudButton>
-            </MudStack>
-        </MudForm>
+    .login-brand-title {
+        color: #ffffff;
+        text-shadow: 0 8px 24px rgba(4,67,255,.35);
+    }
 
-        <AuthLinks />
-    </MudStack>
-</MudPaper>
+    .login-brand-description {
+        color: rgba(255,255,255,.95);
+    }
+
+    .login-info-card {
+        border: 1px solid rgba(255,255,255,.38);
+        background: rgba(255,255,255,.16);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 18px 40px rgba(4,67,255,.18);
+    }
+
+    .login-info-icon {
+        color: #ffffff;
+        font-size: 34px;
+        flex-shrink: 0;
+    }
+
+    .login-info-text {
+        color: rgba(255,255,255,.96);
+    }
+
+    .login-wave {
+        background: linear-gradient(135deg, #ffffff 0%, #dce7ff 100%);
+    }
+
+    .login-avatar {
+        background: #0443FF !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 0 16px rgba(4, 67, 255, .08), 0 18px 34px rgba(4, 67, 255, .24);
+    }
+
+    .login-field:hover .mud-input-outlined-border {
+        border-color: #0443FF !important;
+    }
+
+    .login-field .mud-input-adornment .mud-icon-root {
+        color: #0443FF;
+    }
+
+    .login-submit {
+        height: 56px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #0443FF 0%, #002DB3 100%) !important;
+        color: white !important;
+        font-weight: 800;
+        text-transform: none;
+        letter-spacing: .2px;
+        box-shadow: 0 16px 30px rgba(4, 67, 255, .30);
+        transition: all .2s ease-in-out;
+    }
+
+        .login-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 20px 38px rgba(4, 67, 255, .38);
+        }
+</style>
 
 @code {
     private MudForm? _form;
