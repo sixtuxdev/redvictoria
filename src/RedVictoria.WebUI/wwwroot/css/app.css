@@ -33,6 +33,36 @@ body {
     padding: 0 !important;
 }
 
+.rv-appbar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+    background: linear-gradient(135deg, var(--rv-primary) 0%, var(--rv-primary-dark) 100%) !important;
+    box-shadow: 0 14px 34px rgba(4, 67, 255, 0.24);
+}
+
+.rv-appbar-title {
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.rv-appbar .mud-button-root {
+    color: #ffffff !important;
+    border-radius: 8px;
+    text-transform: none;
+    font-weight: 700;
+}
+
+.rv-appbar .mud-button-root:hover,
+.rv-appbar .mud-icon-button-root:hover {
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+.rv-drawer {
+    border-right: 1px solid rgba(4, 67, 255, 0.12);
+    background:
+        linear-gradient(180deg, #ffffff 0%, #f7f9ff 58%, #eef3ff 100%) !important;
+    box-shadow: 18px 0 44px rgba(15, 23, 42, 0.06);
+}
+
 h1:focus {
     outline: none;
 }

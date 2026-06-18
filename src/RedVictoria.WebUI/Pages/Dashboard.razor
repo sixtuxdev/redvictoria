@@ -7,48 +7,52 @@
 
 @if (ViewModel.IsLoading)
 {
-    <MudStack AlignItems="AlignItems.Center" Class="py-10">
-        <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
-        <MudText Typo="Typo.body2" Color="Color.Secondary">Cargando dashboard...</MudText>
-    </MudStack>
+    <div class="dashboard-loading">
+        <MudStack AlignItems="AlignItems.Center" Class="py-10">
+            <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+            <MudText Typo="Typo.body2" Color="Color.Secondary">Cargando dashboard...</MudText>
+        </MudStack>
+    </div>
 }
 else
 {
-    <MudStack Spacing="4">
-        <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="dashboard-header">
-            <div>
-                <MudText Typo="Typo.h4">Dashboard</MudText>
-                <MudText Typo="Typo.body2" Color="Color.Secondary">
-                    Hola, @ViewModel.Session?.Nombre. Esta es la actividad de tu red de simpatizantes.
-                </MudText>
-            </div>
-            <MudButton Color="Color.Primary"
-                       Variant="Variant.Outlined"
-                       StartIcon="@Icons.Material.Filled.Refresh"
-                       Disabled="@ViewModel.IsBusy"
-                       OnClick="ReloadAsync">
-                Actualizar
-            </MudButton>
-        </MudStack>
+    <div class="dashboard-page">
+        <MudStack Spacing="5" Class="dashboard-content">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="dashboard-header dashboard-hero">
+                <div class="dashboard-heading">
+                    <MudText Typo="Typo.h4" Class="dashboard-title">Dashboard</MudText>
+                    <MudText Typo="Typo.body2" Class="dashboard-subtitle">
+                        Hola, @ViewModel.Session?.Nombre. Esta es la actividad de tu red de simpatizantes.
+                    </MudText>
+                </div>
+                <MudButton Color="Color.Primary"
+                           Variant="Variant.Outlined"
+                           StartIcon="@Icons.Material.Filled.Refresh"
+                           Disabled="@ViewModel.IsBusy"
+                           OnClick="ReloadAsync"
+                           Class="dashboard-refresh-button">
+                    Actualizar
+                </MudButton>
+            </MudStack>
 
         @if (!string.IsNullOrWhiteSpace(ViewModel.ErrorMessage))
         {
-            <MudAlert Severity="Severity.Error" Variant="Variant.Outlined">
+            <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" Class="dashboard-alert">
                 @ViewModel.ErrorMessage
             </MudAlert>
         }
 
-        <MudGrid Spacing="3">
+        <MudGrid Spacing="3" Class="dashboard-summary-grid">
             <MudItem xs="12" lg="4">
-                <MudPaper Elevation="1" Class="pa-4 own-referral-card">
+                <MudPaper Elevation="1" Class="pa-4 own-referral-card dashboard-panel">
                     <MudStack Spacing="2">
                         <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2">
-                            <MudAvatar Color="Color.Primary" Variant="Variant.Filled">
+                            <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Class="dashboard-card-avatar">
                                 <MudIcon Icon="@Icons.Material.Filled.Share" />
                             </MudAvatar>
                             <div>
-                                <MudText Typo="Typo.subtitle1">Comparte tu referido</MudText>
-                                <MudText Typo="Typo.caption" Color="Color.Secondary">
+                                <MudText Typo="Typo.subtitle1" Class="dashboard-card-title">Comparte tu referido</MudText>
+                                <MudText Typo="Typo.caption" Class="dashboard-card-caption">
                                     Invita nuevos simpatizantes bajo tu red.
                                 </MudText>
                             </div>
@@ -62,7 +66,8 @@ else
                                    Variant="Variant.Filled"
                                    StartIcon="@Icons.Material.Filled.ContentCopy"
                                    Disabled="@string.IsNullOrWhiteSpace(ViewModel.MiUrlReferido)"
-                                   OnClick="CopyOwnReferralUrlAsync">
+                                   OnClick="CopyOwnReferralUrlAsync"
+                                   Class="dashboard-primary-action">
                             Copiar mi enlace de referido
                         </MudButton>
                     </MudStack>
@@ -70,31 +75,31 @@ else
             </MudItem>
             <MudItem xs="12" sm="6" lg="2">
                 <MudPaper Elevation="1" Class="pa-4 dashboard-summary summary-direct">
-                    <MudText Typo="Typo.caption">Referidos directos</MudText>
-                    <MudText Typo="Typo.h4">@ViewModel.TotalDirectos</MudText>
+                    <MudText Typo="Typo.caption" Class="dashboard-summary-label">Referidos directos</MudText>
+                    <MudText Typo="Typo.h4" Class="dashboard-summary-value">@ViewModel.TotalDirectos</MudText>
                 </MudPaper>
             </MudItem>
             <MudItem xs="12" sm="6" lg="2">
                 <MudPaper Elevation="1" Class="pa-4 dashboard-summary summary-indirect">
-                    <MudText Typo="Typo.caption">Referidos indirectos</MudText>
-                    <MudText Typo="Typo.h4">@ViewModel.TotalIndirectos</MudText>
+                    <MudText Typo="Typo.caption" Class="dashboard-summary-label">Referidos indirectos</MudText>
+                    <MudText Typo="Typo.h4" Class="dashboard-summary-value">@ViewModel.TotalIndirectos</MudText>
                 </MudPaper>
             </MudItem>
             <MudItem xs="12" sm="6" lg="2">
                 <MudPaper Elevation="1" Class="pa-4 dashboard-summary summary-active">
-                    <MudText Typo="Typo.caption">Activos</MudText>
-                    <MudText Typo="Typo.h4">@ViewModel.TotalActivos</MudText>
+                    <MudText Typo="Typo.caption" Class="dashboard-summary-label">Activos</MudText>
+                    <MudText Typo="Typo.h4" Class="dashboard-summary-value">@ViewModel.TotalActivos</MudText>
                 </MudPaper>
             </MudItem>
             <MudItem xs="12" sm="6" lg="2">
                 <MudPaper Elevation="1" Class="pa-4 dashboard-summary summary-inactive">
-                    <MudText Typo="Typo.caption">Inactivos</MudText>
-                    <MudText Typo="Typo.h4">@ViewModel.TotalInactivos</MudText>
+                    <MudText Typo="Typo.caption" Class="dashboard-summary-label">Inactivos</MudText>
+                    <MudText Typo="Typo.h4" Class="dashboard-summary-value">@ViewModel.TotalInactivos</MudText>
                 </MudPaper>
             </MudItem>
         </MudGrid>
 
-        <MudPaper Elevation="1" Class="pa-4">
+        <MudPaper Elevation="1" Class="pa-4 dashboard-filter-card dashboard-panel">
             <MudGrid Spacing="2" Class="dashboard-filter-grid">
                 <MudItem xs="12" md="6">
                     <MudTextField @bind-Value="ViewModel.SearchText"
@@ -126,13 +131,14 @@ else
             </MudGrid>
         </MudPaper>
 
-        <MudPaper Elevation="1">
+        <MudPaper Elevation="1" Class="dashboard-table-card dashboard-panel">
             <MudTable Items="@ViewModel.ObtenerReferidosFiltrados()"
                       Hover="true"
                       Dense="true"
                       Breakpoint="Breakpoint.Md"
                       Loading="@ViewModel.IsBusy"
-                      Elevation="0">
+                      Elevation="0"
+                      Class="dashboard-table">
                 <HeaderContent>
                     <MudTh>Simpatizante</MudTh>
                     <MudTh>Contacto</MudTh>
@@ -202,7 +208,8 @@ else
                 </NoRecordsContent>
             </MudTable>
         </MudPaper>
-    </MudStack>
+        </MudStack>
+    </div>
 }
 
 @code {
