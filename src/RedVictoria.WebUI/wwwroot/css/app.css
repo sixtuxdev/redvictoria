@@ -12,9 +12,25 @@
 }
 
 html, body {
+    min-height: 100%;
+    margin: 0;
     font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     color: var(--rv-text);
     background: var(--rv-primary-pale);
+}
+
+body {
+    min-height: 100vh;
+}
+
+#app {
+    min-height: 100vh;
+}
+
+.login-layout {
+    min-height: 100vh;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 h1:focus {
