@@ -5,7 +5,9 @@ window.RedVictoriaSweetAlert = {
                 icon,
                 title,
                 text,
-                confirmButtonText: "Aceptar"
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#0443FF",
+                iconColor: icon === "error" ? "#DC2626" : "#0443FF"
             });
         }
 
@@ -22,13 +24,14 @@ window.RedVictoriaSweetAlert = {
 
         return window.Swal.fire({
             icon: "success",
+            iconColor: "#0443FF",
             title: "Registro exitoso",
             html: `
                 <div style="text-align:left">
                     <p style="margin:0 0 14px">${message}</p>
                     <div style="
-                        background:#f5f7fb;
-                        border:1px solid #d7dce8;
+                        background:#f4f7ff;
+                        border:1px solid #d9e2f7;
                         border-radius:8px;
                         padding:12px;
                         color:#1f2937;
@@ -42,6 +45,8 @@ window.RedVictoriaSweetAlert = {
             showCancelButton: true,
             confirmButtonText: "Copiar enlace",
             cancelButtonText: "Cerrar",
+            confirmButtonColor: "#0443FF",
+            cancelButtonColor: "#64748B",
             reverseButtons: true,
             preConfirm: async () => {
                 try {
@@ -56,9 +61,11 @@ window.RedVictoriaSweetAlert = {
             if (result.isConfirmed) {
                 return window.Swal.fire({
                     icon: "success",
+                    iconColor: "#0443FF",
                     title: "Enlace copiado",
                     text: "El enlace fue copiado correctamente.",
-                    confirmButtonText: "Aceptar"
+                    confirmButtonText: "Aceptar",
+                    confirmButtonColor: "#0443FF"
                 });
             }
         });
@@ -70,13 +77,15 @@ window.RedVictoriaSweetAlert = {
 
         const result = await window.Swal.fire({
             icon: "warning",
+            iconColor: "#334155",
             title: "Desactivar referido",
             text: `Deseas desactivar a ${name}? Esta accion no elimina el registro, solo lo marca como inactivo.`,
             showCancelButton: true,
             confirmButtonText: "Desactivar",
             cancelButtonText: "Cancelar",
             reverseButtons: true,
-            confirmButtonColor: "#E11D48"
+            confirmButtonColor: "#DC2626",
+            cancelButtonColor: "#64748B"
         });
 
         return result.isConfirmed === true;
@@ -87,6 +96,7 @@ window.RedVictoriaSweetAlert = {
         if (window.Swal) {
             await window.Swal.fire({
                 icon: "success",
+                iconColor: "#0443FF",
                 title: "Enlace copiado",
                 text: "El enlace fue copiado correctamente.",
                 timer: 1700,

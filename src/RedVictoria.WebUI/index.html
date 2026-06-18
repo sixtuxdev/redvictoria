@@ -9,9 +9,9 @@
     <style>
 
                 :root {
-                    --yellow: #FCDE02;
-                    --green: #018A13;
-                    --dark: #00470A;
+                    --primary: #0443FF;
+                    --primary-dark: #002DB3;
+                    --primary-soft: #E8EEFF;
                     --white: #ffffff;
                 }
 
@@ -28,7 +28,7 @@
                     justify-content: center;
                     align-items: center;
                     padding: 30px;
-                    background: radial-gradient(circle at top left,#FCDE02 0%,transparent 35%), linear-gradient(135deg,#018A13,#003d09);
+                    background: radial-gradient(circle at top left,rgba(4,67,255,.18) 0%,transparent 35%), linear-gradient(135deg,#ffffff,#dbe6ff);
                 }
 
 
@@ -53,7 +53,7 @@
                 .photo-section {
                     position: relative;
                     overflow: hidden;
-                    background: linear-gradient( 160deg, var(--green), var(--dark) );
+                    background: linear-gradient( 160deg, var(--primary), var(--primary-dark) );
                 }
 
 
@@ -63,7 +63,7 @@
                         position: absolute;
                         width: 500px;
                         height: 500px;
-                        background: radial-gradient( circle, rgba(252,222,2,.8), transparent 65% );
+                        background: radial-gradient( circle, rgba(255,255,255,.82), transparent 65% );
                         left: -180px;
                         top: -160px;
                     }
@@ -98,8 +98,8 @@
 
 
                     .photo-info span {
-                        background: var(--yellow);
-                        color: #00470A;
+                        background: var(--white);
+                        color: var(--primary);
                         padding: 8px 18px;
                         border-radius: 40px;
                         font-weight: 900;
@@ -120,10 +120,10 @@
 
                 .badge {
                     width: max-content;
-                    background: linear-gradient( 135deg, var(--yellow), #fff6a8 );
+                    background: linear-gradient( 135deg, var(--primary-soft), #ffffff );
                     padding: 12px 25px;
                     border-radius: 50px;
-                    color: #005C0D;
+                    color: var(--primary);
                     font-weight: 900;
                     margin-bottom: 30px;
                 }
@@ -132,13 +132,13 @@
                 h1 {
                     font-size: 58px;
                     line-height: .95;
-                    color: #005C0D;
+                    color: var(--primary-dark);
                     margin-bottom: 20px;
                 }
 
 
                 h2 {
-                    color: var(--green);
+                    color: var(--primary);
                     font-size: 30px;
                     margin-bottom: 30px;
                 }
@@ -148,14 +148,14 @@
                     font-size: 24px;
                     font-weight: 800;
                     margin-bottom: 20px;
-                    color: #1d351f;
+                    color: #0f172a;
                 }
 
 
                 .description {
                     font-size: 18px;
                     line-height: 1.7;
-                    color: #59665c;
+                    color: #526174;
                     margin-bottom: 35px;
                 }
 
@@ -165,11 +165,11 @@
                     width: max-content;
                     padding: 18px 32px;
                     border-radius: 20px;
-                    background: linear-gradient( 135deg, var(--green), #00470A );
+                    background: linear-gradient( 135deg, var(--primary), var(--primary-dark) );
                     color: white;
                     font-size: 20px;
                     font-weight: 900;
-                    box-shadow: 0 15px 35px rgba(1,138,19,.35);
+                    box-shadow: 0 15px 35px rgba(4,67,255,.28);
                 }
 
 

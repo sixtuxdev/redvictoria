@@ -1,20 +1,20 @@
 .registro-layout {
-    --rv-primary: #0b3c49;
-    --rv-secondary: #1e88e5;
-    --rv-light-blue: #eaf5ff;
-    --rv-soft-blue: #f5fbff;
+    --rv-primary: #0443FF;
+    --rv-secondary: #002DB3;
+    --rv-light-blue: #e8eeff;
+    --rv-soft-blue: #f4f7ff;
     --rv-background: #ffffff;
-    --rv-text: #1e293b;
-    --rv-text-soft: #64748b;
+    --rv-text: #0f172a;
+    --rv-text-soft: #526174;
     --rv-card-bg: rgba(255, 255, 255, 0.98);
-    --rv-border: rgba(30, 136, 229, 0.16);
-    --rv-shadow: rgba(15, 23, 42, 0.12);
+    --rv-border: rgba(4, 67, 255, 0.16);
+    --rv-shadow: rgba(4, 67, 255, 0.12);
 
     min-height: 100vh;
     color: var(--rv-text);
     background:
-        radial-gradient(circle at 12% 10%, rgba(30, 136, 229, 0.14), transparent 24rem),
-        radial-gradient(circle at 88% 4%, rgba(11, 60, 73, 0.08), transparent 22rem),
+        radial-gradient(circle at 12% 10%, rgba(4, 67, 255, 0.14), transparent 24rem),
+        radial-gradient(circle at 88% 4%, rgba(4, 67, 255, 0.08), transparent 22rem),
         linear-gradient(180deg, var(--rv-soft-blue) 0%, var(--rv-background) 42%, var(--rv-light-blue) 100%);
 }
 
@@ -98,7 +98,7 @@
     border: 6px solid var(--rv-background);
     border-radius: 30px;
     background: var(--rv-light-blue);
-    box-shadow: 0 18px 42px rgba(11, 60, 73, 0.2);
+    box-shadow: 0 18px 42px rgba(4, 67, 255, 0.20);
 }
 
 .registro-candidate-photo {
@@ -118,7 +118,7 @@
     gap: 0.45rem;
     padding: 0.42rem 0.8rem;
     color: var(--rv-primary);
-    border: 1px solid rgba(30, 136, 229, 0.2);
+    border: 1px solid rgba(4, 67, 255, 0.2);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.76);
 }
@@ -126,7 +126,7 @@
 .registro-candidate-name {
     color: var(--rv-primary);
     font-weight: 900;
-    letter-spacing: -0.055em;
+    letter-spacing: 0;
     line-height: 0.96;
 }
 
@@ -135,7 +135,7 @@
     margin-top: 0.55rem;
     color: var(--rv-secondary);
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
 }
 
 .registro-campaign-message {
@@ -155,7 +155,7 @@
     min-height: 2rem;
     padding: 0.35rem 0.7rem;
     color: var(--rv-primary);
-    border: 1px solid rgba(30, 136, 229, 0.18);
+    border: 1px solid rgba(4, 67, 255, 0.18);
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.72);
     font-size: 0.82rem;
@@ -181,7 +181,7 @@
     max-width: 42rem;
     color: var(--rv-text);
     font-weight: 800;
-    letter-spacing: -0.035em;
+    letter-spacing: 0;
 }
 
 .registro-form-subtitle {

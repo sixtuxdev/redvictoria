@@ -1,4 +1,36 @@
 .main-content {
     min-height: 100vh;
-    background: #f8fafc;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(4, 67, 255, 0.10), transparent 24rem),
+        linear-gradient(180deg, #ffffff 0%, #f4f7ff 44%, #eef3ff 100%);
+}
+
+::deep .rv-appbar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+    background: linear-gradient(135deg, #0443FF 0%, #002DB3 100%) !important;
+    box-shadow: 0 14px 34px rgba(4, 67, 255, 0.24);
+}
+
+::deep .rv-appbar-title {
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+::deep .rv-appbar .mud-button-root {
+    color: #ffffff !important;
+    border-radius: 8px;
+    text-transform: none;
+    font-weight: 700;
+}
+
+::deep .rv-appbar .mud-button-root:hover,
+::deep .rv-appbar .mud-icon-button-root:hover {
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+::deep .rv-drawer {
+    border-right: 1px solid rgba(4, 67, 255, 0.12);
+    background:
+        linear-gradient(180deg, #ffffff 0%, #f7f9ff 58%, #eef3ff 100%) !important;
+    box-shadow: 18px 0 44px rgba(15, 23, 42, 0.06);
 }

@@ -1,4 +1,31 @@
+::deep .rv-nav-header {
+    background: linear-gradient(135deg, rgba(4, 67, 255, 0.10), rgba(255, 255, 255, 0.92));
+}
+
+::deep .rv-nav-title {
+    color: #0f172a;
+    font-weight: 900;
+    letter-spacing: 0;
+}
+
+::deep .rv-nav-caption {
+    color: #526174;
+    font-weight: 700;
+}
+
 ::deep .mud-nav-link {
-    border-radius: 10px;
+    border-radius: 8px;
     margin: 0.15rem 0.5rem;
+    color: #334155;
+    font-weight: 700;
+}
+
+::deep .mud-nav-link .mud-nav-link-icon {
+    color: #0443FF;
+}
+
+::deep .mud-nav-link.active:not(.mud-nav-link-disabled),
+::deep .mud-nav-link:hover {
+    color: #0443FF;
+    background: rgba(4, 67, 255, 0.09);
 }
