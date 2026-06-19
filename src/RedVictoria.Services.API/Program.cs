@@ -11,13 +11,18 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("WebUI", policy =>
     {
+        //policy
+        //    .WithOrigins(
+        //        "http://localhost:5175",
+        //        "https://localhost:7206",
+        //        "http://127.0.0.1:5175")
+        //    .AllowAnyHeader()
+        //    .AllowAnyMethod();
+
         policy
-            .WithOrigins(
-                "http://localhost:5175",
-                "https://localhost:7206",
-                "http://127.0.0.1:5175")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
 });
 builder.Services.AddJwtAuthentication(builder.Configuration);
@@ -29,11 +34,13 @@ var app = builder.Build();
 
 app.UseGlobalExceptionHandler();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+    
+//}
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
