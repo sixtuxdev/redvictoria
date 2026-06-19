@@ -34,6 +34,9 @@ public sealed class DashboardViewModel(
 
     public bool IsAuthenticated => Session?.IsValid == true;
 
+    public bool IsAdmin =>
+        string.Equals(Session?.Rol, "ADMIN", StringComparison.OrdinalIgnoreCase);
+
     public string? MiUrlReferido =>
         string.IsNullOrWhiteSpace(Session?.CodigoReferido)
             ? null

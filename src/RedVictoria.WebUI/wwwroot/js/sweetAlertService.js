@@ -106,6 +106,17 @@ window.RedVictoriaSweetAlert = {
     }
 };
 
+window.RedVictoriaFileDownload = {
+    downloadBase64File: (fileName, contentType, base64Data) => {
+        const link = document.createElement("a");
+        link.download = fileName;
+        link.href = `data:${contentType};base64,${base64Data}`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    }
+};
+
 function escapeHtml(value) {
     return String(value)
         .replaceAll("&", "&amp;")

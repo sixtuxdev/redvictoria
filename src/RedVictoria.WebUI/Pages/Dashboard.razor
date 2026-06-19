@@ -1,4 +1,5 @@
 @page "/dashboard"
+@using RedVictoria.WebUI.Helpers
 @inject DashboardViewModel ViewModel
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
@@ -132,6 +133,25 @@ else
         </MudPaper>
 
         <MudPaper Elevation="1" Class="dashboard-table-card dashboard-panel">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="dashboard-table-toolbar">
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="dashboard-card-title">Red de referidos</MudText>
+                    <MudText Typo="Typo.caption" Class="dashboard-card-caption">
+                        Datos filtrados actualmente en el Dashboard.
+                    </MudText>
+                </div>
+                @if (ViewModel.IsAdmin)
+                {
+                    <MudButton Color="Color.Primary"
+                               Variant="Variant.Filled"
+                               StartIcon="@Icons.Material.Filled.FileDownload"
+                               Disabled="@ViewModel.IsBusy"
+                               OnClick="ExportDashboardToExcelAsync"
+                               Class="dashboard-export-button">
+                        Exportar Excel
+                    </MudButton>
+                }
+            </MudStack>
             <MudTable Items="@ViewModel.ObtenerReferidosFiltrados()"
                       Hover="true"
                       Dense="true"
@@ -274,6 +294,16 @@ else
             "error",
             "No fue posible desactivar",
             ViewModel.ErrorMessage ?? "No fue posible desactivar el referido.");
+    }
+
+    private async Task ExportDashboardToExcelAsync()
+    {
+        var excelBytes = DashboardExcelExporter.Export(ViewModel.ObtenerReferidosFiltrados());
+        await JSRuntime.InvokeVoidAsync(
+            "RedVictoriaFileDownload.downloadBase64File",
+            "Dashboard_RedVictoria.xlsx",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            Convert.ToBase64String(excelBytes));
     }
 
     private static string Display(string? value) =>

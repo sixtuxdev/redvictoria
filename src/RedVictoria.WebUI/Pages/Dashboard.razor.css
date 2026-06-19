@@ -234,6 +234,21 @@
     background: rgba(255, 255, 255, 0.94);
 }
 
+.dashboard-page ::deep .dashboard-table-toolbar {
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 1rem 1rem 0.85rem;
+    border-bottom: 1px solid rgba(4, 67, 255, 0.10);
+    background:
+        radial-gradient(circle at 100% 0%, rgba(4, 67, 255, 0.10), transparent 16rem),
+        rgba(255, 255, 255, 0.72);
+}
+
+.dashboard-page ::deep .dashboard-export-button {
+    min-height: 2.75rem;
+    box-shadow: 0 14px 28px rgba(4, 67, 255, 0.20);
+}
+
 .dashboard-page ::deep .dashboard-table,
 .dashboard-page ::deep .dashboard-table .mud-table-container {
     background: transparent;
@@ -296,7 +311,8 @@
     }
 
     .dashboard-page ::deep .dashboard-refresh-button,
-    .dashboard-page ::deep .dashboard-primary-action {
+    .dashboard-page ::deep .dashboard-primary-action,
+    .dashboard-page ::deep .dashboard-export-button {
         width: 100%;
     }
 
