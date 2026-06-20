@@ -6,7 +6,8 @@ namespace RedVictoria.WebUI.ViewModels.Ciudadanos;
 
 public sealed class DashboardViewModel(
     ICiudadanoService ciudadanoService,
-    IAuthSessionService authSessionService)
+    IAuthSessionService authSessionService,
+    IReferidosUrlBuilder referidosUrlBuilder)
 {
     public AuthSessionModel? Session { get; private set; }
 
@@ -132,8 +133,8 @@ public sealed class DashboardViewModel(
         }
     }
 
-    public static string BuildReferralUrl(string codigoReferido) =>
-        $"https://localhost:7206/registro-ciudadano/{Uri.EscapeDataString(codigoReferido.Trim())}";
+    public string BuildReferralUrl(string codigoReferido) =>
+        referidosUrlBuilder.BuildRegistroCiudadanoUrl(codigoReferido);
 
     private static bool Matches(CiudadanoReferidoModel item, string search)
     {

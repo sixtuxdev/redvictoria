@@ -23,22 +23,47 @@
     </MudStack>
 </MudOverlay>
 
-<MudForm @ref="_form">
-        <MudGrid Spacing="3">            
-            <MudItem xs="12" lg="8">
-                <MudCard Elevation="2">
-                    <MudCardContent>
-                        <MudText Typo="Typo.h5" Class="mb-4">Datos personales</MudText>
+<section class="registro-page">
+    <MudStack Spacing="4" Class="registro-content">
+        <MudPaper Elevation="0" Class="registro-hero">
+            <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Class="registro-hero-inner">
+                <MudAvatar Color="Color.Default" Variant="Variant.Filled" Class="registro-hero-avatar">
+                    <MudIcon Icon="@Icons.Material.Filled.HowToVote" />
+                </MudAvatar>
+                <div class="registro-hero-copy">
+                    <MudText Typo="Typo.h4" Class="registro-title">Registro ciudadano</MudText>
+                    <MudText Typo="Typo.body2" Class="registro-subtitle">
+                        Completa tus datos para sumarte a la red de participaci髇 de El Equipo Ganador.
+                    </MudText>
+                </div>
+            </MudStack>
+        </MudPaper>
 
-                        <MudGrid Spacing="3">
+        <MudForm @ref="_form" Class="registro-form">
+            <MudGrid Spacing="3" Class="registro-grid">
+                <MudItem xs="12" lg="8">
+                    <MudPaper Elevation="0" Class="registro-panel registro-panel-main">
+                        <div class="registro-section-header">
+                            <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Class="registro-section-avatar">
+                                <MudIcon Icon="@Icons.Material.Filled.Badge" />
+                            </MudAvatar>
+                            <div>
+                                <MudText Typo="Typo.subtitle1" Class="registro-section-title">Datos personales</MudText>
+                                <MudText Typo="Typo.caption" Class="registro-section-caption">Informaci髇 b醩ica para identificar tu registro.</MudText>
+                            </div>
+                        </div>
+
+                        <MudGrid Spacing="2" Class="registro-fields-grid">
                             <MudItem xs="12">
                                 <MudTextField @bind-Value="ViewModel.Request.NombresCompletos"
                                               Label="Nombres completos"
                                               Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
                                               Required="true"
                                               Immediate="true"
                                               Disabled="@ViewModel.IsBusy"
                                               MaxLength="200"
+                                              Class="registro-field"
                                               Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateNombresCompletos))" />
                             </MudItem>
 
@@ -46,17 +71,21 @@
                                 <MudDatePicker @bind-Date="ViewModel.Request.FechaNacimiento"
                                                Label="Fecha de nacimiento"
                                                Variant="Variant.Outlined"
+                                               Margin="Margin.Dense"
                                                Required="true"
                                                RequiredError="Fecha de nacimiento es obligatoria."
                                                Disabled="@ViewModel.IsBusy"
                                                MaxDate="@DateTime.Today"
+                                               Class="registro-field"
                                                Validation="@(new Func<DateTime?, IEnumerable<string>>(ViewModel.ValidateFechaNacimiento))" />
                             </MudItem>
 
                             <MudItem xs="12" sm="6">
                                 <MudAutocomplete T="int?"
-                                                 Label="Departamento de Nacimiento"
+                                                 Label="Departamento de nacimiento"
                                                  Variant="Variant.Outlined"
+                                                 Margin="Margin.Dense"
+                                                 Dense="true"
                                                  Clearable="true"
                                                  Required="true"
                                                  RequiredError="Departamento de nacimiento es obligatorio."
@@ -68,12 +97,16 @@
                                                  MaxItems="null"
                                                  MinCharacters="0"
                                                  ResetValueOnEmptyText="true"
-                                                 Strict="false" />
+                                                 Strict="false"
+                                                 Class="registro-field" />
                             </MudItem>
+
                             <MudItem xs="12" sm="6">
                                 <MudAutocomplete T="int?"
-                                                 Label="Ciudad de Nacimiento"
+                                                 Label="Ciudad de nacimiento"
                                                  Variant="Variant.Outlined"
+                                                 Margin="Margin.Dense"
+                                                 Dense="true"
                                                  Clearable="true"
                                                  Required="true"
                                                  RequiredError="Ciudad de nacimiento es obligatoria."
@@ -84,17 +117,21 @@
                                                  MaxItems="null"
                                                  MinCharacters="0"
                                                  ResetValueOnEmptyText="true"
-                                                 Strict="false" />
+                                                 Strict="false"
+                                                 Class="registro-field" />
                             </MudItem>
 
                             <MudItem xs="12" sm="6">
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdTipoIdentificacion"
                                            Disabled="@ViewModel.IsBusy"
-                                           Label="Tipo de identificaci贸n"
+                                           Label="Tipo de identificaci髇"
                                            Variant="Variant.Outlined"
+                                           Margin="Margin.Dense"
+                                           Dense="true"
                                            Clearable="true"
                                            Required="true"
-                                           RequiredError="Tipo de identificaci贸n es obligatorio.">
+                                           RequiredError="Tipo de identificaci髇 es obligatorio."
+                                           Class="registro-field">
                                     @foreach (var opcion in ViewModel.Parametros.TiposIdentificacion)
                                     {
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
@@ -105,22 +142,27 @@
                             <MudItem xs="12" sm="6">
                                 <MudTextField @bind-Value="ViewModel.Request.NumeroIdentificacion"
                                               Disabled="@ViewModel.IsBusy"
-                                              Label="N煤mero de identificaci贸n"
+                                              Label="N鷐ero de identificaci髇"
                                               Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
                                               Required="true"
                                               Immediate="true"
                                               MaxLength="50"
+                                              Class="registro-field"
                                               Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateNumeroIdentificacion))" />
-                            </MudItem>                           
+                            </MudItem>
 
                             <MudItem xs="12" sm="6">
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdGenero"
                                            Disabled="@ViewModel.IsBusy"
-                                           Label="G茅nero"
+                                           Label="G閚ero"
                                            Variant="Variant.Outlined"
+                                           Margin="Margin.Dense"
+                                           Dense="true"
                                            Clearable="true"
                                            Required="true"
-                                           RequiredError="G茅nero es obligatorio.">
+                                           RequiredError="G閚ero es obligatorio."
+                                           Class="registro-field">
                                     @foreach (var opcion in ViewModel.Parametros.Generos)
                                     {
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
@@ -133,9 +175,12 @@
                                            Disabled="@ViewModel.IsBusy"
                                            Label="Soy"
                                            Variant="Variant.Outlined"
+                                           Margin="Margin.Dense"
+                                           Dense="true"
                                            Clearable="true"
                                            Required="true"
-                                           RequiredError="Soy es obligatorio.">
+                                           RequiredError="Soy es obligatorio."
+                                           Class="registro-field">
                                     @foreach (var opcion in ViewModel.Parametros.Soy)
                                     {
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
@@ -143,128 +188,168 @@
                                 </MudSelect>
                             </MudItem>
                         </MudGrid>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
+                    </MudPaper>
+                </MudItem>
 
-            <MudItem xs="12" lg="4">
-                <MudCard Elevation="2">
-                    <MudCardContent>
-                        <MudText Typo="Typo.h5" Class="mb-4">Contacto y ubicacion</MudText>
+                <MudItem xs="12" lg="4">
+                    <MudPaper Elevation="0" Class="registro-panel registro-panel-side">
+                        <div class="registro-section-header">
+                            <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Class="registro-section-avatar">
+                                <MudIcon Icon="@Icons.Material.Filled.ContactPhone" />
+                            </MudAvatar>
+                            <div>
+                                <MudText Typo="Typo.subtitle1" Class="registro-section-title">Contacto y ubicaci髇</MudText>
+                                <MudText Typo="Typo.caption" Class="registro-section-caption">Canales para mantener comunicaci髇 contigo.</MudText>
+                            </div>
+                        </div>
 
-                        <MudStack Spacing="3">
-                            <MudTextField @bind-Value="ViewModel.Request.Email"
-                                          Disabled="@ViewModel.IsBusy"
-                                          Label="Email"
-                                          Variant="Variant.Outlined"
-                                          Required="true"
-                                          Immediate="true"
-                                          MaxLength="150"
-                                          Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateEmail))" />
-
-                            <MudTextField @bind-Value="ViewModel.Request.Celular"
-                                          Disabled="@ViewModel.IsBusy"
-                                          Label="Celular 1"
-                                          Variant="Variant.Outlined"
-                                          Required="true"
-                                          Immediate="true"
-                                          MaxLength="30"
-                                          Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateCelular))" />
-
-                            <MudSelect T="bool?" @bind-Value="ViewModel.Request.TieneWhatsapp"
-                                       Disabled="@ViewModel.IsBusy"
-                                       Label="Celular 1 tiene WhatsApp"
-                                       Variant="Variant.Outlined"
-                                       Clearable="true"
-                                       Required="true"
-                                       RequiredError="Indica si el celular 1 tiene WhatsApp.">
-                                <MudSelectItem T="bool?" Value="true">Si</MudSelectItem>
-                                <MudSelectItem T="bool?" Value="false">No</MudSelectItem>
-                            </MudSelect>
-
-                            <MudTextField T="string"
-                                          Value="@ViewModel.Request.Celular2"
-                                          ValueChanged="@((string? value) => ViewModel.OnCelular2Changed(value))"
-                                          Disabled="@ViewModel.IsBusy"
-                                          Label="Celular 2"
-                                          Variant="Variant.Outlined"
-                                          Immediate="true"
-                                          MaxLength="30"
-                                          Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateCelular2))" />
-
-                            <MudSelect T="bool?" @bind-Value="ViewModel.Request.TieneWhatsapp2"
-                                       Disabled="@(ViewModel.IsBusy || string.IsNullOrWhiteSpace(ViewModel.Request.Celular2))"
-                                       Label="Celular 2 tiene WhatsApp"
-                                       Variant="Variant.Outlined"
-                                       Clearable="true">
-                                <MudSelectItem T="bool?" Value="true">Si</MudSelectItem>
-                                <MudSelectItem T="bool?" Value="false">No</MudSelectItem>
-                            </MudSelect>
-
-                            <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdDondeVive"
-                                       Disabled="@ViewModel.IsBusy"
-                                       Label="Donde vive"
-                                       Variant="Variant.Outlined"
-                                       Clearable="true"
-                                       Required="true"
-                                       RequiredError="Donde vive es obligatorio.">
-                                @foreach (var opcion in ViewModel.Parametros.DondeVive)
-                                {
-                                    <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
-                                }
-                            </MudSelect>
-
-                            <MudTextField @bind-Value="ViewModel.Request.Direccion"
-                                          Disabled="@ViewModel.IsBusy"
-                                          Label="Direcci贸n"
-                                          Variant="Variant.Outlined"
-                                          Required="true"
-                                          Immediate="true"
-                                          MaxLength="250" />       
-                                          
-                            <MudAutocomplete T="int?" @bind-Value="ViewModel.Request.ParametroIdVereda"
-                                             Disabled="@ViewModel.IsBusy"
-                                             Label="Vereda"
-                                             Variant="Variant.Outlined"
-                                             Clearable="true"
-                                             Required="true"
-                                             RequiredError="Vereda es obligatoria."
-                                             SearchFunc="SearchVeredasAsync"
-                                             ToStringFunc="GetVeredaText"
-                                             MaxItems="null"
-                                             MinCharacters="0"
-                                             ResetValueOnEmptyText="true"
-                                             Strict="false" />
-
-                            @* <MudTextField @bind-Value="ViewModel.Request.PuestoVotacion"
-                                          Disabled="@ViewModel.IsBusy"
-                                          Label="Puesto de votaci贸n"
-                                          Variant="Variant.Outlined"
-                                          Required="true"
-                                          Immediate="true"
-                                          MaxLength="150" /> *@
-                        </MudStack>
-                    </MudCardContent>
-                </MudCard>
-            </MudItem>
-
-            <MudItem xs="12">
-                <MudCard Elevation="2">
-                    <MudCardContent>
-                        <MudGrid Spacing="3">
-                            <MudItem xs="12" md="8">
-                                <MudText Typo="Typo.h5">Referido y acceso</MudText>
-                                <MudText Typo="Typo.body2" Color="Color.Secondary">
-                                    Establezca una contrase帽a de acceso para gestionar y consultar su red de simpatizantes de forma segura.
-                                </MudText>
+                        <MudGrid Spacing="2" Class="registro-fields-grid">
+                            <MudItem xs="12">
+                                <MudTextField @bind-Value="ViewModel.Request.Email"
+                                              Disabled="@ViewModel.IsBusy"
+                                              Label="Email"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
+                                              Required="true"
+                                              Immediate="true"
+                                              MaxLength="150"
+                                              Class="registro-field"
+                                              Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateEmail))" />
                             </MudItem>
 
-                            <MudItem xs="12" md="4">
+                            <MudItem xs="12" sm="6" lg="12">
+                                <MudTextField @bind-Value="ViewModel.Request.Celular"
+                                              Disabled="@ViewModel.IsBusy"
+                                              Label="Celular 1"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
+                                              Required="true"
+                                              Immediate="true"
+                                              MaxLength="30"
+                                              Class="registro-field"
+                                              Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateCelular))" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" lg="12">
+                                <MudSelect T="bool?" @bind-Value="ViewModel.Request.TieneWhatsapp"
+                                           Disabled="@ViewModel.IsBusy"
+                                           Label="Celular 1 tiene WhatsApp"
+                                           Variant="Variant.Outlined"
+                                           Margin="Margin.Dense"
+                                           Dense="true"
+                                           Clearable="true"
+                                           Required="true"
+                                           RequiredError="Indica si el celular 1 tiene WhatsApp."
+                                           Class="registro-field">
+                                    <MudSelectItem T="bool?" Value="true">Si</MudSelectItem>
+                                    <MudSelectItem T="bool?" Value="false">No</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" lg="12">
+                                <MudTextField T="string"
+                                              Value="@ViewModel.Request.Celular2"
+                                              ValueChanged="@((string? value) => ViewModel.OnCelular2Changed(value))"
+                                              Disabled="@ViewModel.IsBusy"
+                                              Label="Celular 2"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
+                                              Immediate="true"
+                                              MaxLength="30"
+                                              Class="registro-field"
+                                              Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateCelular2))" />
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" lg="12">
+                                <MudSelect T="bool?" @bind-Value="ViewModel.Request.TieneWhatsapp2"
+                                           Disabled="@(ViewModel.IsBusy || string.IsNullOrWhiteSpace(ViewModel.Request.Celular2))"
+                                           Label="Celular 2 tiene WhatsApp"
+                                           Variant="Variant.Outlined"
+                                           Margin="Margin.Dense"
+                                           Dense="true"
+                                           Clearable="true"
+                                           Class="registro-field">
+                                    <MudSelectItem T="bool?" Value="true">Si</MudSelectItem>
+                                    <MudSelectItem T="bool?" Value="false">No</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" lg="12">
+                                <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdDondeVive"
+                                           Disabled="@ViewModel.IsBusy"
+                                           Label="Donde vive"
+                                           Variant="Variant.Outlined"
+                                           Margin="Margin.Dense"
+                                           Dense="true"
+                                           Clearable="true"
+                                           Required="true"
+                                           RequiredError="Donde vive es obligatorio."
+                                           Class="registro-field">
+                                    @foreach (var opcion in ViewModel.Parametros.DondeVive)
+                                    {
+                                        <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6" lg="12">
+                                <MudTextField @bind-Value="ViewModel.Request.Direccion"
+                                              Disabled="@ViewModel.IsBusy"
+                                              Label="Direcci髇"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
+                                              Required="true"
+                                              Immediate="true"
+                                              MaxLength="250"
+                                              Class="registro-field" />
+                            </MudItem>
+
+                            <MudItem xs="12">
+                                <MudAutocomplete T="int?" @bind-Value="ViewModel.Request.ParametroIdVereda"
+                                                 Disabled="@ViewModel.IsBusy"
+                                                 Label="Vereda"
+                                                 Variant="Variant.Outlined"
+                                                 Margin="Margin.Dense"
+                                                 Dense="true"
+                                                 Clearable="true"
+                                                 Required="true"
+                                                 RequiredError="Vereda es obligatoria."
+                                                 SearchFunc="SearchVeredasAsync"
+                                                 ToStringFunc="GetVeredaText"
+                                                 MaxItems="null"
+                                                 MinCharacters="0"
+                                                 ResetValueOnEmptyText="true"
+                                                 Strict="false"
+                                                 Class="registro-field" />
+                            </MudItem>
+                        </MudGrid>
+                    </MudPaper>
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudPaper Elevation="0" Class="registro-panel registro-access-panel">
+                        <MudGrid Spacing="2" Class="registro-access-grid">
+                            <MudItem xs="12" md="8">
+                                <div class="registro-section-header compact">
+                                    <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Class="registro-section-avatar">
+                                        <MudIcon Icon="@Icons.Material.Filled.VerifiedUser" />
+                                    </MudAvatar>
+                                    <div>
+                                        <MudText Typo="Typo.subtitle1" Class="registro-section-title">Referido y acceso</MudText>
+                                        <MudText Typo="Typo.caption" Class="registro-section-caption">
+                                            Establece una contrase馻 para gestionar y consultar tu red de simpatizantes.
+                                        </MudText>
+                                    </div>
+                                </div>
+                            </MudItem>
+
+                            <MudItem xs="12" md="4" Class="registro-switch-item">
                                 <MudSwitch T="bool"
                                            Disabled="@ViewModel.IsBusy"
                                            Value="@ViewModel.Request.TieneAcceso"
                                            ValueChanged="@ViewModel.ToggleTieneAcceso"
                                            Color="Color.Primary"
+                                           Class="registro-switch"
                                            Label="Crear acceso de usuario" />
                             </MudItem>
 
@@ -273,48 +358,55 @@
                                 <MudItem xs="12" md="6">
                                     <MudTextField @bind-Value="ViewModel.Request.Password"
                                                   Disabled="@ViewModel.IsBusy"
-                                                  Label="Contrasena"
+                                                  Label="Contrase馻"
                                                   Variant="Variant.Outlined"
+                                                  Margin="Margin.Dense"
                                                   InputType="InputType.Password"
                                                   Required="@ViewModel.Request.TieneAcceso"
                                                   Immediate="true"
+                                                  Class="registro-field"
                                                   Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidatePasswordField))" />
                                 </MudItem>
                                 <MudItem xs="12" md="6">
                                     <MudTextField @bind-Value="ViewModel.Request.ConfirmPassword"
                                                   Disabled="@ViewModel.IsBusy"
-                                                  Label="Confirmar contrase帽a"
+                                                  Label="Confirmar contrase馻"
                                                   Variant="Variant.Outlined"
+                                                  Margin="Margin.Dense"
                                                   InputType="InputType.Password"
                                                   Required="@ViewModel.Request.TieneAcceso"
                                                   Immediate="true"
+                                                  Class="registro-field"
                                                   Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateConfirmPasswordField))" />
                                 </MudItem>
                             }
                         </MudGrid>
-                    </MudCardContent>
-                    <MudCardActions Class="pa-4 justify-end">
-                        <MudButton Color="Color.Primary"
-                                   Variant="Variant.Filled"
-                                   Size="Size.Large"
-                                   Disabled="@(!ViewModel.CanSubmit)"
-                                   OnClick="HandleRegistroAsync">
-                            @if (ViewModel.IsSubmitting)
-                            {
-                                <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
-                                <span>Registrando...</span>
-                            }
-                            else
-                            {
-                                <span>Registrarme</span>
-                            }
-                        </MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
-        </MudGrid>
-</MudForm>
 
+                        <div class="registro-actions">
+                            <MudButton Color="Color.Primary"
+                                       Variant="Variant.Filled"
+                                       Size="Size.Medium"
+                                       Disabled="@(!ViewModel.CanSubmit)"
+                                       OnClick="HandleRegistroAsync"
+                                       Class="registro-submit">
+                                @if (ViewModel.IsSubmitting)
+                                {
+                                    <MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+                                    <span>Registrando...</span>
+                                }
+                                else
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.HowToReg" Class="mr-2" />
+                                    <span>Registrarme</span>
+                                }
+                            </MudButton>
+                        </div>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        </MudForm>
+    </MudStack>
+</section>
 @code {
     private MudForm? _form;
     private bool _showReferidoInvalidoAlert;
@@ -474,7 +566,7 @@
         var registrado = await ViewModel.RegistrarAsync();
         if (registrado)
         {
-            var referidoUrl = BuildReferralUrl(ViewModel.CodigoReferidoRegistrado);
+            var referidoUrl = ViewModel.BuildReferralUrl(ViewModel.CodigoReferidoRegistrado);
             if (string.IsNullOrWhiteSpace(referidoUrl))
             {
                 await ShowAlertAsync(
@@ -501,14 +593,4 @@
 
     private ValueTask ShowReferralLinkAlertAsync(string url) =>
         JSRuntime.InvokeVoidAsync("RedVictoriaSweetAlert.fireReferralLink", url);
-
-    private static string? BuildReferralUrl(string? codigoReferido)
-    {
-        if (string.IsNullOrWhiteSpace(codigoReferido))
-        {
-            return null;
-        }
-
-        return $"https://localhost:7206/registro-ciudadano/{Uri.EscapeDataString(codigoReferido.Trim())}";
-    }
 }

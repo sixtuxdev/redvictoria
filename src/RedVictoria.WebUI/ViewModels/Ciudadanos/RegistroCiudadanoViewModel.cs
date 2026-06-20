@@ -12,7 +12,8 @@ public sealed partial class RegistroCiudadanoViewModel(
     ICiudadanoService ciudadanoService,
     IParametroService parametroService,
     IDepartamentoService departamentoService,
-    ICiudadService ciudadService)
+    ICiudadService ciudadService,
+    IReferidosUrlBuilder referidosUrlBuilder)
 {
     private const int PasswordMinimumLength = 6;
     private bool _isInitialized;
@@ -482,6 +483,12 @@ public sealed partial class RegistroCiudadanoViewModel(
         ErrorMessage = null;
         SuccessMessage = null;
         CodigoReferidoRegistrado = null;
+    }
+    public string? BuildReferralUrl(string? codigoReferido)
+    {
+        return string.IsNullOrWhiteSpace(codigoReferido)
+            ? null
+            : referidosUrlBuilder.BuildRegistroCiudadanoUrl(codigoReferido);
     }
 
     private void ValidatePassword(ICollection<string> errors)

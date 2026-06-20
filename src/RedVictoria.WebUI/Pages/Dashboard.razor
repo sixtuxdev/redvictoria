@@ -249,7 +249,7 @@ else
 
     private async Task CopyReferralUrlAsync(CiudadanoReferidoModel referido)
     {
-        var url = DashboardViewModel.BuildReferralUrl(referido.CodigoReferido);
+        var url = ViewModel.BuildReferralUrl(referido.CodigoReferido);
         await JSRuntime.InvokeVoidAsync("RedVictoriaSweetAlert.copyText", url);
     }
 

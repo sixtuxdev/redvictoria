@@ -9,9 +9,8 @@ namespace RedVictoria.Infrastructure.Email;
 
 public sealed class SmtpCorreoService : ICorreoService
 {
-    private const string RegistroCiudadanoBaseUrl = "https://localhost:7206/registro-ciudadano";
-    private const string CrearPasswordBaseUrl = "https://localhost:7206/usr-ciudadanos";
     private readonly SmtpCorreoSettings _settings;
+    private readonly ReferidosSettings _referidosSettings;
 
     public SmtpCorreoService(IConfiguration configuration)
     {
@@ -25,6 +24,13 @@ public sealed class SmtpCorreoService : ICorreoService
             Password = section["Password"] ?? string.Empty,
             FromEmail = section["FromEmail"] ?? string.Empty,
             FromName = section["FromName"] ?? "Red Victoria"
+        };
+
+        var referidosSection = configuration.GetSection("ReferidosSettings");
+        _referidosSettings = new ReferidosSettings
+        {
+            RegistroCiudadanoBaseUrl = referidosSection["RegistroCiudadanoBaseUrl"] ?? string.Empty,
+            CrearPasswordBaseUrl = referidosSection["CrearPasswordBaseUrl"] ?? string.Empty
         };
     }
 
@@ -42,9 +48,14 @@ public sealed class SmtpCorreoService : ICorreoService
 
         if (string.IsNullOrWhiteSpace(_settings.Host) || string.IsNullOrWhiteSpace(_settings.FromEmail))
             throw new InvalidOperationException("La configuración SMTP no está completa.");
-
-        var linkRegistro = $"{RegistroCiudadanoBaseUrl}/{Uri.EscapeDataString(codigoReferido)}";
-        var linkCrearPassword = $"{CrearPasswordBaseUrl}/{Uri.EscapeDataString(codigoReferido)}";
+        var linkRegistro = BuildReferidoUrl(
+            _referidosSettings.RegistroCiudadanoBaseUrl,
+            codigoReferido,
+            nameof(ReferidosSettings.RegistroCiudadanoBaseUrl));
+        var linkCrearPassword = BuildReferidoUrl(
+            _referidosSettings.CrearPasswordBaseUrl,
+            codigoReferido,
+            nameof(ReferidosSettings.CrearPasswordBaseUrl));
 
         using var message = new MailMessage
         {
@@ -158,5 +169,13 @@ public sealed class SmtpCorreoService : ICorreoService
             </body>
             </html>
             """;
+    }
+
+    private static string BuildReferidoUrl(string baseUrl, string codigoReferido, string settingName)
+    {
+        if (string.IsNullOrWhiteSpace(baseUrl))
+            throw new InvalidOperationException($"ReferidosSettings:{settingName} es obligatorio.");
+
+        return $"{baseUrl.TrimEnd('/')}/{Uri.EscapeDataString(codigoReferido.Trim())}";
     }
 }

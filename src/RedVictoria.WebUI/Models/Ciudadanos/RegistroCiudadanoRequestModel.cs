@@ -32,10 +32,7 @@ public sealed class RegistroCiudadanoRequestModel
     public bool? TieneWhatsapp2 { get; set; }
 
     [Required(ErrorMessage = "Donde vive es obligatorio.")]
-    public int? ParametroIdDondeVive { get; set; }
-
-    [Required(ErrorMessage = "Puesto de votación es obligatorio.")]
-    [MaxLength(150, ErrorMessage = "Puesto de votación no puede superar 150 caracteres.")]
+    public int? ParametroIdDondeVive { get; set; }    
     public string? PuestoVotacion { get; set; }
 
     [Required(ErrorMessage = "Tipo de identificación es obligatorio.")]

@@ -16,6 +16,7 @@ builder.Services.AddMudServices();
 builder.Services.AddScoped<IAuthSessionService, AuthSessionService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICiudadanoService, CiudadanoService>();
+builder.Services.AddScoped<IReferidosUrlBuilder, ReferidosUrlBuilder>();
 builder.Services.AddScoped<IParametroService, ParametroService>();
 builder.Services.AddScoped<IDepartamentoService, DepartamentoService>();
 builder.Services.AddScoped<ICiudadService, CiudadService>();
