@@ -7,7 +7,6 @@ CREATE OR ALTER PROCEDURE dbo.usp_Ciudadanos_Registrar
     @TieneWhatsapp BIT = NULL,
     @TieneWhatsapp2 BIT = NULL,
     @ParametroIdDondeVive INT = NULL,
-    @PuestoVotacion NVARCHAR(150) = NULL,
     @Email NVARCHAR(150) = NULL,
     @ParametroIdTipoIdentificacion INT = NULL,
     @NumeroIdentificacion NVARCHAR(50) = NULL,
@@ -58,8 +57,7 @@ BEGIN
                     CAST(NULL AS NVARCHAR(30)) AS Celular2,
                     CAST(NULL AS BIT) AS TieneWhatsapp2,
                     CAST(NULL AS INT) AS ParametroIdDondeVive,
-                    CAST(NULL AS INT) AS ParametroIdVereda,
-                    CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
+                    CAST(NULL AS INT) AS ParametroIdVereda;
                 RETURN;
             END
         END
@@ -86,8 +84,7 @@ BEGIN
                 CAST(NULL AS NVARCHAR(30)) AS Celular2,
                 CAST(NULL AS BIT) AS TieneWhatsapp2,
                 CAST(NULL AS INT) AS ParametroIdDondeVive,
-                CAST(NULL AS INT) AS ParametroIdVereda,
-                CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
+                CAST(NULL AS INT) AS ParametroIdVereda;
             RETURN;
         END
 
@@ -113,8 +110,7 @@ BEGIN
                 CAST(NULL AS NVARCHAR(30)) AS Celular2,
                 CAST(NULL AS BIT) AS TieneWhatsapp2,
                 CAST(NULL AS INT) AS ParametroIdDondeVive,
-                CAST(NULL AS INT) AS ParametroIdVereda,
-                CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
+                CAST(NULL AS INT) AS ParametroIdVereda;
             RETURN;
         END
 
@@ -140,8 +136,7 @@ BEGIN
                 CAST(NULL AS NVARCHAR(30)) AS Celular2,
                 CAST(NULL AS BIT) AS TieneWhatsapp2,
                 CAST(NULL AS INT) AS ParametroIdDondeVive,
-                CAST(NULL AS INT) AS ParametroIdVereda,
-                CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
+                CAST(NULL AS INT) AS ParametroIdVereda;
             RETURN;
         END
 
@@ -167,8 +162,7 @@ BEGIN
                 CAST(NULL AS NVARCHAR(30)) AS Celular2,
                 CAST(NULL AS BIT) AS TieneWhatsapp2,
                 CAST(NULL AS INT) AS ParametroIdDondeVive,
-                CAST(NULL AS INT) AS ParametroIdVereda,
-                CAST(NULL AS NVARCHAR(150)) AS PuestoVotacion;
+                CAST(NULL AS INT) AS ParametroIdVereda;
             RETURN;
         END
 
@@ -194,7 +188,6 @@ BEGIN
             TieneWhatsapp,
             TieneWhatsapp2,
             ParametroIdDondeVive,
-            PuestoVotacion,
             Email,
             ParametroIdTipoIdentificacion,
             NumeroIdentificacion,
@@ -221,7 +214,6 @@ BEGIN
             @TieneWhatsapp,
             @TieneWhatsapp2,
             @ParametroIdDondeVive,
-            @PuestoVotacion,
             @Email,
             @ParametroIdTipoIdentificacion,
             @NumeroIdentificacion,
@@ -276,7 +268,6 @@ BEGIN
             @Celular2 AS Celular2,
             @TieneWhatsapp2 AS TieneWhatsapp2,
             @ParametroIdDondeVive AS ParametroIdDondeVive,
-            @PuestoVotacion AS PuestoVotacion,
             @ParametroIdTipoIdentificacion AS ParametroIdTipoIdentificacion,
             @NumeroIdentificacion AS NumeroIdentificacion,
             @Direccion AS Direccion,

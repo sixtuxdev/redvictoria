@@ -32,7 +32,6 @@ public class CiudadanoRepository : ICiudadanoRepository
                 command.TieneWhatsapp,
                 command.TieneWhatsapp2,
                 command.ParametroIdDondeVive,
-                command.PuestoVotacion,
                 command.Email,
                 command.ParametroIdTipoIdentificacion,
                 command.NumeroIdentificacion,

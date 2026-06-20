@@ -10,7 +10,6 @@ public class RegistroCiudadanoCommand
     public bool? TieneWhatsapp { get; init; }
     public bool? TieneWhatsapp2 { get; init; }
     public int? ParametroIdDondeVive { get; init; }
-    public string? PuestoVotacion { get; init; }
     public string? Email { get; init; }
     public int? ParametroIdTipoIdentificacion { get; init; }
     public string? NumeroIdentificacion { get; init; }

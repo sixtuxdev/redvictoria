@@ -125,8 +125,20 @@ public sealed class CiudadanoService(
             apiResponse?.Message ?? "No puede continuar porque el referido ingresado no existe.");
     }
 
-    public async Task<OperationResultModel> RegistrarAsync(
+    public Task<OperationResultModel> RegistrarAsync(
         RegistroCiudadanoRequestModel request,
+        string? codigoReferido,
+        CancellationToken cancellationToken = default) =>
+        RegistrarCoreAsync(request, codigoReferido, cancellationToken);
+
+    public Task<OperationResultModel> RegistrarAsync(
+        RegisterCiudadanoRequestModel request,
+        string? codigoReferido,
+        CancellationToken cancellationToken = default) =>
+        RegistrarCoreAsync(request, codigoReferido, cancellationToken);
+
+    private async Task<OperationResultModel> RegistrarCoreAsync<TRequest>(
+        TRequest request,
         string? codigoReferido,
         CancellationToken cancellationToken = default)
     {

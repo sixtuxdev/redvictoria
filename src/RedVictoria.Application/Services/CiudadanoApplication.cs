@@ -53,7 +53,6 @@ public class CiudadanoApplication : ICiudadanoApplication
                 ? null
                 : request.TieneWhatsapp2,
             ParametroIdDondeVive = request.ParametroIdDondeVive,
-            PuestoVotacion = Normalize(request.PuestoVotacion),
             Email = Normalize(request.Email)?.ToLowerInvariant(),
             ParametroIdTipoIdentificacion = request.ParametroIdTipoIdentificacion,
             NumeroIdentificacion = Normalize(request.NumeroIdentificacion),
@@ -87,7 +86,6 @@ public class CiudadanoApplication : ICiudadanoApplication
                 Celular2 = result.Celular2,
                 TieneWhatsapp2 = result.TieneWhatsapp2,
                 ParametroIdDondeVive = result.ParametroIdDondeVive,
-                PuestoVotacion = result.PuestoVotacion,
                 ParametroIdTipoIdentificacion = result.ParametroIdTipoIdentificacion,
                 NumeroIdentificacion = result.NumeroIdentificacion,
                 Direccion = result.Direccion,
@@ -216,7 +214,6 @@ public class CiudadanoApplication : ICiudadanoApplication
         ValidateRequiredText(request.Email, "Email", errors);
         ValidateRequiredText(request.NumeroIdentificacion, "NumeroIdentificacion", errors);
         ValidateRequiredText(request.Direccion, "Direccion", errors);
-        ValidateRequiredText(request.PuestoVotacion, "PuestoVotacion", errors);
         ValidateRequiredText(codigoReferido, "CodigoReferido", errors);
         ValidateRequiredValue(request.FechaNacimiento, "FechaNacimiento", errors);
         ValidateRequiredValue(request.TieneWhatsapp, "TieneWhatsapp", errors);
@@ -234,7 +231,6 @@ public class CiudadanoApplication : ICiudadanoApplication
         ValidateMaximumLength(request.NumeroIdentificacion, 50, "NumeroIdentificacion", errors);
         ValidateMaximumLength(request.Direccion, 250, "Direccion", errors);
         ValidateMaximumLength(request.LugarNacimiento, 150, "LugarNacimiento", errors);
-        ValidateMaximumLength(request.PuestoVotacion, 150, "PuestoVotacion", errors);
         ValidateMaximumLength(codigoReferido, 50, "CodigoReferido", errors);
 
         if (request.FechaNacimiento?.Date > DateTime.Today)

@@ -12,7 +12,6 @@ public sealed class RegistroCiudadanoResponseModel
     public string? Celular2 { get; init; }
     public bool? TieneWhatsapp2 { get; init; }
     public int? ParametroIdDondeVive { get; init; }
-    public string? PuestoVotacion { get; init; }
     public int? ParametroIdTipoIdentificacion { get; init; }
     public string? NumeroIdentificacion { get; init; }
     public string? Direccion { get; init; }

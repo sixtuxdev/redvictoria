@@ -33,7 +33,6 @@ public sealed class RegistroCiudadanoRequestModel
 
     [Required(ErrorMessage = "Donde vive es obligatorio.")]
     public int? ParametroIdDondeVive { get; set; }    
-    public string? PuestoVotacion { get; set; }
 
     [Required(ErrorMessage = "Tipo de identificación es obligatorio.")]
     public int? ParametroIdTipoIdentificacion { get; set; }

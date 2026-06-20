@@ -1,6 +1,7 @@
 @page "/registro-ciudadano"
 @page "/registro-ciudadano/{CodigoReferido}"
 @layout RegistroCiudadanoLayout
+@using System.Globalization
 @inject RegistroCiudadanoViewModel ViewModel
 @inject IJSRuntime JSRuntime
 @inject NavigationManager Navigation
@@ -70,6 +71,10 @@
                             <MudItem xs="12" sm="6">
                                 <MudDatePicker @bind-Date="ViewModel.Request.FechaNacimiento"
                                                Label="Fecha de nacimiento"
+                                               Placeholder="Seleccione la fecha"
+                                               DateFormat="dd/MM/yyyy"
+                                               Culture="@ColombiaCulture"
+                                               PickerVariant="PickerVariant.Dialog"
                                                Variant="Variant.Outlined"
                                                Margin="Margin.Dense"
                                                Required="true"
@@ -410,6 +415,7 @@
 @code {
     private MudForm? _form;
     private bool _showReferidoInvalidoAlert;
+    private static readonly CultureInfo ColombiaCulture = CultureInfo.GetCultureInfo("es-CO");
 
     [Parameter]
     public string? CodigoReferido { get; set; }

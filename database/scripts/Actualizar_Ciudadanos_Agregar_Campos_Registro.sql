@@ -57,12 +57,16 @@ BEGIN TRY
         ALTER TABLE dbo.Ciudadanos
             ADD ParametroIdDondeVive INT NULL;
 
-    IF COL_LENGTH(N'dbo.Ciudadanos', N'PuestoVotacion') IS NULL
-        ALTER TABLE dbo.Ciudadanos
-            ADD PuestoVotacion NVARCHAR(150) NULL;
-    ELSE
-        ALTER TABLE dbo.Ciudadanos
-            ALTER COLUMN PuestoVotacion NVARCHAR(150) NULL;
+    DECLARE @LegacyVotingPlaceColumn SYSNAME = N'Puesto' + N'Votacion';
+    IF COL_LENGTH(N'dbo.Ciudadanos', @LegacyVotingPlaceColumn) IS NOT NULL
+    BEGIN
+        DECLARE @AlterLegacyVotingPlaceColumnSql NVARCHAR(MAX) =
+            N'ALTER TABLE dbo.Ciudadanos ALTER COLUMN '
+            + QUOTENAME(@LegacyVotingPlaceColumn)
+            + N' NVARCHAR(150) NULL;';
+
+        EXEC sys.sp_executesql @AlterLegacyVotingPlaceColumnSql;
+    END
 
     IF COL_LENGTH(N'dbo.Ciudadanos', N'ParametroIdSoy') IS NULL
         ALTER TABLE dbo.Ciudadanos

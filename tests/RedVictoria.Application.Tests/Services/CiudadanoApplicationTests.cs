@@ -207,7 +207,6 @@ public class CiudadanoApplicationTests
             Celular2 = "3107654321",
             TieneWhatsapp2 = false,
             ParametroIdDondeVive = 8,
-            PuestoVotacion = "Colegio Central",
             ParametroIdSoy = 4,
             ParametroIdVereda = 15,
             Estado = true,
@@ -221,7 +220,6 @@ public class CiudadanoApplicationTests
         request.TieneWhatsapp2 = false;
         request.TieneWhatsapp = true;
         request.ParametroIdDondeVive = 8;
-        request.PuestoVotacion = " Colegio Central ";
         request.ParametroIdSoy = 4;
         request.ParametroIdVereda = 15;
         request.Estado = true;
@@ -236,7 +234,6 @@ public class CiudadanoApplicationTests
         Assert.Equal("3107654321", repository.Command.Celular2);
         Assert.False(repository.Command.TieneWhatsapp2);
         Assert.Equal(8, repository.Command.ParametroIdDondeVive);
-        Assert.Equal("Colegio Central", repository.Command.PuestoVotacion);
         Assert.Equal(4, repository.Command.ParametroIdSoy);
         Assert.Equal(15, repository.Command.ParametroIdVereda);
         Assert.True(repository.Command.Estado);
@@ -247,7 +244,6 @@ public class CiudadanoApplicationTests
         Assert.Equal("3107654321", response.Data.Celular2);
         Assert.False(response.Data.TieneWhatsapp2);
         Assert.Equal(8, response.Data.ParametroIdDondeVive);
-        Assert.Equal("Colegio Central", response.Data.PuestoVotacion);
         Assert.Equal(4, response.Data.ParametroIdSoy);
         Assert.Equal(15, response.Data.ParametroIdVereda);
         Assert.True(response.Data.Estado);
@@ -271,26 +267,20 @@ public class CiudadanoApplicationTests
         Assert.Null(repository.Command);
     }
 
-    [Theory]
-    [InlineData("LugarNacimiento")]
-    [InlineData("PuestoVotacion")]
-    public async Task RegistrarAsync_ConNuevoTextoMayorA150_RetornaError(string fieldName)
+    [Fact]
+    public async Task RegistrarAsync_ConLugarNacimientoMayorA150_RetornaError()
     {
         var repository = new CiudadanoRepositoryFake(SuccessResult(tieneAcceso: false));
         var application = CreateApplication(repository);
         var request = ValidRequest();
         var invalidValue = new string('A', 151);
-
-        if (fieldName == "LugarNacimiento")
-            request.LugarNacimiento = invalidValue;
-        else
-            request.PuestoVotacion = invalidValue;
+        request.LugarNacimiento = invalidValue;
 
         var response = await application.RegistrarAsync(request);
 
         Assert.False(response.IsSuccess);
         Assert.Contains(
-            $"{fieldName} no puede superar 150 caracteres.",
+            "LugarNacimiento no puede superar 150 caracteres.",
             response.Errors);
         Assert.Null(repository.Command);
     }
@@ -505,7 +495,6 @@ public class CiudadanoApplicationTests
             Celular2 = null,
             TieneWhatsapp2 = null,
             ParametroIdDondeVive = 8,
-            PuestoVotacion = "Colegio Central",
             ParametroIdTipoIdentificacion = 1,
             NumeroIdentificacion = "12345678",
             Direccion = "Calle 1 # 2-3",

@@ -10,6 +10,11 @@ public interface ICiudadanoService
         string? codigoReferido,
         CancellationToken cancellationToken = default);
 
+    Task<OperationResultModel> RegistrarAsync(
+        RegisterCiudadanoRequestModel request,
+        string? codigoReferido,
+        CancellationToken cancellationToken = default);
+
     Task<OperationResultModel> ValidarCodigoReferidoAsync(
         string? codigoReferido,
         CancellationToken cancellationToken = default);

@@ -463,7 +463,6 @@ public sealed partial class RegistroCiudadanoViewModel(
         Request.TieneWhatsapp2 = null;
         Request.ParametroIdDondeVive = null;
         Request.ParametroIdVereda = null;
-        Request.PuestoVotacion = null;
         Request.ParametroIdTipoIdentificacion = null;
         Request.NumeroIdentificacion = null;
         Request.Direccion = null;

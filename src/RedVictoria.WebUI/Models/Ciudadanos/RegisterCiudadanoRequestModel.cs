@@ -1,6 +1,6 @@
-namespace RedVictoria.Application.DTOs.Ciudadanos;
+namespace RedVictoria.WebUI.Models.Ciudadanos;
 
-public class RegistroCiudadanoRequest
+public sealed class RegisterCiudadanoRequestModel
 {
     public string NombresCompletos { get; set; } = string.Empty;
     public DateTime? FechaNacimiento { get; set; }
@@ -17,7 +17,7 @@ public class RegistroCiudadanoRequest
     public int? DepartamentoId { get; set; }
     public int? MunicipioId { get; set; }
     public int? ParametroIdGrupoEdad { get; set; }
-    public int? ParametroIdGenero { get; set; }    
+    public int? ParametroIdGenero { get; set; }
     public int? ParametroIdSoy { get; set; }
     public string? CodigoReferido { get; set; }
     public int? CiudadanoReferidorId { get; set; }
