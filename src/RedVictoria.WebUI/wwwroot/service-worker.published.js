@@ -1,57 +1,139 @@
-// Caution! Be sure you understand the caveats before publishing an application with
-// offline support. See https://aka.ms/blazor-offline-considerations
+// Service worker de produccion para RedVictoria.WebUI.
+// Mantiene soporte PWA, pero prioriza la red para evitar que celulares queden
+// atrapados con index.html o archivos principales de una version anterior.
 
 self.importScripts('./service-worker-assets.js');
-self.addEventListener('install', event => event.waitUntil(onInstall(event)));
-self.addEventListener('activate', event => event.waitUntil(onActivate(event)));
-self.addEventListener('fetch', event => event.respondWith(onFetch(event)));
 
-const cacheNamePrefix = 'offline-cache-';
-const cacheName = `${cacheNamePrefix}${self.assetsManifest.version}`;
-const offlineAssetsInclude = [ /\.dll$/, /\.pdb$/, /\.wasm/, /\.html/, /\.js$/, /\.json$/, /\.css$/, /\.woff$/, /\.png$/, /\.jpe?g$/, /\.gif$/, /\.ico$/, /\.blat$/, /\.dat$/ ];
-const offlineAssetsExclude = [ /^service-worker\.js$/ ];
+const cacheNamePrefix = 'redvictoria-cache-';
+const legacyCacheNamePrefixes = ['offline-cache-'];
+const appVersion = 'v1.0.1';
+const cacheName = `${cacheNamePrefix}${appVersion}-${self.assetsManifest.version}`;
 
-// Replace with your base path if you are hosting on a subfolder. Ensure there is a trailing '/'.
-const base = "/";
-const baseUrl = new URL(base, self.origin);
-const manifestUrlList = self.assetsManifest.assets.map(asset => new URL(asset.url, baseUrl).href);
+const offlineAssetsInclude = [
+    /\.dll$/,
+    /\.pdb$/,
+    /\.wasm$/,
+    /\.json$/,
+    /\.css$/,
+    /\.js$/,
+    /\.woff$/,
+    /\.png$/,
+    /\.jpe?g$/,
+    /\.gif$/,
+    /\.ico$/,
+    /\.blat$/,
+    /\.dat$/
+];
 
-async function onInstall(event) {
-    console.info('Service worker: Install');
+const offlineAssetsExclude = [
+    /^index\.html$/,
+    /^service-worker\.js$/,
+    /^service-worker-assets\.js$/,
+    /^manifest\.webmanifest$/
+];
+
+
+self.addEventListener('install', event => {
     self.skipWaiting();
+    event.waitUntil(onInstall());
+});
 
-    // Fetch and cache all matching items from the assets manifest
+self.addEventListener('activate', event => {
+    event.waitUntil(onActivate());
+});
+
+self.addEventListener('fetch', event => {
+    if (event.request.method !== 'GET') {
+        return;
+    }
+
+    event.respondWith(onFetch(event));
+});
+
+async function onInstall() {
+    console.info('Service worker: Install', cacheName);
+
     const assetsRequests = self.assetsManifest.assets
         .filter(asset => offlineAssetsInclude.some(pattern => pattern.test(asset.url)))
         .filter(asset => !offlineAssetsExclude.some(pattern => pattern.test(asset.url)))
         .map(asset => new Request(asset.url, { integrity: asset.hash, cache: 'no-cache' }));
-    await caches.open(cacheName).then(cache => cache.addAll(assetsRequests));
+
+    const cache = await caches.open(cacheName);
+    await cache.addAll(assetsRequests);
 }
 
-async function onActivate(event) {
-    console.info('Service worker: Activate');
-    await self.clients.claim();
+async function onActivate() {
+    console.info('Service worker: Activate', cacheName);
 
-    // Delete unused caches
-    const cacheKeys = await caches.keys();
-    await Promise.all(cacheKeys
-        .filter(key => key.startsWith(cacheNamePrefix) && key !== cacheName)
-        .map(key => caches.delete(key)));
+    const cacheNames = await caches.keys();
+    await Promise.all(
+        cacheNames
+            .filter(name => (name.startsWith(cacheNamePrefix) && name !== cacheName)
+                || legacyCacheNamePrefixes.some(prefix => name.startsWith(prefix)))
+            .map(name => caches.delete(name))
+    );
+
+    await self.clients.claim();
 }
 
 async function onFetch(event) {
-    let cachedResponse = null;
-    if (event.request.method === 'GET') {
-        // For all navigation requests, try to serve index.html from cache,
-        // unless that request is for an offline resource.
-        // If you need some URLs to be server-rendered, edit the following check to exclude those URLs
-        const shouldServeIndexHtml = event.request.mode === 'navigate'
-            && !manifestUrlList.some(url => url === event.request.url);
+    const requestUrl = new URL(event.request.url);
 
-        const request = shouldServeIndexHtml ? 'index.html' : event.request;
-        const cache = await caches.open(cacheName);
-        cachedResponse = await cache.match(request);
+    if (shouldUseNetworkFirst(event.request, requestUrl)) {
+        return networkFirst(event.request);
     }
 
-    return cachedResponse || fetch(event.request);
+    const cache = await caches.open(cacheName);
+    const cachedResponse = await cache.match(event.request);
+
+    if (cachedResponse) {
+        return cachedResponse;
+    }
+
+    return fetch(event.request);
+}
+
+function shouldUseNetworkFirst(request, requestUrl) {
+    if (request.mode === 'navigate') {
+        return true;
+    }
+
+    const pathname = requestUrl.pathname.toLowerCase();
+
+    return pathname.endsWith('/index.html')
+        || pathname.endsWith('/service-worker.js')
+        || pathname.endsWith('/service-worker-assets.js')
+        || pathname.endsWith('/manifest.webmanifest')
+        || pathname.endsWith('/_framework/blazor.boot.json')
+        || pathname.endsWith('/css/app.css')
+        || pathname.endsWith('/js/site.js')
+        || pathname.endsWith('/js/sweetalertservice.js')
+        || pathname.endsWith('/redvictoria.webui.styles.css');
+}
+
+async function networkFirst(request) {
+    const cache = await caches.open(cacheName);
+    const requestUrl = new URL(request.url);
+    const fallbackRequest = request.mode === 'navigate' ? 'index.html' : request;
+
+    try {
+        const networkRequest = request.mode === 'navigate'
+            ? new Request(request.url, { cache: 'no-store', credentials: request.credentials })
+            : new Request(request, { cache: 'no-store' });
+
+        const networkResponse = await fetch(networkRequest);
+
+        if (networkResponse && networkResponse.ok && requestUrl.origin === self.location.origin) {
+            await cache.put(fallbackRequest, networkResponse.clone());
+        }
+
+        return networkResponse;
+    } catch (error) {
+        const cachedResponse = await cache.match(fallbackRequest);
+        if (cachedResponse) {
+            return cachedResponse;
+        }
+
+        throw error;
+    }
 }

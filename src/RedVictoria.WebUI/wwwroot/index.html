@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/app.css?v=1.0.1" />
     <link rel="icon" type="image/png" href="favicon.png" />
-    <link href="RedVictoria.WebUI.styles.css" rel="stylesheet" />
+    <link href="RedVictoria.WebUI.styles.css?v=1.0.1" rel="stylesheet" />
     <link href="manifest.webmanifest" rel="manifest" />
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
     <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
@@ -32,10 +32,17 @@
         <span class="dismiss">🗙</span>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="js/sweetAlertService.js"></script>
+    <script src="js/sweetAlertService.js?v=1.0.1"></script>
+    <script src="js/site.js?v=1.0.1"></script>
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
-    <script>navigator.serviceWorker.register('service-worker.js', { updateViaCache: 'none' }).then(registration => registration.update());</script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('service-worker.js', { updateViaCache: 'none' })
+                .then(registration => registration.update());
+        }
+    </script>
 </body>
 
 </html>

@@ -3,6 +3,7 @@
 @inject DashboardViewModel ViewModel
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
+@inject ISnackbar Snackbar
 
 <PageTitle>Dashboard</PageTitle>
 
@@ -21,10 +22,15 @@ else
         <MudStack Spacing="5" Class="dashboard-content">
             <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="dashboard-header dashboard-hero">
                 <div class="dashboard-heading">
-                    <MudText Typo="Typo.h4" Class="dashboard-title">Dashboard</MudText>
-                    <MudText Typo="Typo.body2" Class="dashboard-subtitle">
-                        Hola, @ViewModel.Session?.Nombre. Esta es la actividad de tu red de simpatizantes.
-                    </MudText>
+                    <MudImage Src="image/logo.png"
+                              Alt="RedVictoria"
+                              Class="dashboard-logo" />
+                    <div class="dashboard-heading-text">
+                        <MudText Typo="Typo.h4" Class="dashboard-title">Dashboard</MudText>
+                        <MudText Typo="Typo.body2" Class="dashboard-subtitle">
+                            Hola, @ViewModel.Session?.Nombre. Esta es la actividad de tu red de simpatizantes.
+                        </MudText>
+                    </div>
                 </div>
                 <MudButton Color="Color.Primary"
                            Variant="Variant.Outlined"
@@ -67,7 +73,7 @@ else
                                    Variant="Variant.Filled"
                                    StartIcon="@Icons.Material.Filled.ContentCopy"
                                    Disabled="@string.IsNullOrWhiteSpace(ViewModel.MiUrlReferido)"
-                                   OnClick="CopyOwnReferralUrlAsync"
+                                   OnClick="CopiarEnlaceReferido"
                                    Class="dashboard-primary-action">
                             Copiar mi enlace de referido
                         </MudButton>
@@ -250,22 +256,40 @@ else
     private async Task CopyReferralUrlAsync(CiudadanoReferidoModel referido)
     {
         var url = ViewModel.BuildReferralUrl(referido.CodigoReferido);
-        await JSRuntime.InvokeVoidAsync("RedVictoriaSweetAlert.copyText", url);
+        await CopyReferralUrlToClipboardAsync(url);
     }
 
-    private async Task CopyOwnReferralUrlAsync()
+    private async Task CopiarEnlaceReferido()
     {
         if (string.IsNullOrWhiteSpace(ViewModel.MiUrlReferido))
         {
-            await JSRuntime.InvokeVoidAsync(
-                "RedVictoriaSweetAlert.fire",
-                "error",
-                "No fue posible copiar",
-                "No encontramos tu c√≥digo referido en la sesi√≥n actual. Inicia sesi√≥n nuevamente.");
+            Snackbar.Add("No se encontrÛ el enlace de referido.", Severity.Warning);
             return;
         }
 
-        await JSRuntime.InvokeVoidAsync("RedVictoriaSweetAlert.copyText", ViewModel.MiUrlReferido);
+        await CopyReferralUrlToClipboardAsync(ViewModel.MiUrlReferido);
+    }
+
+    private async Task CopyReferralUrlToClipboardAsync(string? url)
+    {
+        if (string.IsNullOrWhiteSpace(url))
+        {
+            Snackbar.Add("No se encontrÛ el enlace de referido.", Severity.Warning);
+            return;
+        }
+
+        var copiado = await JSRuntime.InvokeAsync<bool>(
+            "redVictoria.copyToClipboard",
+            url);
+
+        if (copiado)
+        {
+            Snackbar.Add("Enlace de referido copiado correctamente.", Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add("No se pudo copiar el enlace. Puedes seleccionarlo manualmente.", Severity.Error);
+        }
     }
 
     private async Task DeactivateAsync(CiudadanoReferidoModel referido)

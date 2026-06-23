@@ -81,7 +81,25 @@
 .dashboard-page .dashboard-heading {
     position: relative;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
     max-width: 48rem;
+    min-width: 0;
+}
+
+.dashboard-page .dashboard-heading-text {
+    min-width: 0;
+}
+
+.dashboard-page ::deep .dashboard-logo {
+    width: auto;
+    height: 70px;
+    max-height: 70px;
+    max-width: 220px;
+    object-fit: contain;
+    display: block;
+    flex: 0 0 auto;
 }
 
 .dashboard-page ::deep .dashboard-title {
@@ -304,6 +322,20 @@
     .dashboard-page ::deep .dashboard-hero {
         padding: 1.25rem;
         border-radius: 14px;
+    }
+
+    .dashboard-page .dashboard-heading {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+        align-items: center;
+        max-width: 100%;
+    }
+
+    .dashboard-page ::deep .dashboard-logo {
+        height: 55px;
+        max-height: 55px;
+        max-width: 180px;
     }
 
     .dashboard-page ::deep .dashboard-title {

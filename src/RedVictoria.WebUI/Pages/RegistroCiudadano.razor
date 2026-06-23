@@ -295,24 +295,12 @@
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
                                     }
                                 </MudSelect>
-                            </MudItem>
-
-                            <MudItem xs="12" sm="6" lg="12">
-                                <MudTextField @bind-Value="ViewModel.Request.Direccion"
-                                              Disabled="@ViewModel.IsBusy"
-                                              Label="Dirección"
-                                              Variant="Variant.Outlined"
-                                              Margin="Margin.Dense"
-                                              Required="true"
-                                              Immediate="true"
-                                              MaxLength="250"
-                                              Class="registro-field" />
-                            </MudItem>
+                            </MudItem>                            
 
                             <MudItem xs="12">
                                 <MudAutocomplete T="int?" @bind-Value="ViewModel.Request.ParametroIdVereda"
                                                  Disabled="@ViewModel.IsBusy"
-                                                 Label="Vereda"
+                                                 Label="Centro Poblado"
                                                  Variant="Variant.Outlined"
                                                  Margin="Margin.Dense"
                                                  Dense="true"
@@ -327,6 +315,19 @@
                                                  Strict="false"
                                                  Class="registro-field" />
                             </MudItem>
+
+                            <MudItem xs="12" sm="6" lg="12">
+                                <MudTextField @bind-Value="ViewModel.Request.Direccion"
+                                              Disabled="@ViewModel.IsBusy"
+                                              Label="Dirección"
+                                              Variant="Variant.Outlined"
+                                              Margin="Margin.Dense"
+                                              Required="true"
+                                              Immediate="true"
+                                              MaxLength="250"
+                                              Class="registro-field" />
+                            </MudItem>
+
                         </MudGrid>
                     </MudPaper>
                 </MudItem>
