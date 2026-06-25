@@ -168,6 +168,7 @@ else
                 <HeaderContent>
                     <MudTh>Simpatizante</MudTh>
                     <MudTh>Contacto</MudTh>
+                    <MudTh>Fecha de Nacimiento</MudTh>
                     <MudTh>Codigo</MudTh>
                     <MudTh>Referidor</MudTh>
                     <MudTh>Registro</MudTh>
@@ -188,6 +189,7 @@ else
                             <MudText Typo="Typo.caption" Color="Color.Secondary">@Display(context.Celular)</MudText>
                         </MudStack>
                     </MudTd>
+                    <MudTd DataLabel="Fecha de Nacimiento">@(context.FechaNacimiento.HasValue ? context.FechaNacimiento.Value.ToString("dd/MM/yyyy") : "No registrada")</MudTd>
                     <MudTd DataLabel="Codigo">
                         <MudText Typo="Typo.body2">@context.CodigoReferido</MudText>
                     </MudTd>

@@ -4,7 +4,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    ;WITH Directos AS
+    ;WITH RedReferidos AS
     (
         SELECT
             c.CiudadanoId,
@@ -14,20 +14,23 @@ BEGIN
             c.Celular2,
             c.TieneWhatsapp2,
             c.NumeroIdentificacion,
+            c.FechaNacimiento,
             c.CodigoReferido,
             c.CiudadanoReferidorId,
             r.NombresCompletos AS Referidor,
             c.FechaRegistro,
             c.Estado,
             1 AS Nivel,
-            CAST(N'Directo' AS NVARCHAR(20)) AS TipoReferido
+            CAST(N'Directo' AS NVARCHAR(20)) AS TipoReferido,
+            CAST('/' + CAST(c.CiudadanoId AS VARCHAR(20)) + '/' AS VARCHAR(MAX)) AS Ruta
         FROM dbo.Ciudadanos c
         INNER JOIN dbo.Ciudadanos r
             ON r.CiudadanoId = c.CiudadanoReferidorId
         WHERE c.CiudadanoReferidorId = @CiudadanoId
-    ),
-    Indirectos AS
-    (
+          AND c.CiudadanoId <> @CiudadanoId
+
+        UNION ALL
+
         SELECT
             c.CiudadanoId,
             c.NombresCompletos,
@@ -36,23 +39,44 @@ BEGIN
             c.Celular2,
             c.TieneWhatsapp2,
             c.NumeroIdentificacion,
+            c.FechaNacimiento,
             c.CodigoReferido,
             c.CiudadanoReferidorId,
             r.NombresCompletos AS Referidor,
             c.FechaRegistro,
             c.Estado,
-            2 AS Nivel,
-            CAST(N'Indirecto' AS NVARCHAR(20)) AS TipoReferido
+            rr.Nivel + 1 AS Nivel,
+            CAST(N'Indirecto' AS NVARCHAR(20)) AS TipoReferido,
+            CAST(rr.Ruta + CAST(c.CiudadanoId AS VARCHAR(20)) + '/' AS VARCHAR(MAX)) AS Ruta
         FROM dbo.Ciudadanos c
         INNER JOIN dbo.Ciudadanos r
             ON r.CiudadanoId = c.CiudadanoReferidorId
-        INNER JOIN Directos d
-            ON d.CiudadanoId = c.CiudadanoReferidorId
+        INNER JOIN RedReferidos rr
+            ON rr.CiudadanoId = c.CiudadanoReferidorId
+        WHERE c.CiudadanoId <> @CiudadanoId
+          AND rr.Ruta NOT LIKE '%/' + CAST(c.CiudadanoId AS VARCHAR(20)) + '/%'
+          AND rr.Nivel < 20
     )
-    SELECT *
-    FROM Directos
-    UNION ALL
-    SELECT *
-    FROM Indirectos
-    ORDER BY Nivel, FechaRegistro DESC, NombresCompletos;
+    SELECT
+        CiudadanoId,
+        NombresCompletos,
+        Email,
+        Celular,
+        Celular2,
+        TieneWhatsapp2,
+        NumeroIdentificacion,
+        FechaNacimiento,
+        CodigoReferido,
+        CiudadanoReferidorId,
+        Referidor,
+        FechaRegistro,
+        Estado,
+        Nivel,
+        TipoReferido
+    FROM RedReferidos
+    ORDER BY 
+        Nivel,
+        FechaRegistro DESC,
+        NombresCompletos
+    OPTION (MAXRECURSION 20);
 END;

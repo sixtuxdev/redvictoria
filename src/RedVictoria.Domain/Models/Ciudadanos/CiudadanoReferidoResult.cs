@@ -9,6 +9,7 @@ public class CiudadanoReferidoResult
     public string? Celular2 { get; init; }
     public bool? TieneWhatsapp2 { get; init; }
     public string? NumeroIdentificacion { get; init; }
+    public DateTime? FechaNacimiento { get; init; }
     public string CodigoReferido { get; init; } = string.Empty;
     public int? CiudadanoReferidorId { get; init; }
     public string? Referidor { get; init; }

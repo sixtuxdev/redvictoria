@@ -3,12 +3,18 @@
 @inject NavigationManager Navigation
 
 <MudLayout>
-    <MudAppBar Elevation="0" Dense="true" Class="rv-appbar">
+    <MudAppBar Elevation="0" Dense="true" >
         <MudIconButton Icon="@Icons.Material.Filled.Menu"
-                       Color="Color.Inherit"
+                       Color="Color.Dark"
                        Edge="Edge.Start"
                        OnClick="@ToggleDrawer" />
-        <MudText Typo="Typo.h6" Class="ml-2 rv-appbar-title">RedVictoria</MudText>
+        <MudImage Src="image/logo.png"
+                  Alt="Logo RedVictoria"
+                  Class="ml-2 rv-appbar-logo"
+                  Height="32"
+                  Width="120"
+                  ObjectFit="ObjectFit.Contain"
+                  Style="height:32px; max-height:32px; width:auto; max-width:120px; object-fit:contain; display:block;" />
         <MudSpacer />
         @if (_isAuthenticated)
         {

@@ -32,6 +32,7 @@ public static class DashboardExcelExporter
                 "Identificacion",
                 "Email",
                 "Celular",
+                "Fecha de Nacimiento",
                 "Codigo",
                 "Referidor",
                 "Registro",
@@ -46,6 +47,7 @@ public static class DashboardExcelExporter
             Display(item.NumeroIdentificacion),
             Display(item.Email),
             Display(item.Celular),
+            DisplayDate(item.FechaNacimiento),
             item.CodigoReferido,
             Display(item.Referidor),
             item.FechaRegistro.ToString("yyyy-MM-dd"),
@@ -59,7 +61,7 @@ public static class DashboardExcelExporter
             <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
               <cols>
                 <col min="1" max="1" width="28" customWidth="1"/>
-                <col min="2" max="9" width="18" customWidth="1"/>
+                <col min="2" max="10" width="18" customWidth="1"/>
               </cols>
               <sheetData>
             """);
@@ -170,6 +172,9 @@ public static class DashboardExcelExporter
 
     private static string Display(string? value) =>
         string.IsNullOrWhiteSpace(value) ? "-" : value;
+
+    private static string DisplayDate(DateTime? value) =>
+        value.HasValue ? value.Value.ToString("dd/MM/yyyy") : "No registrada";
 
     private static string EscapeXml(string? value) =>
         System.Security.SecurityElement.Escape(value ?? string.Empty) ?? string.Empty;

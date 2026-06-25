@@ -43,14 +43,30 @@ body {
     font-weight: 800;
     letter-spacing: 0;
 }
+.rv-appbar-logo {
+    height: 32px !important;
+    max-height: 32px !important;
+    width: auto !important;
+    max-width: 120px !important;
+    object-fit: contain !important;
+    display: block !important;
+    flex-shrink: 0;
+    align-self: center;
+}
 
+@media (max-width: 600px) {
+    .rv-appbar-logo {
+        height: 28px !important;
+        max-height: 28px !important;
+        max-width: 96px !important;
+    }
+}
 .rv-appbar .mud-button-root {
     color: #ffffff !important;
     border-radius: 8px;
     text-transform: none;
     font-weight: 700;
 }
-
 .rv-appbar .mud-button-root:hover,
 .rv-appbar .mud-icon-button-root:hover {
     background-color: rgba(255, 255, 255, 0.14);

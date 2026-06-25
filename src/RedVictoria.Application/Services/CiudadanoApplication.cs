@@ -348,6 +348,7 @@ public class CiudadanoApplication : ICiudadanoApplication
             Celular2 = result.Celular2,
             TieneWhatsapp2 = result.TieneWhatsapp2,
             NumeroIdentificacion = result.NumeroIdentificacion,
+            FechaNacimiento = result.FechaNacimiento,
             CodigoReferido = result.CodigoReferido,
             CiudadanoReferidorId = result.CiudadanoReferidorId,
             Referidor = result.Referidor,
