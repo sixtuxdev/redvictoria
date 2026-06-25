@@ -17,6 +17,14 @@ CREATE OR ALTER PROCEDURE dbo.usp_Ciudadanos_Registrar
     @ParametroIdGenero INT = NULL,
     @ParametroIdSoy INT = NULL,
     @ParametroIdVereda INT = NULL,
+    @ParametroIdTipoDiscapacidad INT = NULL,
+    @ParametroIdEstadoCivil INT = NULL,
+    @TieneHijos BIT = NULL,
+    @Cuantos INT = NULL,
+    @TieneVehiculo BIT = NULL,
+    @ParametroIdTipoVehiculo INT = NULL,
+    @ParametroIdReligion INT = NULL,
+    @EsEmpleado BIT = NULL,
     @Estado BIT = 1,
     @CodigoReferidoInvitacion NVARCHAR(50) = NULL,
     @PasswordHash NVARCHAR(500) = NULL
@@ -57,7 +65,15 @@ BEGIN
                     CAST(NULL AS NVARCHAR(30)) AS Celular2,
                     CAST(NULL AS BIT) AS TieneWhatsapp2,
                     CAST(NULL AS INT) AS ParametroIdDondeVive,
-                    CAST(NULL AS INT) AS ParametroIdVereda;
+                    CAST(NULL AS INT) AS ParametroIdVereda,
+                    CAST(NULL AS INT) AS ParametroIdTipoDiscapacidad,
+                    CAST(NULL AS INT) AS ParametroIdEstadoCivil,
+                    CAST(NULL AS BIT) AS TieneHijos,
+                    CAST(NULL AS INT) AS Cuantos,
+                    CAST(NULL AS BIT) AS TieneVehiculo,
+                    CAST(NULL AS INT) AS ParametroIdTipoVehiculo,
+                    CAST(NULL AS INT) AS ParametroIdReligion,
+                    CAST(NULL AS BIT) AS EsEmpleado;
                 RETURN;
             END
         END
@@ -84,7 +100,15 @@ BEGIN
                 CAST(NULL AS NVARCHAR(30)) AS Celular2,
                 CAST(NULL AS BIT) AS TieneWhatsapp2,
                 CAST(NULL AS INT) AS ParametroIdDondeVive,
-                CAST(NULL AS INT) AS ParametroIdVereda;
+                CAST(NULL AS INT) AS ParametroIdVereda,
+                CAST(NULL AS INT) AS ParametroIdTipoDiscapacidad,
+                CAST(NULL AS INT) AS ParametroIdEstadoCivil,
+                CAST(NULL AS BIT) AS TieneHijos,
+                CAST(NULL AS INT) AS Cuantos,
+                CAST(NULL AS BIT) AS TieneVehiculo,
+                CAST(NULL AS INT) AS ParametroIdTipoVehiculo,
+                CAST(NULL AS INT) AS ParametroIdReligion,
+                CAST(NULL AS BIT) AS EsEmpleado;
             RETURN;
         END
 
@@ -110,7 +134,15 @@ BEGIN
                 CAST(NULL AS NVARCHAR(30)) AS Celular2,
                 CAST(NULL AS BIT) AS TieneWhatsapp2,
                 CAST(NULL AS INT) AS ParametroIdDondeVive,
-                CAST(NULL AS INT) AS ParametroIdVereda;
+                CAST(NULL AS INT) AS ParametroIdVereda,
+                CAST(NULL AS INT) AS ParametroIdTipoDiscapacidad,
+                CAST(NULL AS INT) AS ParametroIdEstadoCivil,
+                CAST(NULL AS BIT) AS TieneHijos,
+                CAST(NULL AS INT) AS Cuantos,
+                CAST(NULL AS BIT) AS TieneVehiculo,
+                CAST(NULL AS INT) AS ParametroIdTipoVehiculo,
+                CAST(NULL AS INT) AS ParametroIdReligion,
+                CAST(NULL AS BIT) AS EsEmpleado;
             RETURN;
         END
 
@@ -136,7 +168,15 @@ BEGIN
                 CAST(NULL AS NVARCHAR(30)) AS Celular2,
                 CAST(NULL AS BIT) AS TieneWhatsapp2,
                 CAST(NULL AS INT) AS ParametroIdDondeVive,
-                CAST(NULL AS INT) AS ParametroIdVereda;
+                CAST(NULL AS INT) AS ParametroIdVereda,
+                CAST(NULL AS INT) AS ParametroIdTipoDiscapacidad,
+                CAST(NULL AS INT) AS ParametroIdEstadoCivil,
+                CAST(NULL AS BIT) AS TieneHijos,
+                CAST(NULL AS INT) AS Cuantos,
+                CAST(NULL AS BIT) AS TieneVehiculo,
+                CAST(NULL AS INT) AS ParametroIdTipoVehiculo,
+                CAST(NULL AS INT) AS ParametroIdReligion,
+                CAST(NULL AS BIT) AS EsEmpleado;
             RETURN;
         END
 
@@ -162,7 +202,15 @@ BEGIN
                 CAST(NULL AS NVARCHAR(30)) AS Celular2,
                 CAST(NULL AS BIT) AS TieneWhatsapp2,
                 CAST(NULL AS INT) AS ParametroIdDondeVive,
-                CAST(NULL AS INT) AS ParametroIdVereda;
+                CAST(NULL AS INT) AS ParametroIdVereda,
+                CAST(NULL AS INT) AS ParametroIdTipoDiscapacidad,
+                CAST(NULL AS INT) AS ParametroIdEstadoCivil,
+                CAST(NULL AS BIT) AS TieneHijos,
+                CAST(NULL AS INT) AS Cuantos,
+                CAST(NULL AS BIT) AS TieneVehiculo,
+                CAST(NULL AS INT) AS ParametroIdTipoVehiculo,
+                CAST(NULL AS INT) AS ParametroIdReligion,
+                CAST(NULL AS BIT) AS EsEmpleado;
             RETURN;
         END
 
@@ -198,6 +246,14 @@ BEGIN
             ParametroIdGenero,
             ParametroIdSoy,
             ParametroIdVereda,
+            ParametroIdTipoDiscapacidad,
+            ParametroIdEstadoCivil,
+            TieneHijos,
+            Cuantos,
+            TieneVehiculo,
+            ParametroIdTipoVehiculo,
+            ParametroIdReligion,
+            EsEmpleado,
             CodigoReferido,
             CiudadanoReferidorId,
             TieneAcceso,
@@ -224,6 +280,14 @@ BEGIN
             @ParametroIdGenero,
             @ParametroIdSoy,
             @ParametroIdVereda,
+            @ParametroIdTipoDiscapacidad,
+            @ParametroIdEstadoCivil,
+            @TieneHijos,
+            @Cuantos,
+            @TieneVehiculo,
+            @ParametroIdTipoVehiculo,
+            @ParametroIdReligion,
+            @EsEmpleado,
             @CodigoReferido,
             @CiudadanoReferidorId,
             @TieneAcceso,
@@ -277,6 +341,14 @@ BEGIN
             @ParametroIdGenero AS ParametroIdGenero,
             @ParametroIdSoy AS ParametroIdSoy,
             @ParametroIdVereda AS ParametroIdVereda,
+            @ParametroIdTipoDiscapacidad AS ParametroIdTipoDiscapacidad,
+            @ParametroIdEstadoCivil AS ParametroIdEstadoCivil,
+            @TieneHijos AS TieneHijos,
+            @Cuantos AS Cuantos,
+            @TieneVehiculo AS TieneVehiculo,
+            @ParametroIdTipoVehiculo AS ParametroIdTipoVehiculo,
+            @ParametroIdReligion AS ParametroIdReligion,
+            @EsEmpleado AS EsEmpleado,
             @CodigoReferido AS CodigoReferido,
             @CiudadanoReferidorId AS CiudadanoReferidorId,
             @TieneAcceso AS TieneAcceso,

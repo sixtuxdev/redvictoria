@@ -59,6 +59,27 @@ public sealed class RegistroCiudadanoRequestModel
     [Required(ErrorMessage = "Soy es obligatorio.")]
     public int? ParametroIdSoy { get; set; }
 
+    [Required(ErrorMessage = "Tipo de discapacidad es obligatorio.")]
+    public int? ParametroIdTipoDiscapacidad { get; set; }
+
+    [Required(ErrorMessage = "Estado civil es obligatorio.")]
+    public int? ParametroIdEstadoCivil { get; set; }
+
+    [Required(ErrorMessage = "Indica si tiene hijos.")]
+    public bool? TieneHijos { get; set; }
+
+    public int? Cuantos { get; set; }
+
+    [Required(ErrorMessage = "Indica si tiene vehiculo.")]
+    public bool? TieneVehiculo { get; set; }
+
+    public int? ParametroIdTipoVehiculo { get; set; }
+
+    [Required(ErrorMessage = "Religion es obligatoria.")]
+    public int? ParametroIdReligion { get; set; }
+
+    [Required(ErrorMessage = "Indica si es empleado.")]
+    public bool? EsEmpleado { get; set; }
     [Required(ErrorMessage = "Codigo referido es obligatorio.")]
     [MaxLength(50, ErrorMessage = "Codigo referido no puede superar 50 caracteres.")]
     public string? CodigoReferido { get; set; }

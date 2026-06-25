@@ -2,6 +2,7 @@ using System.Net.Http.Json;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using RedVictoria.WebUI.Constants;
 using RedVictoria.WebUI.Interfaces;
 using RedVictoria.WebUI.Models.Ciudadanos;
@@ -12,7 +13,8 @@ namespace RedVictoria.WebUI.Services;
 public sealed class CiudadanoService(
     HttpClient httpClient,
     IConfiguration configuration,
-    IAuthSessionService authSessionService) : ICiudadanoService
+    IAuthSessionService authSessionService,
+    ILogger<CiudadanoService> logger) : ICiudadanoService
 {
     public async Task<ReferidosResultModel> ObtenerRedReferidosAsync(
         CancellationToken cancellationToken = default)
@@ -146,6 +148,8 @@ public sealed class CiudadanoService(
             ? ApiEndpoints.RegistroCiudadano
             : $"{ApiEndpoints.RegistroCiudadano}?ref={Uri.EscapeDataString(codigoReferido)}";
         var endpoint = ApiEndpointBuilder.Build(configuration, relativeEndpoint);
+        var camposNuevosJson = BuildCamposNuevosJson(request);
+        logger.LogInformation("Registro ciudadano WebUI HTTP JSON campos nuevos: {CamposNuevosJson}", camposNuevosJson);
 
         var response = await httpClient.PostAsJsonAsync(endpoint, request, cancellationToken);
         if (response.Content.Headers.ContentLength == 0)
@@ -183,6 +187,23 @@ public sealed class CiudadanoService(
         return OperationResultModel.Failure(message);
     }
 
+    private static string BuildCamposNuevosJson<TRequest>(TRequest request)
+    {
+        var requestType = request?.GetType();
+        object? GetValue(string propertyName) => requestType?.GetProperty(propertyName)?.GetValue(request);
+
+        return JsonSerializer.Serialize(new
+        {
+            ParametroIdTipoDiscapacidad = GetValue(nameof(RegistroCiudadanoRequestModel.ParametroIdTipoDiscapacidad)),
+            ParametroIdEstadoCivil = GetValue(nameof(RegistroCiudadanoRequestModel.ParametroIdEstadoCivil)),
+            TieneHijos = GetValue(nameof(RegistroCiudadanoRequestModel.TieneHijos)),
+            Cuantos = GetValue(nameof(RegistroCiudadanoRequestModel.Cuantos)),
+            TieneVehiculo = GetValue(nameof(RegistroCiudadanoRequestModel.TieneVehiculo)),
+            ParametroIdTipoVehiculo = GetValue(nameof(RegistroCiudadanoRequestModel.ParametroIdTipoVehiculo)),
+            ParametroIdReligion = GetValue(nameof(RegistroCiudadanoRequestModel.ParametroIdReligion)),
+            EsEmpleado = GetValue(nameof(RegistroCiudadanoRequestModel.EsEmpleado))
+        });
+    }
     private async Task<HttpRequestMessage?> CreateAuthorizedRequestAsync(
         HttpMethod method,
         string relativeEndpoint,

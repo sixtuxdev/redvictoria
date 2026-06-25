@@ -20,6 +20,15 @@ public class RegistroCiudadanoCommand
     public int? ParametroIdGenero { get; init; }
     public int? ParametroIdSoy { get; init; }
     public int? ParametroIdVereda { get; init; }
+
+    public int? ParametroIdTipoDiscapacidad { get; init; }
+    public int? ParametroIdEstadoCivil { get; init; }
+    public bool? TieneHijos { get; init; }
+    public int? Cuantos { get; init; }
+    public bool? TieneVehiculo { get; init; }
+    public int? ParametroIdTipoVehiculo { get; init; }
+    public int? ParametroIdReligion { get; init; }
+    public bool? EsEmpleado { get; init; }
     public bool Estado { get; init; } = true;
     public string? CodigoReferidoInvitacion { get; init; }
     public string? PasswordHash { get; init; }

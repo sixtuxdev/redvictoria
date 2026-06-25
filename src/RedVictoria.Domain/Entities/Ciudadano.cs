@@ -20,6 +20,15 @@ public class Ciudadano
     public int? ParametroIdGrupoEdad { get; set; }
     public int? ParametroIdGenero { get; set; }
     public int? ParametroIdSoy { get; set; }
+
+    public int? ParametroIdTipoDiscapacidad { get; set; }
+    public int? ParametroIdEstadoCivil { get; set; }
+    public bool? TieneHijos { get; set; }
+    public int? Cuantos { get; set; }
+    public bool? TieneVehiculo { get; set; }
+    public int? ParametroIdTipoVehiculo { get; set; }
+    public int? ParametroIdReligion { get; set; }
+    public bool? EsEmpleado { get; set; }
     public string CodigoReferido { get; set; } = string.Empty;
     public int? CiudadanoReferidorId { get; set; }
     public bool TieneAcceso { get; set; }

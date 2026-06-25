@@ -19,7 +19,11 @@ public sealed class ParametroService(HttpClient httpClient, IConfiguration confi
             Generos = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.Genero, cancellationToken),
             Soy = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.Soy, cancellationToken),
             DondeVive = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.DondeVive, cancellationToken),
-            Veredas = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.Veredas, cancellationToken)
+            Veredas = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.Veredas, cancellationToken),
+            TiposDiscapacidad = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.TipoDiscapacidad, cancellationToken),
+            EstadosCivil = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.EstadoCivil, cancellationToken),
+            TiposVehiculo = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.TipoVehiculo, cancellationToken),
+            Religiones = await ObtenerParametrosPorClaseDescripcionAsync(ParametroTipos.Religion, cancellationToken)
         };
     }
 

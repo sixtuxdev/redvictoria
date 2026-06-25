@@ -76,6 +76,38 @@ BEGIN TRY
         ALTER TABLE dbo.Ciudadanos
             ADD ParametroIdVereda INT NULL;
 
+    IF COL_LENGTH(N'dbo.Ciudadanos', N'ParametroIdTipoDiscapacidad') IS NULL
+        ALTER TABLE dbo.Ciudadanos
+            ADD ParametroIdTipoDiscapacidad INT NULL;
+
+    IF COL_LENGTH(N'dbo.Ciudadanos', N'ParametroIdEstadoCivil') IS NULL
+        ALTER TABLE dbo.Ciudadanos
+            ADD ParametroIdEstadoCivil INT NULL;
+
+    IF COL_LENGTH(N'dbo.Ciudadanos', N'TieneHijos') IS NULL
+        ALTER TABLE dbo.Ciudadanos
+            ADD TieneHijos BIT NULL;
+
+    IF COL_LENGTH(N'dbo.Ciudadanos', N'Cuantos') IS NULL
+        ALTER TABLE dbo.Ciudadanos
+            ADD Cuantos INT NULL;
+
+    IF COL_LENGTH(N'dbo.Ciudadanos', N'TieneVehiculo') IS NULL
+        ALTER TABLE dbo.Ciudadanos
+            ADD TieneVehiculo BIT NULL;
+
+    IF COL_LENGTH(N'dbo.Ciudadanos', N'ParametroIdTipoVehiculo') IS NULL
+        ALTER TABLE dbo.Ciudadanos
+            ADD ParametroIdTipoVehiculo INT NULL;
+
+    IF COL_LENGTH(N'dbo.Ciudadanos', N'ParametroIdReligion') IS NULL
+        ALTER TABLE dbo.Ciudadanos
+            ADD ParametroIdReligion INT NULL;
+
+    IF COL_LENGTH(N'dbo.Ciudadanos', N'EsEmpleado') IS NULL
+        ALTER TABLE dbo.Ciudadanos
+            ADD EsEmpleado BIT NULL;
+
     IF COL_LENGTH(N'dbo.Ciudadanos', N'Email') IS NULL
         ALTER TABLE dbo.Ciudadanos
             ADD Email NVARCHAR(150) NULL;

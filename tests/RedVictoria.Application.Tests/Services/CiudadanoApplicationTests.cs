@@ -209,6 +209,14 @@ public class CiudadanoApplicationTests
             ParametroIdDondeVive = 8,
             ParametroIdSoy = 4,
             ParametroIdVereda = 15,
+            ParametroIdTipoDiscapacidad = 21,
+            ParametroIdEstadoCivil = 22,
+            TieneHijos = true,
+            Cuantos = 2,
+            TieneVehiculo = true,
+            ParametroIdTipoVehiculo = 23,
+            ParametroIdReligion = 24,
+            EsEmpleado = false,
             Estado = true,
             FechaRegistro = fechaRegistro
         });
@@ -222,6 +230,14 @@ public class CiudadanoApplicationTests
         request.ParametroIdDondeVive = 8;
         request.ParametroIdSoy = 4;
         request.ParametroIdVereda = 15;
+        request.ParametroIdTipoDiscapacidad = 21;
+        request.ParametroIdEstadoCivil = 22;
+        request.TieneHijos = true;
+        request.Cuantos = 2;
+        request.TieneVehiculo = true;
+        request.ParametroIdTipoVehiculo = 23;
+        request.ParametroIdReligion = 24;
+        request.EsEmpleado = false;
         request.Estado = true;
 
         var response = await application.RegistrarAsync(request);
@@ -236,6 +252,14 @@ public class CiudadanoApplicationTests
         Assert.Equal(8, repository.Command.ParametroIdDondeVive);
         Assert.Equal(4, repository.Command.ParametroIdSoy);
         Assert.Equal(15, repository.Command.ParametroIdVereda);
+        Assert.Equal(21, repository.Command.ParametroIdTipoDiscapacidad);
+        Assert.Equal(22, repository.Command.ParametroIdEstadoCivil);
+        Assert.True(repository.Command.TieneHijos);
+        Assert.Equal(2, repository.Command.Cuantos);
+        Assert.True(repository.Command.TieneVehiculo);
+        Assert.Equal(23, repository.Command.ParametroIdTipoVehiculo);
+        Assert.Equal(24, repository.Command.ParametroIdReligion);
+        Assert.False(repository.Command.EsEmpleado);
         Assert.True(repository.Command.Estado);
         Assert.Equal(fechaNacimiento, response.Data!.FechaNacimiento);
         Assert.Equal("Bogota", response.Data.LugarNacimiento);
@@ -246,6 +270,14 @@ public class CiudadanoApplicationTests
         Assert.Equal(8, response.Data.ParametroIdDondeVive);
         Assert.Equal(4, response.Data.ParametroIdSoy);
         Assert.Equal(15, response.Data.ParametroIdVereda);
+        Assert.Equal(21, response.Data.ParametroIdTipoDiscapacidad);
+        Assert.Equal(22, response.Data.ParametroIdEstadoCivil);
+        Assert.True(response.Data.TieneHijos);
+        Assert.Equal(2, response.Data.Cuantos);
+        Assert.True(response.Data.TieneVehiculo);
+        Assert.Equal(23, response.Data.ParametroIdTipoVehiculo);
+        Assert.Equal(24, response.Data.ParametroIdReligion);
+        Assert.False(response.Data.EsEmpleado);
         Assert.True(response.Data.Estado);
         Assert.Equal(fechaRegistro, response.Data.FechaRegistro);
     }
@@ -503,6 +535,14 @@ public class CiudadanoApplicationTests
             ParametroIdGenero = 2,
             ParametroIdSoy = 4,
             ParametroIdVereda = 15,
+            ParametroIdTipoDiscapacidad = 21,
+            ParametroIdEstadoCivil = 22,
+            TieneHijos = false,
+            Cuantos = null,
+            TieneVehiculo = false,
+            ParametroIdTipoVehiculo = null,
+            ParametroIdReligion = 24,
+            EsEmpleado = false,
             CodigoReferido = "RV-REF001"
         };
 

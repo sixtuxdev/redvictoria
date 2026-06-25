@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using RedVictoria.WebUI.Interfaces;
 using RedVictoria.WebUI.Models.Ciudades;
 using RedVictoria.WebUI.Models.Ciudadanos;
@@ -13,8 +15,10 @@ public sealed partial class RegistroCiudadanoViewModel(
     IParametroService parametroService,
     IDepartamentoService departamentoService,
     ICiudadService ciudadService,
-    IReferidosUrlBuilder referidosUrlBuilder)
+    IReferidosUrlBuilder referidosUrlBuilder,
+    ILogger<RegistroCiudadanoViewModel>? logger = null)
 {
+    private readonly ILogger<RegistroCiudadanoViewModel> _logger = logger ?? NullLogger<RegistroCiudadanoViewModel>.Instance;
     private const int PasswordMinimumLength = 6;
     private bool _isInitialized;
     private string? _initializedCodigoReferido;
@@ -53,7 +57,11 @@ public sealed partial class RegistroCiudadanoViewModel(
         || Parametros.GruposEdad.Count > 0
         || Parametros.Generos.Count > 0
         || Parametros.Soy.Count > 0
-        || Parametros.Veredas.Count > 0;
+        || Parametros.Veredas.Count > 0
+        || Parametros.TiposDiscapacidad.Count > 0
+        || Parametros.EstadosCivil.Count > 0
+        || Parametros.TiposVehiculo.Count > 0
+        || Parametros.Religiones.Count > 0;
 
     public bool AreRequiredParametrosLoaded =>
         Parametros.TiposIdentificacion.Count > 0
@@ -61,7 +69,11 @@ public sealed partial class RegistroCiudadanoViewModel(
         && Parametros.Generos.Count > 0
         && Parametros.Soy.Count > 0
         && Parametros.DondeVive.Count > 0
-        && Parametros.Veredas.Count > 0;
+        && Parametros.Veredas.Count > 0
+        && Parametros.TiposDiscapacidad.Count > 0
+        && Parametros.EstadosCivil.Count > 0
+        && Parametros.TiposVehiculo.Count > 0
+        && Parametros.Religiones.Count > 0;
 
     public bool CanSubmit =>
         AreRequiredParametrosLoaded
@@ -215,6 +227,17 @@ public sealed partial class RegistroCiudadanoViewModel(
             Request.CodigoReferido = CodigoReferido;
             Request.Estado = true;
 
+            _logger.LogInformation(
+                "Registro ciudadano ViewModel request campos nuevos: ParametroIdTipoDiscapacidad={ParametroIdTipoDiscapacidad}, ParametroIdEstadoCivil={ParametroIdEstadoCivil}, TieneHijos={TieneHijos}, Cuantos={Cuantos}, TieneVehiculo={TieneVehiculo}, ParametroIdTipoVehiculo={ParametroIdTipoVehiculo}, ParametroIdReligion={ParametroIdReligion}, EsEmpleado={EsEmpleado}",
+                Request.ParametroIdTipoDiscapacidad,
+                Request.ParametroIdEstadoCivil,
+                Request.TieneHijos,
+                Request.Cuantos,
+                Request.TieneVehiculo,
+                Request.ParametroIdTipoVehiculo,
+                Request.ParametroIdReligion,
+                Request.EsEmpleado);
+
             var result = await ciudadanoService.RegistrarAsync(Request, CodigoReferido, cancellationToken);
             if (!result.IsSuccess)
             {
@@ -263,8 +286,38 @@ public sealed partial class RegistroCiudadanoViewModel(
         ValidateRequiredSelect(Request.ParametroIdTipoIdentificacion, "Tipo de identificación", errors);
         ValidateRequiredSelect(Request.ParametroIdGenero, "Género", errors);
         ValidateRequiredSelect(Request.ParametroIdSoy, "Soy", errors);
+        ValidateRequiredSelect(Request.ParametroIdTipoDiscapacidad, "Tipo de discapacidad", errors);
+        ValidateRequiredSelect(Request.ParametroIdEstadoCivil, "Estado civil", errors);
+        ValidateRequiredSelect(Request.ParametroIdReligion, "Religion", errors);
         ValidateRequiredSelect(Request.ParametroIdDondeVive, "Donde vive", errors);
         ValidateRequiredSelect(Request.ParametroIdVereda, "Vereda", errors);
+
+        if (!Request.TieneHijos.HasValue)
+        {
+            errors.Add("Indica si tiene hijos.");
+        }
+        else if (Request.TieneHijos.Value)
+        {
+            ValidateRequiredSelect(Request.Cuantos, "Cuantos", errors);
+            if (Request.Cuantos <= 0)
+            {
+                errors.Add("Cuantos debe ser mayor a cero.");
+            }
+        }
+
+        if (!Request.TieneVehiculo.HasValue)
+        {
+            errors.Add("Indica si tiene vehiculo.");
+        }
+        else if (Request.TieneVehiculo.Value)
+        {
+            ValidateRequiredSelect(Request.ParametroIdTipoVehiculo, "Tipo de vehiculo", errors);
+        }
+
+        if (!Request.EsEmpleado.HasValue)
+        {
+            errors.Add("Indica si es empleado.");
+        }
 
         if (!Request.TieneWhatsapp.HasValue)
         {
@@ -379,6 +432,39 @@ public sealed partial class RegistroCiudadanoViewModel(
         }
     }
 
+    public void OnTieneHijosChanged(bool? value)
+    {
+        Request.TieneHijos = value;
+
+        if (value != true)
+        {
+            Request.Cuantos = null;
+        }
+    }
+
+    public void OnTieneVehiculoChanged(bool? value)
+    {
+        Request.TieneVehiculo = value;
+
+        if (value != true)
+        {
+            Request.ParametroIdTipoVehiculo = null;
+        }
+    }
+
+    public IEnumerable<string> ValidateCuantos(int? value)
+    {
+        if (Request.TieneHijos != true)
+        {
+            yield break;
+        }
+
+        if (!value.HasValue || value.Value <= 0)
+        {
+            yield return "Cuantos debe ser mayor a cero.";
+        }
+    }
+
     public IEnumerable<string> ValidateNumeroIdentificacion(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -471,6 +557,14 @@ public sealed partial class RegistroCiudadanoViewModel(
         Request.ParametroIdGrupoEdad = null;
         Request.ParametroIdGenero = null;
         Request.ParametroIdSoy = null;
+        Request.ParametroIdTipoDiscapacidad = null;
+        Request.ParametroIdEstadoCivil = null;
+        Request.TieneHijos = null;
+        Request.Cuantos = null;
+        Request.TieneVehiculo = null;
+        Request.ParametroIdTipoVehiculo = null;
+        Request.ParametroIdReligion = null;
+        Request.EsEmpleado = null;
         Request.CodigoReferido = CodigoReferido;
         Request.CiudadanoReferidorId = null;
         Request.TieneAcceso = false;

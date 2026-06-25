@@ -8,4 +8,8 @@ public sealed class RegistroCiudadanoParametrosModel
     public IReadOnlyCollection<ParametroOptionModel> Generos { get; init; } = [];
     public IReadOnlyCollection<ParametroOptionModel> Soy { get; init; } = [];
     public IReadOnlyCollection<ParametroOptionModel> Veredas { get; init; } = [];
+    public IReadOnlyCollection<ParametroOptionModel> TiposDiscapacidad { get; init; } = [];
+    public IReadOnlyCollection<ParametroOptionModel> EstadosCivil { get; init; } = [];
+    public IReadOnlyCollection<ParametroOptionModel> TiposVehiculo { get; init; } = [];
+    public IReadOnlyCollection<ParametroOptionModel> Religiones { get; init; } = [];
 }

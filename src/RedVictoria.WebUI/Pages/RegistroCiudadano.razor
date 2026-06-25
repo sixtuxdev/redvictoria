@@ -5,6 +5,7 @@
 @inject RegistroCiudadanoViewModel ViewModel
 @inject IJSRuntime JSRuntime
 @inject NavigationManager Navigation
+@inject ILogger<RegistroCiudadano> Logger
 
 <PageTitle>Registro ciudadano</PageTitle>
 
@@ -34,7 +35,7 @@
                 <div class="registro-hero-copy">
                     <MudText Typo="Typo.h4" Class="registro-title">Registro ciudadano</MudText>
                     <MudText Typo="Typo.body2" Class="registro-subtitle">
-                        Completa tus datos para sumarte a la red de participaci髇 de El Equipo Ganador.
+                        Completa tus datos para sumarte a la red de participaci贸n de El Equipo Ganador.
                     </MudText>
                 </div>
             </MudStack>
@@ -50,7 +51,7 @@
                             </MudAvatar>
                             <div>
                                 <MudText Typo="Typo.subtitle1" Class="registro-section-title">Datos personales</MudText>
-                                <MudText Typo="Typo.caption" Class="registro-section-caption">Informaci髇 b醩ica para identificar tu registro.</MudText>
+                                <MudText Typo="Typo.caption" Class="registro-section-caption">Informaci贸n b谩sica para identificar tu registro.</MudText>
                             </div>
                         </div>
 
@@ -129,13 +130,13 @@
                             <MudItem xs="12" sm="6">
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdTipoIdentificacion"
                                            Disabled="@ViewModel.IsBusy"
-                                           Label="Tipo de identificaci髇"
+                                           Label="Tipo de identificaci贸n"
                                            Variant="Variant.Outlined"
                                            Margin="Margin.Dense"
                                            Dense="true"
                                            Clearable="true"
                                            Required="true"
-                                           RequiredError="Tipo de identificaci髇 es obligatorio."
+                                           RequiredError="Tipo de identificaci贸n es obligatorio."
                                            Class="registro-field">
                                     @foreach (var opcion in ViewModel.Parametros.TiposIdentificacion)
                                     {
@@ -147,7 +148,7 @@
                             <MudItem xs="12" sm="6">
                                 <MudTextField @bind-Value="ViewModel.Request.NumeroIdentificacion"
                                               Disabled="@ViewModel.IsBusy"
-                                              Label="N鷐ero de identificaci髇"
+                                              Label="N煤mero de identificaci贸n"
                                               Variant="Variant.Outlined"
                                               Margin="Margin.Dense"
                                               Required="true"
@@ -160,15 +161,15 @@
                             <MudItem xs="12" sm="6">
                                 <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdGenero"
                                            Disabled="@ViewModel.IsBusy"
-                                           Label="G閚ero"
+                                           Label="G茅nero"
                                            Variant="Variant.Outlined"
                                            Margin="Margin.Dense"
                                            Dense="true"
                                            Clearable="true"
                                            Required="true"
-                                           RequiredError="G閚ero es obligatorio."
+                                           RequiredError="G茅nero es obligatorio."
                                            Class="registro-field">
-                                    @foreach (var opcion in ViewModel.Parametros.Generos)
+                                    @foreach (var opcion in ViewModel.Parametros.Generos.OrderBy(x => x.ParametroId))
                                     {
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
                                     }
@@ -192,6 +193,149 @@
                                     }
                                 </MudSelect>
                             </MudItem>
+                            <MudItem xs="12" sm="6">
+                                <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdTipoDiscapacidad"
+                                           Disabled="@ViewModel.IsBusy"
+                                           Label="Tipo de discapacidad"
+                                           Variant="Variant.Outlined"
+                                           Margin="Margin.Dense"
+                                           Dense="true"
+                                           Clearable="true"
+                                           Required="true"
+                                           RequiredError="Tipo de discapacidad es obligatorio."
+                                           Class="registro-field">
+                                    @foreach (var opcion in ViewModel.Parametros.TiposDiscapacidad)
+                                    {
+                                        <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6">
+                                <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdEstadoCivil"
+                                           Disabled="@ViewModel.IsBusy"
+                                           Label="Estado civil"
+                                           Variant="Variant.Outlined"
+                                           Margin="Margin.Dense"
+                                           Dense="true"
+                                           Clearable="true"
+                                           Required="true"
+                                           RequiredError="Estado civil es obligatorio."
+                                           Class="registro-field">
+                                    @foreach (var opcion in ViewModel.Parametros.EstadosCivil)
+                                    {
+                                        <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6">
+                                <MudSelect T="bool?"
+                                           Value="@ViewModel.Request.TieneHijos"
+                                           ValueChanged="@ViewModel.OnTieneHijosChanged"
+                                           Disabled="@ViewModel.IsBusy"
+                                           Label="Tiene hijos"
+                                           Variant="Variant.Outlined"
+                                           Margin="Margin.Dense"
+                                           Dense="true"
+                                           Clearable="true"
+                                           Required="true"
+                                           RequiredError="Indica si tiene hijos."
+                                           Class="registro-field">
+                                    <MudSelectItem T="bool?" Value="true">Si</MudSelectItem>
+                                    <MudSelectItem T="bool?" Value="false">No</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+
+                            @if (ViewModel.Request.TieneHijos == true)
+                            {
+                                <MudItem xs="12" sm="6">
+                                    <MudTextField T="int?"
+                                                  @bind-Value="ViewModel.Request.Cuantos"
+                                                  Disabled="@ViewModel.IsBusy"
+                                                  InputType="InputType.Number"                                                  
+                                                  Label="Cuantos"
+                                                  Variant="Variant.Outlined"
+                                                  Margin="Margin.Dense"
+                                                  Required="true"
+                                                  Immediate="true"
+                                                  Class="registro-field"
+                                                  Validation="@(new Func<int?, IEnumerable<string>>(ViewModel.ValidateCuantos))" />
+                                </MudItem>
+                            }
+
+                            <MudItem xs="12" sm="6">
+                                <MudSelect T="bool?"
+                                           Value="@ViewModel.Request.TieneVehiculo"
+                                           ValueChanged="@ViewModel.OnTieneVehiculoChanged"
+                                           Disabled="@ViewModel.IsBusy"
+                                           Label="Tiene vehiculo"
+                                           Variant="Variant.Outlined"
+                                           Margin="Margin.Dense"
+                                           Dense="true"
+                                           Clearable="true"
+                                           Required="true"
+                                           RequiredError="Indica si tiene vehiculo."
+                                           Class="registro-field">
+                                    <MudSelectItem T="bool?" Value="true">Si</MudSelectItem>
+                                    <MudSelectItem T="bool?" Value="false">No</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
+
+                            @if (ViewModel.Request.TieneVehiculo == true)
+                            {
+                                <MudItem xs="12" sm="6">
+                                    <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdTipoVehiculo"
+                                               Disabled="@ViewModel.IsBusy"
+                                               Label="Tipo de vehiculo"
+                                               Variant="Variant.Outlined"
+                                               Margin="Margin.Dense"
+                                               Dense="true"
+                                               Clearable="true"
+                                               Required="true"
+                                               RequiredError="Tipo de vehiculo es obligatorio."
+                                               Class="registro-field">
+                                        @foreach (var opcion in ViewModel.Parametros.TiposVehiculo)
+                                        {
+                                            <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                </MudItem>
+                            }
+
+                            <MudItem xs="12" sm="6">
+                                <MudSelect T="int?" @bind-Value="ViewModel.Request.ParametroIdReligion"
+                                           Disabled="@ViewModel.IsBusy"
+                                           Label="Religion"
+                                           Variant="Variant.Outlined"
+                                           Margin="Margin.Dense"
+                                           Dense="true"
+                                           Clearable="true"
+                                           Required="true"
+                                           RequiredError="Religion es obligatoria."
+                                           Class="registro-field">
+                                    @foreach (var opcion in ViewModel.Parametros.Religiones)
+                                    {
+                                        <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
+                                    }
+                                </MudSelect>
+                            </MudItem>
+
+                            <MudItem xs="12" sm="6">
+                                <MudSelect T="bool?" @bind-Value="ViewModel.Request.EsEmpleado"
+                                           Disabled="@ViewModel.IsBusy"
+                                           Label="Es empleado"
+                                           Variant="Variant.Outlined"
+                                           Margin="Margin.Dense"
+                                           Dense="true"
+                                           Clearable="true"
+                                           Required="true"
+                                           RequiredError="Indica si es empleado."
+                                           Class="registro-field">
+                                    <MudSelectItem T="bool?" Value="true">Si</MudSelectItem>
+                                    <MudSelectItem T="bool?" Value="false">No</MudSelectItem>
+                                </MudSelect>
+                            </MudItem>
                         </MudGrid>
                     </MudPaper>
                 </MudItem>
@@ -203,8 +347,8 @@
                                 <MudIcon Icon="@Icons.Material.Filled.ContactPhone" />
                             </MudAvatar>
                             <div>
-                                <MudText Typo="Typo.subtitle1" Class="registro-section-title">Contacto y ubicaci髇</MudText>
-                                <MudText Typo="Typo.caption" Class="registro-section-caption">Canales para mantener comunicaci髇 contigo.</MudText>
+                                <MudText Typo="Typo.subtitle1" Class="registro-section-title">Contacto y ubicaci贸n</MudText>
+                                <MudText Typo="Typo.caption" Class="registro-section-caption">Canales para mantener comunicaci贸n contigo.</MudText>
                             </div>
                         </div>
 
@@ -319,7 +463,7 @@
                             <MudItem xs="12" sm="6" lg="12">
                                 <MudTextField @bind-Value="ViewModel.Request.Direccion"
                                               Disabled="@ViewModel.IsBusy"
-                                              Label="Direcci髇"
+                                              Label="Direcci贸n"
                                               Variant="Variant.Outlined"
                                               Margin="Margin.Dense"
                                               Required="true"
@@ -343,7 +487,7 @@
                                     <div>
                                         <MudText Typo="Typo.subtitle1" Class="registro-section-title">Referido y acceso</MudText>
                                         <MudText Typo="Typo.caption" Class="registro-section-caption">
-                                            Establece una contrase馻 para gestionar y consultar tu red de simpatizantes.
+                                            Establece una contrase帽a para gestionar y consultar tu red de simpatizantes.
                                         </MudText>
                                     </div>
                                 </div>
@@ -364,7 +508,7 @@
                                 <MudItem xs="12" md="6">
                                     <MudTextField @bind-Value="ViewModel.Request.Password"
                                                   Disabled="@ViewModel.IsBusy"
-                                                  Label="Contrase馻"
+                                                  Label="Contrase帽a"
                                                   Variant="Variant.Outlined"
                                                   Margin="Margin.Dense"
                                                   InputType="InputType.Password"
@@ -376,7 +520,7 @@
                                 <MudItem xs="12" md="6">
                                     <MudTextField @bind-Value="ViewModel.Request.ConfirmPassword"
                                                   Disabled="@ViewModel.IsBusy"
-                                                  Label="Confirmar contrase馻"
+                                                  Label="Confirmar contrase帽a"
                                                   Variant="Variant.Outlined"
                                                   Margin="Margin.Dense"
                                                   InputType="InputType.Password"
@@ -569,6 +713,17 @@
                 "No puede continuar porque el referido ingresado no existe.");
             return;
         }
+
+        Logger.LogInformation(
+            "Registro ciudadano Razor antes de guardar campos nuevos: ParametroIdTipoDiscapacidad={ParametroIdTipoDiscapacidad}, ParametroIdEstadoCivil={ParametroIdEstadoCivil}, TieneHijos={TieneHijos}, Cuantos={Cuantos}, TieneVehiculo={TieneVehiculo}, ParametroIdTipoVehiculo={ParametroIdTipoVehiculo}, ParametroIdReligion={ParametroIdReligion}, EsEmpleado={EsEmpleado}",
+            ViewModel.Request.ParametroIdTipoDiscapacidad,
+            ViewModel.Request.ParametroIdEstadoCivil,
+            ViewModel.Request.TieneHijos,
+            ViewModel.Request.Cuantos,
+            ViewModel.Request.TieneVehiculo,
+            ViewModel.Request.ParametroIdTipoVehiculo,
+            ViewModel.Request.ParametroIdReligion,
+            ViewModel.Request.EsEmpleado);
 
         var registrado = await ViewModel.RegistrarAsync();
         if (registrado)

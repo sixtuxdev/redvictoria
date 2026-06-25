@@ -11,10 +11,14 @@ namespace RedVictoria.Services.API.Controllers;
 public class CiudadanosController : ControllerBase
 {
     private readonly ICiudadanoApplication _ciudadanoApplication;
+    private readonly ILogger<CiudadanosController> _logger;
 
-    public CiudadanosController(ICiudadanoApplication ciudadanoApplication)
+    public CiudadanosController(
+        ICiudadanoApplication ciudadanoApplication,
+        ILogger<CiudadanosController> logger)
     {
         _ciudadanoApplication = ciudadanoApplication;
+        _logger = logger;
     }
 
     [HttpPost("registrar")]
@@ -23,6 +27,17 @@ public class CiudadanosController : ControllerBase
         [FromQuery(Name = "ref")] string? codigoReferido,
         CancellationToken cancellationToken)
     {
+        _logger.LogInformation(
+            "Registro ciudadano API endpoint campos nuevos: ParametroIdTipoDiscapacidad={ParametroIdTipoDiscapacidad}, ParametroIdEstadoCivil={ParametroIdEstadoCivil}, TieneHijos={TieneHijos}, Cuantos={Cuantos}, TieneVehiculo={TieneVehiculo}, ParametroIdTipoVehiculo={ParametroIdTipoVehiculo}, ParametroIdReligion={ParametroIdReligion}, EsEmpleado={EsEmpleado}",
+            request.ParametroIdTipoDiscapacidad,
+            request.ParametroIdEstadoCivil,
+            request.TieneHijos,
+            request.Cuantos,
+            request.TieneVehiculo,
+            request.ParametroIdTipoVehiculo,
+            request.ParametroIdReligion,
+            request.EsEmpleado);
+
         var response = await _ciudadanoApplication.RegistrarAsync(
             request,
             codigoReferido,

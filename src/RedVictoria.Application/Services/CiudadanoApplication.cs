@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using RedVictoria.Application.Common;
 using RedVictoria.Application.DTOs.Ciudadanos;
 using RedVictoria.Application.Interfaces;
@@ -40,6 +41,8 @@ public class CiudadanoApplication : ICiudadanoApplication
                 errors);
         }
 
+        Trace.WriteLine($"Registro ciudadano Application request campos nuevos: ParametroIdTipoDiscapacidad={request.ParametroIdTipoDiscapacidad}, ParametroIdEstadoCivil={request.ParametroIdEstadoCivil}, TieneHijos={request.TieneHijos}, Cuantos={request.Cuantos}, TieneVehiculo={request.TieneVehiculo}, ParametroIdTipoVehiculo={request.ParametroIdTipoVehiculo}, ParametroIdReligion={request.ParametroIdReligion}, EsEmpleado={request.EsEmpleado}");
+
         var hasPassword = !string.IsNullOrWhiteSpace(request.Password);
         var command = new RegistroCiudadanoCommand
         {
@@ -63,10 +66,20 @@ public class CiudadanoApplication : ICiudadanoApplication
             ParametroIdGenero = request.ParametroIdGenero,
             ParametroIdSoy = request.ParametroIdSoy,
             ParametroIdVereda = request.ParametroIdVereda,
+            ParametroIdTipoDiscapacidad = request.ParametroIdTipoDiscapacidad,
+            ParametroIdEstadoCivil = request.ParametroIdEstadoCivil,
+            TieneHijos = request.TieneHijos,
+            Cuantos = request.TieneHijos == true ? request.Cuantos : null,
+            TieneVehiculo = request.TieneVehiculo,
+            ParametroIdTipoVehiculo = request.TieneVehiculo == true ? request.ParametroIdTipoVehiculo : null,
+            ParametroIdReligion = request.ParametroIdReligion,
+            EsEmpleado = request.EsEmpleado,
             Estado = request.Estado,
             CodigoReferidoInvitacion = codigoReferido,
             PasswordHash = hasPassword ? _passwordHasher.Hash(request.Password!) : null
         };
+
+        Trace.WriteLine($"Registro ciudadano Application command campos nuevos: ParametroIdTipoDiscapacidad={command.ParametroIdTipoDiscapacidad}, ParametroIdEstadoCivil={command.ParametroIdEstadoCivil}, TieneHijos={command.TieneHijos}, Cuantos={command.Cuantos}, TieneVehiculo={command.TieneVehiculo}, ParametroIdTipoVehiculo={command.ParametroIdTipoVehiculo}, ParametroIdReligion={command.ParametroIdReligion}, EsEmpleado={command.EsEmpleado}");
 
         var result = await _ciudadanoRepository.RegistrarAsync(command, cancellationToken);
         if (!result.IsSuccess)
@@ -95,6 +108,14 @@ public class CiudadanoApplication : ICiudadanoApplication
                 ParametroIdGenero = result.ParametroIdGenero,
                 ParametroIdSoy = result.ParametroIdSoy,
                 ParametroIdVereda = result.ParametroIdVereda,
+                ParametroIdTipoDiscapacidad = result.ParametroIdTipoDiscapacidad,
+                ParametroIdEstadoCivil = result.ParametroIdEstadoCivil,
+                TieneHijos = result.TieneHijos,
+                Cuantos = result.Cuantos,
+                TieneVehiculo = result.TieneVehiculo,
+                ParametroIdTipoVehiculo = result.ParametroIdTipoVehiculo,
+                ParametroIdReligion = result.ParametroIdReligion,
+                EsEmpleado = result.EsEmpleado,
                 CodigoReferido = result.CodigoReferido!,
                 CiudadanoReferidorId = result.CiudadanoReferidorId,
                 TieneAcceso = result.TieneAcceso,
@@ -224,6 +245,22 @@ public class CiudadanoApplication : ICiudadanoApplication
         ValidateRequiredValue(request.ParametroIdGenero, "ParametroIdGenero", errors);
         ValidateRequiredValue(request.ParametroIdSoy, "ParametroIdSoy", errors);
         ValidateRequiredValue(request.ParametroIdVereda, "ParametroIdVereda", errors);
+        ValidateRequiredValue(request.ParametroIdTipoDiscapacidad, "ParametroIdTipoDiscapacidad", errors);
+        ValidateRequiredValue(request.ParametroIdEstadoCivil, "ParametroIdEstadoCivil", errors);
+        ValidateRequiredValue(request.TieneHijos, "TieneHijos", errors);
+        ValidateRequiredValue(request.TieneVehiculo, "TieneVehiculo", errors);
+        ValidateRequiredValue(request.ParametroIdReligion, "ParametroIdReligion", errors);
+        ValidateRequiredValue(request.EsEmpleado, "EsEmpleado", errors);
+
+        if (request.TieneHijos == true)
+        {
+            ValidateRequiredValue(request.Cuantos, "Cuantos", errors);
+            if (request.Cuantos <= 0)
+                errors.Add("Cuantos debe ser mayor a cero cuando TieneHijos es true.");
+        }
+
+        if (request.TieneVehiculo == true)
+            ValidateRequiredValue(request.ParametroIdTipoVehiculo, "ParametroIdTipoVehiculo", errors);
 
         ValidateMaximumLength(request.Celular, 30, "Celular", errors);
         ValidateMaximumLength(request.Celular2, 30, "Celular2", errors);
