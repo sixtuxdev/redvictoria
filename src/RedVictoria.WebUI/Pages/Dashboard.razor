@@ -1,4 +1,4 @@
-@page "/dashboard"
+﻿@page "/dashboard"
 @using RedVictoria.WebUI.Helpers
 @inject DashboardViewModel ViewModel
 @inject NavigationManager Navigation
@@ -265,7 +265,7 @@ else
     {
         if (string.IsNullOrWhiteSpace(ViewModel.MiUrlReferido))
         {
-            Snackbar.Add("No se encontr� el enlace de referido.", Severity.Warning);
+            Snackbar.Add("No se encontr� el enlace de referido.", Severity.Warning);
             return;
         }
 
@@ -276,7 +276,7 @@ else
     {
         if (string.IsNullOrWhiteSpace(url))
         {
-            Snackbar.Add("No se encontr� el enlace de referido.", Severity.Warning);
+            Snackbar.Add("No se encontr� el enlace de referido.", Severity.Warning);
             return;
         }
 
@@ -324,12 +324,33 @@ else
 
     private async Task ExportDashboardToExcelAsync()
     {
-        var excelBytes = DashboardExcelExporter.Export(ViewModel.ObtenerReferidosFiltrados());
-        await JSRuntime.InvokeVoidAsync(
-            "RedVictoriaFileDownload.downloadBase64File",
-            "Dashboard_RedVictoria.xlsx",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            Convert.ToBase64String(excelBytes));
+        try
+        {
+            var excelBytes = await ViewModel.ExportarReferidosExcelAsync();
+            if (excelBytes == null || excelBytes.Length == 0)
+            {
+                await JSRuntime.InvokeVoidAsync(
+                    "RedVictoriaSweetAlert.fire",
+                    "error",
+                    "ExportaciÃ³n fallida",
+                    "No fue posible generar el archivo Excel o no hay datos para exportar.");
+                return;
+            }
+
+            await JSRuntime.InvokeVoidAsync(
+                "RedVictoriaFileDownload.downloadBase64File",
+                "RedReferidos.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                Convert.ToBase64String(excelBytes));
+        }
+        catch (Exception ex)
+        {
+            await JSRuntime.InvokeVoidAsync(
+                "RedVictoriaSweetAlert.fire",
+                "error",
+                "Error de exportaciÃ³n",
+                "OcurriÃ³ un error al descargar el archivo: " + ex.Message);
+        }
     }
 
     private static string Display(string? value) =>

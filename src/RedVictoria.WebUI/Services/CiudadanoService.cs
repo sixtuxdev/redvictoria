@@ -204,6 +204,28 @@ public sealed class CiudadanoService(
             EsEmpleado = GetValue(nameof(RegistroCiudadanoRequestModel.EsEmpleado))
         });
     }
+
+    public async Task<byte[]> ExportarRedReferidosExcelAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var request = await CreateAuthorizedRequestAsync(
+            HttpMethod.Get,
+            ApiEndpoints.ExportarReferidos,
+            cancellationToken);
+        if (request is null)
+        {
+            return [];
+        }
+
+        var response = await httpClient.SendAsync(request, cancellationToken);
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadAsByteArrayAsync(cancellationToken);
+        }
+
+        return [];
+    }
+
     private async Task<HttpRequestMessage?> CreateAuthorizedRequestAsync(
         HttpMethod method,
         string relativeEndpoint,

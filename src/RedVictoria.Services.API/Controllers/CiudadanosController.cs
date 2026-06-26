@@ -76,6 +76,28 @@ public class CiudadanosController : ControllerBase
     }
 
     [Authorize]
+    [HttpGet("referidos/exportar")]
+    public async Task<IActionResult> ExportarRedReferidos(CancellationToken cancellationToken)
+    {
+        var ciudadanoId = GetCiudadanoId();
+        if (!ciudadanoId.HasValue)
+        {
+            return Unauthorized();
+        }
+
+        var response = await _ciudadanoApplication.ExportarRedReferidosExcelAsync(
+            ciudadanoId.Value,
+            cancellationToken);
+
+        if (!response.IsSuccess)
+        {
+            return BadRequest(response);
+        }
+
+        return File(response.Data!, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "RedReferidos.xlsx");
+    }
+
+    [Authorize]
     [HttpPut("referidos/{ciudadanoReferidoId:int}/desactivar")]
     public async Task<IActionResult> DesactivarReferido(
         [FromRoute] int ciudadanoReferidoId,

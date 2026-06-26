@@ -79,6 +79,11 @@ public sealed class DashboardViewModel(
         Referidos = result.Data;
     }
 
+    public async Task<byte[]> ExportarReferidosExcelAsync(CancellationToken cancellationToken = default)
+    {
+        return await ciudadanoService.ExportarRedReferidosExcelAsync(cancellationToken);
+    }
+
     public IReadOnlyCollection<CiudadanoReferidoModel> ObtenerReferidosFiltrados()
     {
         var query = Referidos.AsEnumerable();

@@ -22,4 +22,8 @@ public interface ICiudadanoApplication
         int ciudadanoAutenticadoId,
         int ciudadanoReferidoId,
         CancellationToken cancellationToken = default);
+
+    Task<Response<byte[]>> ExportarRedReferidosExcelAsync(
+        int ciudadanoId,
+        CancellationToken cancellationToken = default);
 }

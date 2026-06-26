@@ -25,4 +25,7 @@ public interface ICiudadanoService
     Task<OperationResultModel> DesactivarReferidoAsync(
         int ciudadanoReferidoId,
         CancellationToken cancellationToken = default);
+
+    Task<byte[]> ExportarRedReferidosExcelAsync(
+        CancellationToken cancellationToken = default);
 }

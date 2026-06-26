@@ -343,18 +343,65 @@ public class CiudadanoApplication : ICiudadanoApplication
         {
             CiudadanoId = result.CiudadanoId,
             NombresCompletos = result.NombresCompletos,
+            FechaNacimiento = result.FechaNacimiento,
+            LugarNacimiento = result.LugarNacimiento,
             Email = result.Email,
             Celular = result.Celular,
-            Celular2 = result.Celular2,
-            TieneWhatsapp2 = result.TieneWhatsapp2,
+            TieneWhatsapp = result.TieneWhatsapp,
+            ParametroIdDondeVive = result.ParametroIdDondeVive,
+            PuestoVotacion = result.PuestoVotacion,
+            ParametroIdTipoIdentificacion = result.ParametroIdTipoIdentificacion,
             NumeroIdentificacion = result.NumeroIdentificacion,
-            FechaNacimiento = result.FechaNacimiento,
+            Direccion = result.Direccion,
+            DepartamentoId = result.DepartamentoId,
+            MunicipioId = result.MunicipioId,
+            ParametroIdGrupoEdad = result.ParametroIdGrupoEdad,
+            ParametroIdGenero = result.ParametroIdGenero,
+            ParametroIdSoy = result.ParametroIdSoy,
             CodigoReferido = result.CodigoReferido,
             CiudadanoReferidorId = result.CiudadanoReferidorId,
-            Referidor = result.Referidor,
-            FechaRegistro = result.FechaRegistro,
+            TieneAcceso = result.TieneAcceso,
+            ParametroIdVereda = result.ParametroIdVereda,
             Estado = result.Estado,
+            FechaRegistro = result.FechaRegistro,
+            Celular2 = result.Celular2,
+            TieneWhatsapp2 = result.TieneWhatsapp2,
+            ParametroIdTipoDiscapacidad = result.ParametroIdTipoDiscapacidad,
+            TipoDiscapacidadDescripcion = result.TipoDiscapacidadDescripcion,
+            ParametroIdEstadoCivil = result.ParametroIdEstadoCivil,
+            EstadoCivilDescripcion = result.EstadoCivilDescripcion,
+            TieneHijos = result.TieneHijos,
+            Cuantos = result.Cuantos,
+            TieneVehiculo = result.TieneVehiculo,
+            ParametroIdTipoVehiculo = result.ParametroIdTipoVehiculo,
+            TipoVehiculoDescripcion = result.TipoVehiculoDescripcion,
+            ParametroIdReligion = result.ParametroIdReligion,
+            ReligionDescripcion = result.ReligionDescripcion,
+            EsEmpleado = result.EsEmpleado,
+            Referidor = result.Referidor,
             Nivel = result.Nivel,
             TipoReferido = result.TipoReferido
         };
+
+    public async Task<Response<byte[]>> ExportarRedReferidosExcelAsync(
+        int ciudadanoId,
+        CancellationToken cancellationToken = default)
+    {
+        if (ciudadanoId <= 0)
+        {
+            return Response<byte[]>.Failure("No fue posible identificar el ciudadano autenticado.");
+        }
+
+        var referidos = await _ciudadanoRepository.ObtenerRedReferidosAsync(
+            ciudadanoId,
+            cancellationToken);
+
+        var mappedReferidos = referidos
+            .Select(MapReferido)
+            .ToArray();
+
+        var excelBytes = ExcelExporter.Export(mappedReferidos);
+
+        return Response<byte[]>.Success(excelBytes, "Archivo Excel de referidos generado con éxito.");
+    }
 }

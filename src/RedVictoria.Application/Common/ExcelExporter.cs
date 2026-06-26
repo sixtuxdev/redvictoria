@@ -1,12 +1,12 @@
 using System.IO.Compression;
 using System.Text;
-using RedVictoria.WebUI.Models.Ciudadanos;
+using RedVictoria.Application.DTOs.Ciudadanos;
 
-namespace RedVictoria.WebUI.Helpers;
+namespace RedVictoria.Application.Common;
 
-public static class DashboardExcelExporter
+public static class ExcelExporter
 {
-    public static byte[] Export(IEnumerable<CiudadanoReferidoModel> referidos)
+    public static byte[] Export(IEnumerable<CiudadanoReferidoResponse> referidos)
     {
         using var stream = new MemoryStream();
         using (var archive = new ZipArchive(stream, ZipArchiveMode.Create, leaveOpen: true))
@@ -22,37 +22,89 @@ public static class DashboardExcelExporter
         return stream.ToArray();
     }
 
-    private static string WorksheetXml(IEnumerable<CiudadanoReferidoModel> referidos)
+    private static string WorksheetXml(IEnumerable<CiudadanoReferidoResponse> referidos)
     {
         var rows = new List<IReadOnlyList<string>>
         {
             new[]
             {
-                "Simpatizante",
-                "Identificacion",
+                "Ciudadano ID",
+                "Nombres Completos",
+                "Fecha de Nacimiento",
+                "Lugar de Nacimiento",
                 "Email",
                 "Celular",
-                "Fecha de Nacimiento",
-                "Codigo",
-                "Referidor",
-                "Registro",
+                "Tiene WhatsApp",
+                "ID Donde Vive",
+                "Puesto de Votación",
+                "ID Tipo Identificación",
+                "Número Identificación",
+                "Dirección",
+                "ID Departamento",
+                "ID Municipio",
+                "ID Grupo Edad",
+                "ID Género",
+                "ID Soy",
+                "Código Referido",
+                "ID Ciudadano Referidor",
+                "Tiene Acceso",
+                "ID Vereda",
                 "Estado",
-                "Tipo"
+                "Fecha de Registro",
+                "Celular 2",
+                "Tiene WhatsApp 2",
+                "Tipo Discapacidad",
+                "Estado Civil",
+                "Tiene Hijos",
+                "Cuántos",
+                "Tiene Vehículo",
+                "Tipo Vehículo",
+                "Religión",
+                "Es Empleado",
+                "Referidor",
+                "Nivel",
+                "Tipo Referido"
             }
         };
 
         rows.AddRange(referidos.Select(item => new[]
         {
-            item.NombresCompletos,
-            Display(item.NumeroIdentificacion),
+            Display(item.CiudadanoId),
+            Display(item.NombresCompletos),
+            DisplayDate(item.FechaNacimiento),
+            Display(item.LugarNacimiento),
             Display(item.Email),
             Display(item.Celular),
-            DisplayDate(item.FechaNacimiento),
-            item.CodigoReferido,
+            DisplayBool(item.TieneWhatsapp),
+            Display(item.ParametroIdDondeVive),
+            Display(item.PuestoVotacion),
+            Display(item.ParametroIdTipoIdentificacion),
+            Display(item.NumeroIdentificacion),
+            Display(item.Direccion),
+            Display(item.DepartamentoId),
+            Display(item.MunicipioId),
+            Display(item.ParametroIdGrupoEdad),
+            Display(item.ParametroIdGenero),
+            Display(item.ParametroIdSoy),
+            Display(item.CodigoReferido),
+            Display(item.CiudadanoReferidorId),
+            DisplayBool(item.TieneAcceso),
+            Display(item.ParametroIdVereda),
+            DisplayBool(item.Estado),
+            DisplayDate(item.FechaRegistro),
+            Display(item.Celular2),
+            DisplayBool(item.TieneWhatsapp2),
+            Display(item.TipoDiscapacidadDescripcion),
+            Display(item.EstadoCivilDescripcion),
+            DisplayBool(item.TieneHijos),
+            Display(item.Cuantos),
+            DisplayBool(item.TieneVehiculo),
+            Display(item.TipoVehiculoDescripcion),
+            Display(item.ReligionDescripcion),
+            DisplayBool(item.EsEmpleado),
             Display(item.Referidor),
-            item.FechaRegistro.ToString("yyyy-MM-dd"),
-            item.Estado ? "Activo" : "Inactivo",
-            item.TipoReferido
+            Display(item.Nivel),
+            Display(item.TipoReferido)
         }));
 
         var builder = new StringBuilder();
@@ -60,8 +112,9 @@ public static class DashboardExcelExporter
             <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
             <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
               <cols>
-                <col min="1" max="1" width="28" customWidth="1"/>
-                <col min="2" max="10" width="18" customWidth="1"/>
+                <col min="1" max="1" width="15" customWidth="1"/>
+                <col min="2" max="2" width="28" customWidth="1"/>
+                <col min="3" max="36" width="18" customWidth="1"/>
               </cols>
               <sheetData>
             """);
@@ -121,7 +174,7 @@ public static class DashboardExcelExporter
         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
         <workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
           <sheets>
-            <sheet name="Dashboard" sheetId="1" r:id="rId1"/>
+            <sheet name="Referidos" sheetId="1" r:id="rId1"/>
           </sheets>
         </workbook>
         """;
@@ -171,10 +224,25 @@ public static class DashboardExcelExporter
     }
 
     private static string Display(string? value) =>
-        string.IsNullOrWhiteSpace(value) ? "-" : value;
+        string.IsNullOrWhiteSpace(value) ? "" : value;
+
+    private static string Display(int? value) =>
+        value.HasValue ? value.Value.ToString() : "";
+
+    private static string Display(int value) =>
+        value.ToString();
+
+    private static string DisplayBool(bool? value) =>
+        value.HasValue ? (value.Value ? "Sí" : "No") : "";
+
+    private static string DisplayBool(bool value) =>
+        value ? "Sí" : "No";
 
     private static string DisplayDate(DateTime? value) =>
-        value.HasValue ? value.Value.ToString("dd/MM/yyyy") : "No registrada";
+        value.HasValue ? value.Value.ToString("dd/MM/yyyy") : "";
+
+    private static string DisplayDate(DateTime value) =>
+        value.ToString("dd/MM/yyyy");
 
     private static string EscapeXml(string? value) =>
         System.Security.SecurityElement.Escape(value ?? string.Empty) ?? string.Empty;
