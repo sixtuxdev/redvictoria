@@ -60,7 +60,7 @@ public sealed class SmtpCorreoService : ICorreoService
         using var message = new MailMessage
         {
             From = new MailAddress(_settings.FromEmail, _settings.FromName, Encoding.UTF8),
-            Subject = "Tu registro en Red Victoria fue creado correctamente",
+            Subject = "Tu registro en Pablo Emilio Otero Alcalde fué creado correctamente",
             SubjectEncoding = Encoding.UTF8,
             BodyEncoding = Encoding.UTF8,
             IsBodyHtml = true
