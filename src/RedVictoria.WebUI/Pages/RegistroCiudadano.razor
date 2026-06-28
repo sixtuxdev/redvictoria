@@ -361,10 +361,10 @@
                                               Variant="Variant.Outlined"
                                               Margin="Margin.Dense"
                                               Required="true"
-                                              Immediate="true"
+                                              Immediate="false"
                                               MaxLength="150"
                                               
-                                              Validation="@(new Func<string?, IEnumerable<string>>(ViewModel.ValidateEmail))" />
+                                              Validation="@(new Func<string?, IEnumerable<string>>(ValidateEmailField))" />
                             </MudItem>
 
                             <MudItem xs="12" sm="6" lg="12">
@@ -670,6 +670,30 @@
         ViewModel.Parametros.Veredas.FirstOrDefault(opcion => opcion.ParametroId == parametroId)?.Descripcion
         ?? string.Empty;
 
+    private IEnumerable<string> ValidateEmailField(string? value)
+    {
+        foreach (var error in ViewModel.ValidateEmail(value))
+        {
+            yield return error;
+        }
+
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            yield break;
+        }
+
+        var email = value.Trim();
+        const string emailPattern = @"^[^@\s]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}$";
+
+        if (!System.Text.RegularExpressions.Regex.IsMatch(
+                email,
+                emailPattern,
+                System.Text.RegularExpressions.RegexOptions.CultureInvariant,
+                TimeSpan.FromMilliseconds(250)))
+        {
+            yield return "Ingresa un correo electronico valido. Ejemplo: nombre@dominio.com.";
+        }
+    }
     private static bool Matches(string? search, params string?[] values) =>
         string.IsNullOrWhiteSpace(search)
         || values.Any(value => !string.IsNullOrWhiteSpace(value)
