@@ -21,7 +21,7 @@ public sealed class TerminosyCondicionesService(
 
         if (response.Content.Headers.ContentLength == 0)
         {
-            return OperationResultModel.Failure("El servicio de terminos y condiciones no devolvio una respuesta valida.");
+            return OperationResultModel.Failure("El servicio de términos y condiciones no devolvió una respuesta válida.");
         }
 
         ApiResponseModel<TerminosyCondicionesResponseModel>? apiResponse;
@@ -32,11 +32,11 @@ public sealed class TerminosyCondicionesService(
         }
         catch (JsonException)
         {
-            return OperationResultModel.Failure("No fue posible interpretar la respuesta de terminos y condiciones.");
+            return OperationResultModel.Failure("No fue posible interpretar la respuesta de términos y condiciones.");
         }
         catch (NotSupportedException)
         {
-            return OperationResultModel.Failure("El servicio de terminos y condiciones no devolvio una respuesta JSON valida.");
+            return OperationResultModel.Failure("El servicio de términos y condiciones no devolvió una respuesta JSON válida.");
         }
 
         if (response.IsSuccessStatusCode && apiResponse?.IsSuccess == true)
@@ -47,7 +47,7 @@ public sealed class TerminosyCondicionesService(
         var errors = apiResponse?.Errors?.Where(error => !string.IsNullOrWhiteSpace(error)).ToArray() ?? [];
         var message = errors.Length > 0
             ? string.Join(" ", errors)
-            : apiResponse?.Message ?? "No fue posible registrar la aceptacion de terminos y condiciones.";
+            : apiResponse?.Message ?? "No fue posible registrar la aceptación de términos y condiciones.";
 
         return OperationResultModel.Failure(message);
     }

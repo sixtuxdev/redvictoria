@@ -51,7 +51,7 @@ BEGIN
         SELECT
             CAST(SCOPE_IDENTITY() AS INT) AS TerminosyCondicionesId,
             CAST(1 AS BIT) AS IsSuccess,
-            'Terminos y condiciones registrados correctamente.' AS Message;
+            'Términos y condiciones registrados correctamente.' AS Message;
     END TRY
     BEGIN CATCH
         SELECT

@@ -17,7 +17,7 @@ public sealed class TerminosyCondicionesApplication(
         if (errors.Count > 0)
         {
             return Response<TerminosyCondicionesResponse>.Failure(
-                "La solicitud contiene datos invalidos.",
+                "La solicitud contiene datos inválidos.",
                 errors);
         }
 

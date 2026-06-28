@@ -41,7 +41,7 @@ public sealed class CiudadanoService(
         }
         catch (NotSupportedException)
         {
-            return ReferidosResultModel.Failure("El servicio de referidos no devolvio una respuesta valida.");
+            return ReferidosResultModel.Failure("El servicio de referidos no devolvió una respuesta válida.");
         }
 
         if (response.IsSuccessStatusCode && apiResponse?.IsSuccess == true)
@@ -74,11 +74,11 @@ public sealed class CiudadanoService(
         }
         catch (JsonException)
         {
-            return OperationResultModel.Failure("No fue posible interpretar la respuesta de desactivacion.");
+            return OperationResultModel.Failure("No fue posible interpretar la respuesta de desactivación.");
         }
         catch (NotSupportedException)
         {
-            return OperationResultModel.Failure("El servicio de desactivacion no devolvio una respuesta valida.");
+            return OperationResultModel.Failure("El servicio de desactivación no devolvió una respuesta válida.");
         }
 
         return response.IsSuccessStatusCode && apiResponse?.IsSuccess == true
@@ -154,7 +154,7 @@ public sealed class CiudadanoService(
         var response = await httpClient.PostAsJsonAsync(endpoint, request, cancellationToken);
         if (response.Content.Headers.ContentLength == 0)
         {
-            return OperationResultModel.Failure("El servicio de registro ciudadano no devolvio una respuesta valida.");
+            return OperationResultModel.Failure("El servicio de registro ciudadano no devolvió una respuesta válida.");
         }
 
         ApiResponseModel<RegistroCiudadanoResponseModel>? apiResponse = null;
@@ -169,7 +169,7 @@ public sealed class CiudadanoService(
         }
         catch (NotSupportedException)
         {
-            return OperationResultModel.Failure("El servicio de registro ciudadano no devolvio una respuesta JSON valida.");
+            return OperationResultModel.Failure("El servicio de registro ciudadano no devolvió una respuesta JSON válida.");
         }
 
         if (response.IsSuccessStatusCode && apiResponse?.IsSuccess == true)

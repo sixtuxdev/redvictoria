@@ -53,7 +53,7 @@ window.RedVictoriaSweetAlert = {
                     await navigator.clipboard.writeText(url);
                     return true;
                 } catch {
-                    window.Swal.showValidationMessage("No fue posible copiar el enlace automaticamente.");
+                    window.Swal.showValidationMessage("No fue posible copiar el enlace automáticamente.");
                     return false;
                 }
             }
@@ -72,14 +72,14 @@ window.RedVictoriaSweetAlert = {
     },
     confirmDeactivate: async (name) => {
         if (!window.Swal) {
-            return window.confirm(`Deseas desactivar a ${name}?`);
+            return window.confirm(`¿Deseas desactivar a ${name}?`);
         }
 
         const result = await window.Swal.fire({
             icon: "warning",
             iconColor: "#334155",
             title: "Desactivar referido",
-            text: `Deseas desactivar a ${name}? Esta accion no elimina el registro, solo lo marca como inactivo.`,
+            text: `¿Deseas desactivar a ${name}? Esta acción no elimina el registro, solo lo marca como inactivo.`,
             showCancelButton: true,
             confirmButtonText: "Desactivar",
             cancelButtonText: "Cancelar",

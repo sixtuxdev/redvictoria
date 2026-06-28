@@ -80,8 +80,8 @@ public sealed class RegistroCiudadanoRequestModel
 
     [Required(ErrorMessage = "Indica si es empleado.")]
     public bool? EsEmpleado { get; set; }
-    [Required(ErrorMessage = "Codigo referido es obligatorio.")]
-    [MaxLength(50, ErrorMessage = "Codigo referido no puede superar 50 caracteres.")]
+    [Required(ErrorMessage = "Código referido es obligatorio.")]
+    [MaxLength(50, ErrorMessage = "Código referido no puede superar 50 caracteres.")]
     public string? CodigoReferido { get; set; }
 
     public int? CiudadanoReferidorId { get; set; }

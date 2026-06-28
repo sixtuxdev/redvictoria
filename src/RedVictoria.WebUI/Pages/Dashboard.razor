@@ -1,4 +1,4 @@
-﻿@page "/dashboard"
+@page "/dashboard"
 @using RedVictoria.WebUI.Helpers
 @inject DashboardViewModel ViewModel
 @inject NavigationManager Navigation
@@ -168,8 +168,8 @@ else
                 <HeaderContent>
                     <MudTh>Simpatizante</MudTh>
                     <MudTh>Contacto</MudTh>
-                    <MudTh>Fecha de Nacimiento</MudTh>
-                    <MudTh>Codigo</MudTh>
+                    <MudTh>Fecha de nacimiento</MudTh>
+                    <MudTh>Código</MudTh>
                     <MudTh>Referidor</MudTh>
                     <MudTh>Registro</MudTh>
                     <MudTh>Estado</MudTh>
@@ -189,8 +189,8 @@ else
                             <MudText Typo="Typo.caption" Color="Color.Secondary">@Display(context.Celular)</MudText>
                         </MudStack>
                     </MudTd>
-                    <MudTd DataLabel="Fecha de Nacimiento">@(context.FechaNacimiento.HasValue ? context.FechaNacimiento.Value.ToString("dd/MM/yyyy") : "No registrada")</MudTd>
-                    <MudTd DataLabel="Codigo">
+                    <MudTd DataLabel="Fecha de nacimiento">@(context.FechaNacimiento.HasValue ? context.FechaNacimiento.Value.ToString("dd/MM/yyyy") : "No registrada")</MudTd>
+                    <MudTd DataLabel="Código">
                         <MudText Typo="Typo.body2">@context.CodigoReferido</MudText>
                     </MudTd>
                     <MudTd DataLabel="Referidor">@Display(context.Referidor)</MudTd>
@@ -265,7 +265,7 @@ else
     {
         if (string.IsNullOrWhiteSpace(ViewModel.MiUrlReferido))
         {
-            Snackbar.Add("No se encontr� el enlace de referido.", Severity.Warning);
+            Snackbar.Add("No se encontró el enlace de referido.", Severity.Warning);
             return;
         }
 
@@ -276,7 +276,7 @@ else
     {
         if (string.IsNullOrWhiteSpace(url))
         {
-            Snackbar.Add("No se encontr� el enlace de referido.", Severity.Warning);
+            Snackbar.Add("No se encontró el enlace de referido.", Severity.Warning);
             return;
         }
 
@@ -332,7 +332,7 @@ else
                 await JSRuntime.InvokeVoidAsync(
                     "RedVictoriaSweetAlert.fire",
                     "error",
-                    "ExportaciÃ³n fallida",
+                    "Exportación fallida",
                     "No fue posible generar el archivo Excel o no hay datos para exportar.");
                 return;
             }
@@ -348,8 +348,8 @@ else
             await JSRuntime.InvokeVoidAsync(
                 "RedVictoriaSweetAlert.fire",
                 "error",
-                "Error de exportaciÃ³n",
-                "OcurriÃ³ un error al descargar el archivo: " + ex.Message);
+                "Error de exportación",
+                "Ocurrió un error al descargar el archivo: " + ex.Message);
         }
     }
 

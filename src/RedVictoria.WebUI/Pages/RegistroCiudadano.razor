@@ -541,11 +541,11 @@
                                              Disabled="@ViewModel.IsBusy"
                                              Color="Color.Primary"
                                              Required="true"
-                                             RequiredError="Debes aceptar los terminos y condiciones."
+                                             RequiredError="Debes aceptar los términos y condiciones."
                                              Class="registro-terms-check">
                                     <ChildContent>
                                         <MudText Typo="Typo.body2" Class="registro-terms-label">
-                                            Acepto los terminos y condiciones
+                                            Acepto los términos y condiciones
                                         </MudText>
                                     </ChildContent>
                                 </MudCheckBox>
@@ -556,7 +556,7 @@
                                            Disabled="@ViewModel.IsBusy"
                                            OnClick="OpenTerminosDialogAsync"
                                            Class="registro-terms-link">
-                                    Leer terminos y condiciones
+                                    Leer términos y condiciones
                                 </MudButton>
                             </div>
 
@@ -722,7 +722,7 @@
         };
 
         var dialog = await DialogService.ShowAsync<TerminosyCondicionesDialog>(
-            "Terminos y condiciones",
+            "Términos y condiciones",
             options);
         var result = await dialog.Result;
 
@@ -748,8 +748,8 @@
         {
             await ShowAlertAsync(
                 "warning",
-                "T�rminos y condiciones requeridos",
-                "Para completar el registro debes leer y aceptar los t�rminos y condiciones.");
+                "Términos y condiciones requeridos",
+                "Para completar el registro debes leer y aceptar los términos y condiciones.");
             return;
         }
 

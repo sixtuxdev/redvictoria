@@ -217,7 +217,7 @@ public sealed partial class RegistroCiudadanoViewModel(
 
         if (!AceptaTerminos)
         {
-            ErrorMessage = "Debes aceptar los terminos y condiciones para continuar.";
+            ErrorMessage = "Debes aceptar los términos y condiciones para continuar.";
             return false;
         }
 
@@ -267,7 +267,7 @@ public sealed partial class RegistroCiudadanoViewModel(
             if (!terminosResult.IsSuccess)
             {
                 TerminosWarningMessage = terminosResult.Message
-                    ?? "El ciudadano fue registrado, pero no fue posible guardar la aceptacion de terminos y condiciones.";
+                    ?? "El ciudadano fue registrado, pero no fue posible guardar la aceptación de términos y condiciones.";
             }
 
             return true;
@@ -523,7 +523,7 @@ public sealed partial class RegistroCiudadanoViewModel(
     {
         if (Request.TieneAcceso && string.IsNullOrWhiteSpace(value))
         {
-            yield return "Contrasena es obligatoria cuando el ciudadano tendra acceso.";
+            yield return "Contraseña es obligatoria cuando el ciudadano tendrá acceso.";
         }
 
         if (!string.IsNullOrWhiteSpace(value) && value.Length < PasswordMinimumLength)
@@ -545,7 +545,7 @@ public sealed partial class RegistroCiudadanoViewModel(
         }
         else if (!string.Equals(Request.Password, value, StringComparison.Ordinal))
         {
-            yield return "Contrasena y confirmacion deben coincidir.";
+            yield return "Contraseña y confirmación deben coincidir.";
         }
     }
 
@@ -622,7 +622,7 @@ public sealed partial class RegistroCiudadanoViewModel(
     {
         if (Request.TieneAcceso && string.IsNullOrWhiteSpace(Request.Password))
         {
-            errors.Add("Contrasena es obligatoria cuando el ciudadano tendra acceso.");
+            errors.Add("Contraseña es obligatoria cuando el ciudadano tendrá acceso.");
         }
 
         if (!string.IsNullOrWhiteSpace(Request.Password))
@@ -643,12 +643,12 @@ public sealed partial class RegistroCiudadanoViewModel(
             }
             else if (!string.Equals(Request.Password, Request.ConfirmPassword, StringComparison.Ordinal))
             {
-                errors.Add("Contrasena y confirmacion deben coincidir.");
+                errors.Add("Contraseña y confirmación deben coincidir.");
             }
         }
         else if (!string.IsNullOrWhiteSpace(Request.ConfirmPassword))
         {
-            errors.Add("Contrasena es obligatoria cuando se ingresa confirmacion.");
+            errors.Add("Contraseña es obligatoria cuando se ingresa confirmación.");
         }
     }
 
