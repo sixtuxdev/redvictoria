@@ -6,7 +6,6 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager Navigation
 @inject IDialogService DialogService
-@inject ISnackbar Snackbar
 @inject ILogger<RegistroCiudadano> Logger
 
 <PageTitle>Registro ciudadano</PageTitle>
@@ -206,7 +205,7 @@
                                            Required="true"
                                            RequiredError="Tipo de discapacidad es obligatorio."
                                            Class="registro-field">
-                                    @foreach (var opcion in ViewModel.Parametros.TiposDiscapacidad)
+                                    @foreach (var opcion in ViewModel.Parametros.TiposDiscapacidad.OrderByDescending(x => x.Descripcion))
                                     {
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
                                     }
@@ -747,7 +746,10 @@
 
         if (!ViewModel.AceptaTerminos)
         {
-            Snackbar.Add("Debes aceptar los terminos y condiciones para continuar.", Severity.Warning);
+            await ShowAlertAsync(
+                "warning",
+                "Términos y condiciones requeridos",
+                "Para completar el registro debes leer y aceptar los términos y condiciones.");
             return;
         }
 
