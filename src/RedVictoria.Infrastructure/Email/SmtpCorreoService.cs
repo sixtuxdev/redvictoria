@@ -105,45 +105,60 @@ public sealed class SmtpCorreoService : ICorreoService
                 <meta name="viewport" content="width=device-width, initial-scale=1">
                 <title>Registro ciudadano creado</title>
             </head>
-            <body style="margin:0;padding:0;background-color:#f4f6f8;font-family:Arial,Helvetica,sans-serif;color:#1f2933;">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f6f8;margin:0;padding:24px 0;">
+            <body style="margin:0;padding:0;background-color:#eef3ff;font-family:Arial,Helvetica,sans-serif;color:#0f172a;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0;padding:0;background:#eef3ff;background-image:linear-gradient(135deg,#ffffff 0%,#eef3ff 45%,#dbe6ff 100%);">
                     <tr>
-                        <td align="center" style="padding:0 16px;">
-                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;background-color:#ffffff;border-radius:10px;overflow:hidden;border:1px solid #e5e7eb;">
+                        <td align="center" style="padding:28px 14px;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;width:100%;background-color:#ffffff;border:1px solid rgba(255,255,255,0.78);border-radius:22px;overflow:hidden;box-shadow:0 32px 90px rgba(15,23,42,0.18);">
                                 <tr>
-                                    <td style="background-color:#0f4c81;padding:28px 32px;text-align:center;">
-                                        <h1 style="margin:0;color:#ffffff;font-size:24px;line-height:32px;font-weight:700;">Red Victoria</h1>
-                                        <p style="margin:8px 0 0;color:#dbeafe;font-size:14px;line-height:20px;">Registro ciudadano confirmado</p>
+                                    <td style="padding:34px 32px 30px;text-align:center;color:#ffffff;background:#0443FF;background-image:linear-gradient(155deg,#ffffff 0%,#dce7ff 34%,#0443FF 100%);">
+                                        <table role="presentation" align="center" cellpadding="0" cellspacing="0" style="margin:0 auto 18px;">
+                                            <tr>
+                                                <td align="center" valign="middle" style="width:58px;height:58px;border-radius:50%;background-color:#ffffff;border:1px solid rgba(255,255,255,0.62);box-shadow:0 18px 38px rgba(4,67,255,0.22);color:#0443FF;font-size:26px;line-height:58px;font-weight:800;">
+                                                    OK
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <h1 style="margin:0;color:#ffffff;font-size:30px;line-height:36px;font-weight:900;letter-spacing:0;text-shadow:0 8px 24px rgba(0,45,179,0.36);">Registro ciudadano confirmado</h1>
+                                        <p style="margin:12px auto 0;max-width:420px;color:rgba(255,255,255,0.96);font-size:15px;line-height:24px;text-shadow:0 6px 18px rgba(0,45,179,0.28);">
+                                            Tu registro fue creado correctamente y ya puedes compartir tu enlace de referido.
+                                        </p>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="padding:32px;">
-                                        <p style="margin:0 0 16px;font-size:16px;line-height:24px;">Hola {{nombre}},</p>
-                                        <p style="margin:0 0 22px;font-size:16px;line-height:24px;">
+                                    <td style="padding:34px 32px 30px;background:#ffffff;background-image:linear-gradient(180deg,#ffffff 0%,#f8faff 100%);">
+                                        <p style="margin:0 0 16px;color:#0f172a;font-size:17px;line-height:26px;font-weight:700;">Hola {{nombre}},</p>
+                                        <p style="margin:0 0 24px;color:#526174;font-size:16px;line-height:25px;">
                                             Tu registro ciudadano fue creado correctamente. Desde ahora puedes compartir tu enlace de referido con otras personas para que se sumen a tu red.
                                         </p>
 
-                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;background-color:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;">
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 26px;background-color:#ffffff;border:1px solid rgba(82,97,116,0.18);border-radius:8px;box-shadow:0 16px 30px rgba(4,67,255,0.10);">
                                             <tr>
-                                                <td style="padding:18px 20px;">
+                                                <td style="padding:20px 22px;">
                                                     <p style="margin:0 0 6px;color:#64748b;font-size:13px;line-height:18px;text-transform:uppercase;font-weight:700;">Código referido</p>
-                                                    <p style="margin:0;color:#0f172a;font-size:22px;line-height:28px;font-weight:700;letter-spacing:1px;">{{codigo}}</p>
+                                                    <p style="margin:0;color:#0f172a;font-size:24px;line-height:30px;font-weight:900;letter-spacing:1px;">{{codigo}}</p>
                                                 </td>
                                             </tr>
                                         </table>
 
-                                        <p style="margin:0 0 8px;color:#334155;font-size:14px;line-height:20px;font-weight:700;">Link para compartir el registro ciudadano</p>
-                                        <p style="margin:0 0 24px;font-size:14px;line-height:22px;word-break:break-word;">
-                                            <a href="{{registroUrl}}" style="color:#0f4c81;text-decoration:underline;">{{registroUrl}}</a>
-                                        </p>
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 26px;background-color:#f8faff;border:1px solid rgba(4,67,255,0.14);border-radius:8px;">
+                                            <tr>
+                                                <td style="padding:20px 22px;">
+                                                    <p style="margin:0 0 8px;color:#0f172a;font-size:14px;line-height:20px;font-weight:800;">Link para compartir el registro ciudadano</p>
+                                                    <p style="margin:0;color:#526174;font-size:14px;line-height:22px;word-break:break-word;">
+                                                        <a href="{{registroUrl}}" style="color:#0443FF;text-decoration:underline;font-weight:700;">{{registroUrl}}</a>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
 
-                                        <p style="margin:0 0 18px;font-size:15px;line-height:23px;color:#334155;">
+                                        <p style="margin:0 0 18px;color:#526174;font-size:15px;line-height:24px;">
                                             Si aún no tienes contraseña asignada, puedes crearla usando el siguiente botón:
                                         </p>
 
-                                        <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 26px;">
+                                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
                                             <tr>
-                                                <td align="center" bgcolor="#16a34a" style="border-radius:6px;">
+                                                <td align="center" bgcolor="#0443FF" style="border-radius:8px;background:#0443FF;background-image:linear-gradient(135deg,#0443FF 0%,#002DB3 100%);box-shadow:0 16px 30px rgba(4,67,255,0.30);">
                                                     <a href="{{passwordUrl}}" style="display:inline-block;padding:14px 24px;color:#ffffff;font-size:15px;line-height:20px;font-weight:700;text-decoration:none;border-radius:6px;">Crear mi contraseña</a>
                                                 </td>
                                             </tr>
@@ -151,14 +166,14 @@ public sealed class SmtpCorreoService : ICorreoService
 
                                         <p style="margin:0;color:#64748b;font-size:13px;line-height:20px;">
                                             Si el botón no funciona, copia y pega este enlace en tu navegador:<br>
-                                            <a href="{{passwordUrl}}" style="color:#0f4c81;text-decoration:underline;word-break:break-word;">{{passwordUrl}}</a>
+                                            <a href="{{passwordUrl}}" style="color:#0443FF;text-decoration:underline;font-weight:700;word-break:break-word;">{{passwordUrl}}</a>
                                         </p>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="background-color:#f8fafc;padding:20px 32px;border-top:1px solid #e5e7eb;text-align:center;">
-                                        <p style="margin:0;color:#64748b;font-size:12px;line-height:18px;">
-                                            Este mensaje fue enviado automáticamente por Red Victoria. Por favor no respondas a este correo.
+                                    <td style="background-color:#f8faff;padding:20px 32px 22px;border-top:1px solid rgba(82,97,116,0.14);text-align:center;">
+                                        <p style="margin:0;color:#526174;font-size:12px;line-height:18px;">
+                                            Este mensaje fue enviado automáticamente. Por favor no respondas a este correo.
                                         </p>
                                     </td>
                                 </tr>
