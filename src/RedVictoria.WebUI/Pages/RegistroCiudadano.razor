@@ -653,6 +653,7 @@
     {
         var items = ViewModel.Parametros.Veredas
             .Where(opcion => Matches(value, opcion.Descripcion))
+            .OrderBy(opcion => opcion.ParametroId)
             .Select(opcion => (int?)opcion.ParametroId);
 
         return Task.FromResult(items);
