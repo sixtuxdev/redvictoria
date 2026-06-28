@@ -20,6 +20,7 @@ public sealed class SmtpCorreoService : ICorreoService
             Host = section["Host"] ?? string.Empty,
             Port = int.TryParse(section["Port"], out var port) ? port : 587,
             EnableSsl = !bool.TryParse(section["EnableSsl"], out var enableSsl) || enableSsl,
+            EnableEmailSending = !bool.TryParse(section["EnableEmailSending"], out var enableEmailSending) || enableEmailSending,
             UserName = section["UserName"] ?? string.Empty,
             Password = section["Password"] ?? string.Empty,
             FromEmail = section["FromEmail"] ?? string.Empty,
@@ -40,6 +41,9 @@ public sealed class SmtpCorreoService : ICorreoService
         string codigoReferido,
         CancellationToken cancellationToken = default)
     {
+        if (!ShouldSendEmails())
+            return;
+
         if (string.IsNullOrWhiteSpace(destinatario))
             throw new InvalidOperationException("El destinatario del correo es obligatorio.");
 
@@ -84,6 +88,8 @@ public sealed class SmtpCorreoService : ICorreoService
         using var registration = cancellationToken.Register(client.SendAsyncCancel);
         await client.SendMailAsync(message);
     }
+
+    private bool ShouldSendEmails() => _settings.EnableEmailSending;
 
     private static string BuildRegistroCiudadanoTemplate(
         string nombresCompletos,
