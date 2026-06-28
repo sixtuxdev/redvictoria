@@ -14,6 +14,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IConnectionFactory, SqlConnectionFactory>();
         services.AddScoped<ICiudadanoRepository, CiudadanoRepository>();
+        services.AddScoped<ITerminosyCondicionesRepository, TerminosyCondicionesRepository>();
         services.AddScoped<IAuthRepository, AuthRepository>();
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         services.AddScoped<IParametrosRepository, ParametrosRepository>();

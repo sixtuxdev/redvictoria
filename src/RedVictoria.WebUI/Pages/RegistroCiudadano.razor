@@ -5,6 +5,8 @@
 @inject RegistroCiudadanoViewModel ViewModel
 @inject IJSRuntime JSRuntime
 @inject NavigationManager Navigation
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
 @inject ILogger<RegistroCiudadano> Logger
 
 <PageTitle>Registro ciudadano</PageTitle>
@@ -533,6 +535,32 @@
                         </MudGrid>
 
                         <div class="registro-actions">
+                            <div class="registro-terms">
+                                <MudCheckBox T="bool"
+                                             Value="@ViewModel.AceptaTerminos"
+                                             ValueChanged="OnAceptaTerminosChanged"
+                                             Disabled="@ViewModel.IsBusy"
+                                             Color="Color.Primary"
+                                             Required="true"
+                                             RequiredError="Debes aceptar los terminos y condiciones."
+                                             Class="registro-terms-check">
+                                    <ChildContent>
+                                        <MudText Typo="Typo.body2" Class="registro-terms-label">
+                                            Acepto los terminos y condiciones
+                                        </MudText>
+                                    </ChildContent>
+                                </MudCheckBox>
+                                <MudButton Variant="Variant.Text"
+                                           Color="Color.Primary"
+                                           Size="Size.Small"
+                                           StartIcon="@Icons.Material.Filled.Article"
+                                           Disabled="@ViewModel.IsBusy"
+                                           OnClick="OpenTerminosDialogAsync"
+                                           Class="registro-terms-link">
+                                    Leer terminos y condiciones
+                                </MudButton>
+                            </div>
+
                             <MudButton Color="Color.Primary"
                                        Variant="Variant.Filled"
                                        Size="Size.Medium"
@@ -685,10 +713,41 @@
         return null;
     }
 
+    private async Task OpenTerminosDialogAsync()
+    {
+        var options = new DialogOptions
+        {
+            CloseButton = true,
+            FullWidth = true,
+            MaxWidth = MaxWidth.Medium
+        };
+
+        var dialog = await DialogService.ShowAsync<TerminosyCondicionesDialog>(
+            "Terminos y condiciones",
+            options);
+        var result = await dialog.Result;
+
+        if (result is not null && !result.Canceled && result.Data is true)
+        {
+            ViewModel.AceptaTerminos = true;
+        }
+    }
+
+    private void OnAceptaTerminosChanged(bool value)
+    {
+        ViewModel.AceptaTerminos = value;
+    }
+
     private async Task HandleRegistroAsync()
     {
         if (ViewModel.IsBusy)
         {
+            return;
+        }
+
+        if (!ViewModel.AceptaTerminos)
+        {
+            Snackbar.Add("Debes aceptar los terminos y condiciones para continuar.", Severity.Warning);
             return;
         }
 
@@ -728,6 +787,14 @@
         var registrado = await ViewModel.RegistrarAsync();
         if (registrado)
         {
+            if (!string.IsNullOrWhiteSpace(ViewModel.TerminosWarningMessage))
+            {
+                await ShowAlertAsync(
+                    "warning",
+                    "Registro exitoso con advertencia",
+                    ViewModel.TerminosWarningMessage);
+            }
+
             var referidoUrl = ViewModel.BuildReferralUrl(ViewModel.CodigoReferidoRegistrado);
             if (string.IsNullOrWhiteSpace(referidoUrl))
             {

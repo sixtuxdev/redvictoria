@@ -7,11 +7,13 @@ using RedVictoria.WebUI.Models.Ciudades;
 using RedVictoria.WebUI.Models.Ciudadanos;
 using RedVictoria.WebUI.Models.Departamentos;
 using RedVictoria.WebUI.Models.Parametros;
+using RedVictoria.WebUI.Models.TerminosyCondiciones;
 
 namespace RedVictoria.WebUI.ViewModels.Ciudadanos;
 
 public sealed partial class RegistroCiudadanoViewModel(
     ICiudadanoService ciudadanoService,
+    ITerminosyCondicionesService terminosyCondicionesService,
     IParametroService parametroService,
     IDepartamentoService departamentoService,
     ICiudadService ciudadService,
@@ -46,6 +48,10 @@ public sealed partial class RegistroCiudadanoViewModel(
     public string? SuccessMessage { get; private set; }
 
     public string? CodigoReferidoRegistrado { get; private set; }
+
+    public string? TerminosWarningMessage { get; private set; }
+
+    public bool AceptaTerminos { get; set; }
 
     public bool IsCodigoReferidoValido { get; private set; }
 
@@ -195,6 +201,7 @@ public sealed partial class RegistroCiudadanoViewModel(
         ErrorMessage = null;
         SuccessMessage = null;
         CodigoReferidoRegistrado = null;
+        TerminosWarningMessage = null;
 
         if (!AreRequiredParametrosLoaded)
         {
@@ -205,6 +212,12 @@ public sealed partial class RegistroCiudadanoViewModel(
         if (!IsCodigoReferidoValido)
         {
             ErrorMessage = "No puede continuar porque el referido ingresado no existe.";
+            return false;
+        }
+
+        if (!AceptaTerminos)
+        {
+            ErrorMessage = "Debes aceptar los terminos y condiciones para continuar.";
             return false;
         }
 
@@ -247,6 +260,16 @@ public sealed partial class RegistroCiudadanoViewModel(
 
             SuccessMessage = result.Message ?? "Ciudadano registrado correctamente.";
             CodigoReferidoRegistrado = Normalize(result.CodigoReferido);
+
+            var terminosResult = await terminosyCondicionesService.InsertarAsync(
+                BuildTerminosRequest(),
+                cancellationToken);
+            if (!terminosResult.IsSuccess)
+            {
+                TerminosWarningMessage = terminosResult.Message
+                    ?? "El ciudadano fue registrado, pero no fue posible guardar la aceptacion de terminos y condiciones.";
+            }
+
             return true;
         }
         catch (OperationCanceledException)
@@ -571,11 +594,13 @@ public sealed partial class RegistroCiudadanoViewModel(
         Request.Estado = true;
         Request.Password = null;
         Request.ConfirmPassword = null;
+        AceptaTerminos = false;
 
         Ciudades = [];
         ErrorMessage = null;
         SuccessMessage = null;
         CodigoReferidoRegistrado = null;
+        TerminosWarningMessage = null;
     }
     public string? BuildReferralUrl(string? codigoReferido)
     {
@@ -583,6 +608,15 @@ public sealed partial class RegistroCiudadanoViewModel(
             ? null
             : referidosUrlBuilder.BuildRegistroCiudadanoUrl(codigoReferido);
     }
+
+    private TerminosyCondicionesRequestModel BuildTerminosRequest() =>
+        new()
+        {
+            TipoDocumentoId = Request.ParametroIdTipoIdentificacion,
+            Documento = NormalizeMax(Request.NumeroIdentificacion, 50) ?? string.Empty,
+            Nombres = NormalizeMax(Request.NombresCompletos, 150) ?? string.Empty,
+            Apellidos = null
+        };
 
     private void ValidatePassword(ICollection<string> errors)
     {
@@ -621,6 +655,17 @@ public sealed partial class RegistroCiudadanoViewModel(
     private static string? Normalize(string? value)
     {
         return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+    }
+
+    private static string? NormalizeMax(string? value, int maximumLength)
+    {
+        var normalized = Normalize(value);
+        if (normalized is null || normalized.Length <= maximumLength)
+        {
+            return normalized;
+        }
+
+        return normalized[..maximumLength];
     }
 
     private static string AppendError(string? currentError, string newError)
