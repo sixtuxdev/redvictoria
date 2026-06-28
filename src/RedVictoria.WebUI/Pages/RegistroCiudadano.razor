@@ -205,7 +205,7 @@
                                            Required="true"
                                            RequiredError="Tipo de discapacidad es obligatorio."
                                            Class="registro-field">
-                                    @foreach (var opcion in ViewModel.Parametros.TiposDiscapacidad.OrderByDescending(x => x.Descripcion))
+                                    @foreach (var opcion in ViewModel.Parametros.TiposDiscapacidad.OrderByDescending(x => x.ParametroId))
                                     {
                                         <MudSelectItem T="int?" Value="@((int?)opcion.ParametroId)">@opcion.Descripcion</MudSelectItem>
                                     }
