@@ -10,19 +10,25 @@ public class CiudadanoReferidoResponse
     public string? Celular { get; init; }
     public bool? TieneWhatsapp { get; init; }
     public int? ParametroIdDondeVive { get; init; }
+    public string? DondeViveDescripcion { get; init; }
     public string? PuestoVotacion { get; init; }
     public int? ParametroIdTipoIdentificacion { get; init; }
+    public string? TipoIdentificacionDescripcion { get; init; }
     public string? NumeroIdentificacion { get; init; }
     public string? Direccion { get; init; }
     public int? DepartamentoId { get; init; }
     public int? MunicipioId { get; init; }
     public int? ParametroIdGrupoEdad { get; init; }
+    public string? GrupoEdadDescripcion { get; init; }
     public int? ParametroIdGenero { get; init; }
+    public string? GeneroDescripcion { get; init; }
     public int? ParametroIdSoy { get; init; }
+    public string? SoyDescripcion { get; init; }
     public string CodigoReferido { get; init; } = string.Empty;
     public int? CiudadanoReferidorId { get; init; }
     public bool TieneAcceso { get; init; }
     public int? ParametroIdVereda { get; init; }
+    public string? VeredaDescripcion { get; init; }
     public bool Estado { get; init; }
     public DateTime FechaRegistro { get; init; }
     public string? Celular2 { get; init; }

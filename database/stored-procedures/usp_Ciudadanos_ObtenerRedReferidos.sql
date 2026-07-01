@@ -108,19 +108,25 @@ BEGIN
         rr.Celular,
         rr.TieneWhatsapp,
         rr.ParametroIdDondeVive,
+        pDondeVive.Descripcion AS DondeViveDescripcion,
         rr.PuestoVotacion,
         rr.ParametroIdTipoIdentificacion,
+        pTipoIdentificacion.Descripcion AS TipoIdentificacionDescripcion,
         rr.NumeroIdentificacion,
         rr.Direccion,
         rr.DepartamentoId,
         rr.MunicipioId,
         rr.ParametroIdGrupoEdad,
+        pGrupoEdad.Descripcion AS GrupoEdadDescripcion,
         rr.ParametroIdGenero,
+        pGenero.Descripcion AS GeneroDescripcion,
         rr.ParametroIdSoy,
+        pSoy.Descripcion AS SoyDescripcion,
         rr.CodigoReferido,
         rr.CiudadanoReferidorId,
         rr.TieneAcceso,
         rr.ParametroIdVereda,
+        pVereda.Descripcion AS VeredaDescripcion,
         rr.Estado,
         rr.FechaRegistro,
         rr.Celular2,
@@ -141,6 +147,18 @@ BEGIN
         rr.Nivel,
         rr.TipoReferido
     FROM RedReferidos rr
+    LEFT JOIN dbo.Parametros pDondeVive
+        ON pDondeVive.ParametroId = rr.ParametroIdDondeVive
+    LEFT JOIN dbo.Parametros pTipoIdentificacion
+        ON pTipoIdentificacion.ParametroId = rr.ParametroIdTipoIdentificacion
+    LEFT JOIN dbo.Parametros pGrupoEdad
+        ON pGrupoEdad.ParametroId = rr.ParametroIdGrupoEdad
+    LEFT JOIN dbo.Parametros pGenero
+        ON pGenero.ParametroId = rr.ParametroIdGenero
+    LEFT JOIN dbo.Parametros pSoy
+        ON pSoy.ParametroId = rr.ParametroIdSoy
+    LEFT JOIN dbo.Parametros pVereda
+        ON pVereda.ParametroId = rr.ParametroIdVereda
     LEFT JOIN dbo.Parametros pDiscapacidad
         ON pDiscapacidad.ParametroId = rr.ParametroIdTipoDiscapacidad
     LEFT JOIN dbo.Parametros pEstadoCivil
