@@ -78,6 +78,50 @@ public class CiudadanoRepository : ICiudadanoRepository
         return result.ToArray();
     }
 
+    public async Task<CiudadanoReferidoPagedResult> ObtenerRedReferidosPaginadosAsync(
+        CiudadanoReferidoQuery query,
+        CancellationToken cancellationToken = default)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        var databaseCommand = new CommandDefinition(
+            "dbo.usp_Ciudadanos_ObtenerRedReferidos",
+            new
+            {
+                query.CiudadanoId,
+                query.PageNumber,
+                query.PageSize,
+                query.SearchText,
+                query.NombresCompletos,
+                query.NumeroIdentificacion,
+                query.Email,
+                query.Celular,
+                query.FechaNacimiento,
+                query.CodigoReferido,
+                query.Referidor,
+                query.FechaRegistro,
+                query.Estado,
+                query.TipoReferido,
+                query.SortColumn,
+                query.SortDescending
+            },
+            commandType: CommandType.StoredProcedure,
+            cancellationToken: cancellationToken);
+
+        using var result = await connection.QueryMultipleAsync(databaseCommand);
+        var items = (await result.ReadAsync<CiudadanoReferidoResult>()).ToArray();
+        var totalItems = await result.ReadSingleAsync<int>();
+        var summary = await result.ReadSingleOrDefaultAsync<CiudadanoReferidoSummaryResult>()
+            ?? new CiudadanoReferidoSummaryResult();
+
+        return new CiudadanoReferidoPagedResult(
+            items,
+            totalItems,
+            summary.TotalDirectos,
+            summary.TotalIndirectos,
+            summary.TotalActivos,
+            summary.TotalInactivos);
+    }
+
     public async Task<bool> DesactivarReferidoAsync(
         int ciudadanoAutenticadoId,
         int ciudadanoReferidoId,
@@ -130,5 +174,13 @@ public class CiudadanoRepository : ICiudadanoRepository
         parameters.Add("CodigoReferidoInvitacion", command.CodigoReferidoInvitacion);
         parameters.Add("PasswordHash", command.PasswordHash);
         return parameters;
+    }
+
+    private sealed class CiudadanoReferidoSummaryResult
+    {
+        public int TotalDirectos { get; init; }
+        public int TotalIndirectos { get; init; }
+        public int TotalActivos { get; init; }
+        public int TotalInactivos { get; init; }
     }
 }

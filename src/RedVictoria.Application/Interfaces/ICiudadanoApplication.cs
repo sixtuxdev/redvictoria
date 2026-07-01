@@ -18,6 +18,11 @@ public interface ICiudadanoApplication
         int ciudadanoId,
         CancellationToken cancellationToken = default);
 
+    Task<Response<CiudadanoReferidoPagedResponse>> ObtenerRedReferidosPaginadosAsync(
+        int ciudadanoId,
+        CiudadanoReferidoPagedRequest request,
+        CancellationToken cancellationToken = default);
+
     Task<Response<bool>> DesactivarReferidoAsync(
         int ciudadanoAutenticadoId,
         int ciudadanoReferidoId,

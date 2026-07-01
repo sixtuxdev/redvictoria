@@ -195,6 +195,56 @@ public class CiudadanoApplication : ICiudadanoApplication
             "Red de referidos consultada correctamente.");
     }
 
+    public async Task<Response<CiudadanoReferidoPagedResponse>> ObtenerRedReferidosPaginadosAsync(
+        int ciudadanoId,
+        CiudadanoReferidoPagedRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        if (ciudadanoId <= 0)
+        {
+            return Response<CiudadanoReferidoPagedResponse>.Failure(
+                "No fue posible identificar el ciudadano autenticado.");
+        }
+
+        var pageNumber = request.PageNumber <= 0 ? 1 : request.PageNumber;
+        var pageSize = request.PageSize <= 0 ? 10 : Math.Min(request.PageSize, 100);
+        var result = await _ciudadanoRepository.ObtenerRedReferidosPaginadosAsync(
+            new CiudadanoReferidoQuery
+            {
+                CiudadanoId = ciudadanoId,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                SearchText = Normalize(request.SearchText),
+                NombresCompletos = Normalize(request.NombresCompletos),
+                NumeroIdentificacion = Normalize(request.NumeroIdentificacion),
+                Email = Normalize(request.Email),
+                Celular = Normalize(request.Celular),
+                FechaNacimiento = request.FechaNacimiento,
+                CodigoReferido = Normalize(request.CodigoReferido),
+                Referidor = Normalize(request.Referidor),
+                FechaRegistro = request.FechaRegistro,
+                Estado = request.Estado,
+                TipoReferido = Normalize(request.TipoReferido),
+                SortColumn = Normalize(request.SortColumn),
+                SortDescending = request.SortDescending
+            },
+            cancellationToken);
+
+        var response = new CiudadanoReferidoPagedResponse
+        {
+            Items = result.Items.Select(MapReferido).ToArray(),
+            TotalItems = result.TotalItems,
+            TotalDirectos = result.TotalDirectos,
+            TotalIndirectos = result.TotalIndirectos,
+            TotalActivos = result.TotalActivos,
+            TotalInactivos = result.TotalInactivos
+        };
+
+        return Response<CiudadanoReferidoPagedResponse>.Success(
+            response,
+            "Red de referidos consultada correctamente.");
+    }
+
     public async Task<Response<bool>> DesactivarReferidoAsync(
         int ciudadanoAutenticadoId,
         int ciudadanoReferidoId,

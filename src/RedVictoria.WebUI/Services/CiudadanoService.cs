@@ -52,6 +52,52 @@ public sealed class CiudadanoService(
         return ReferidosResultModel.Failure(apiResponse?.Message ?? "No fue posible consultar la red de referidos.");
     }
 
+    public async Task<ReferidosPageResultModel> ObtenerRedReferidosPaginadosAsync(
+        ReferidosPageRequestModel request,
+        CancellationToken cancellationToken = default)
+    {
+        var endpoint = BuildReferidosPaginadosEndpoint(request);
+        var httpRequest = await CreateAuthorizedRequestAsync(
+            HttpMethod.Get,
+            endpoint,
+            cancellationToken);
+        if (httpRequest is null)
+        {
+            return ReferidosPageResultModel.Failure("Debes iniciar sesión para consultar el dashboard.");
+        }
+
+        var response = await httpClient.SendAsync(httpRequest, cancellationToken);
+        ApiResponseModel<ReferidosPageResponseModel>? apiResponse;
+        try
+        {
+            apiResponse = await response.Content.ReadFromJsonAsync<ApiResponseModel<ReferidosPageResponseModel>>(
+                cancellationToken: cancellationToken);
+        }
+        catch (JsonException)
+        {
+            return ReferidosPageResultModel.Failure("No fue posible interpretar la red de referidos.");
+        }
+        catch (NotSupportedException)
+        {
+            return ReferidosPageResultModel.Failure("El servicio de referidos no devolvió una respuesta válida.");
+        }
+
+        if (response.IsSuccessStatusCode && apiResponse?.IsSuccess == true)
+        {
+            var data = apiResponse.Data ?? new ReferidosPageResponseModel();
+            return ReferidosPageResultModel.Success(
+                data.Items,
+                data.TotalItems,
+                data.TotalDirectos,
+                data.TotalIndirectos,
+                data.TotalActivos,
+                data.TotalInactivos,
+                apiResponse.Message);
+        }
+
+        return ReferidosPageResultModel.Failure(apiResponse?.Message ?? "No fue posible consultar la red de referidos.");
+    }
+
     public async Task<OperationResultModel> DesactivarReferidoAsync(
         int ciudadanoReferidoId,
         CancellationToken cancellationToken = default)
@@ -242,4 +288,38 @@ public sealed class CiudadanoService(
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         return request;
     }
+
+    private static string BuildReferidosPaginadosEndpoint(ReferidosPageRequestModel request)
+    {
+        var query = new List<string>
+        {
+            Query("PageNumber", request.PageNumber.ToString()),
+            Query("PageSize", request.PageSize.ToString()),
+            Query("SortDescending", request.SortDescending.ToString())
+        };
+
+        AddQuery(query, "SearchText", request.SearchText);
+        AddQuery(query, "NombresCompletos", request.NombresCompletos);
+        AddQuery(query, "NumeroIdentificacion", request.NumeroIdentificacion);
+        AddQuery(query, "Email", request.Email);
+        AddQuery(query, "Celular", request.Celular);
+        AddQuery(query, "FechaNacimiento", request.FechaNacimiento?.ToString("yyyy-MM-dd"));
+        AddQuery(query, "CodigoReferido", request.CodigoReferido);
+        AddQuery(query, "Referidor", request.Referidor);
+        AddQuery(query, "FechaRegistro", request.FechaRegistro?.ToString("yyyy-MM-dd"));
+        AddQuery(query, "Estado", request.Estado?.ToString());
+        AddQuery(query, "TipoReferido", request.TipoReferido);
+        AddQuery(query, "SortColumn", request.SortColumn);
+
+        return $"{ApiEndpoints.ReferidosPaginados}?{string.Join("&", query)}";
+    }
+
+    private static void AddQuery(List<string> query, string name, string? value)
+    {
+        if (!string.IsNullOrWhiteSpace(value))
+            query.Add(Query(name, value));
+    }
+
+    private static string Query(string name, string value) =>
+        $"{Uri.EscapeDataString(name)}={Uri.EscapeDataString(value)}";
 }

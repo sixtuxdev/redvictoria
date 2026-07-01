@@ -109,7 +109,9 @@ else
         <MudPaper Elevation="1" Class="pa-4 dashboard-filter-card dashboard-panel">
             <MudGrid Spacing="2" Class="dashboard-filter-grid">
                 <MudItem xs="12" md="6">
-                    <MudTextField @bind-Value="ViewModel.SearchText"
+                    <MudTextField T="string"
+                                  Value="@ViewModel.SearchText"
+                                  ValueChanged="OnSearchChanged"
                                   Label="Buscar"
                                   Placeholder="Nombre, documento, celular, email, código, estado o tipo"
                                   Variant="Variant.Outlined"
@@ -118,7 +120,9 @@ else
                                   AdornmentIcon="@Icons.Material.Filled.Search" />
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSelect T="string" @bind-Value="ViewModel.EstadoFiltro"
+                    <MudSelect T="string"
+                               Value="@ViewModel.EstadoFiltro"
+                               ValueChanged="OnEstadoFiltroChanged"
                                Label="Estado"
                                Variant="Variant.Outlined">
                         <MudSelectItem Value="@("Todos")">Todos</MudSelectItem>
@@ -127,7 +131,9 @@ else
                     </MudSelect>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="3">
-                    <MudSelect T="string" @bind-Value="ViewModel.TipoFiltro"
+                    <MudSelect T="string"
+                               Value="@ViewModel.TipoFiltro"
+                               ValueChanged="OnTipoFiltroChanged"
                                Label="Tipo de referido"
                                Variant="Variant.Outlined">
                         <MudSelectItem Value="@("Todos")">Todos</MudSelectItem>
@@ -158,89 +164,99 @@ else
                     </MudButton>
                 }
             </MudStack>
-            <MudTable Items="@ViewModel.ObtenerReferidosFiltrados()"
-                      Hover="true"
-                      Dense="true"
-                      Breakpoint="Breakpoint.Md"
-                      Loading="@ViewModel.IsBusy"
-                      Elevation="0"
-                      Class="dashboard-table">
-                <HeaderContent>
-                    <MudTh>Simpatizante</MudTh>
-                    <MudTh>Contacto</MudTh>
-                    <MudTh>Fecha de nacimiento</MudTh>
-                    <MudTh>Código</MudTh>
-                    <MudTh>Referidor</MudTh>
-                    <MudTh>Registro</MudTh>
-                    <MudTh>Estado</MudTh>
-                    <MudTh>Tipo</MudTh>
-                    <MudTh>Acciones</MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd DataLabel="Simpatizante">
-                        <MudStack Spacing="0">
-                            <MudText Typo="Typo.subtitle2">@context.NombresCompletos</MudText>
-                            <MudText Typo="Typo.caption" Color="Color.Secondary">@context.NumeroIdentificacion</MudText>
-                        </MudStack>
-                    </MudTd>
-                    <MudTd DataLabel="Contacto">
-                        <MudStack Spacing="0">
-                            <MudText Typo="Typo.body2">@Display(context.Email)</MudText>
-                            <MudText Typo="Typo.caption" Color="Color.Secondary">@Display(context.Celular)</MudText>
-                        </MudStack>
-                    </MudTd>
-                    <MudTd DataLabel="Fecha de nacimiento">@(context.FechaNacimiento.HasValue ? context.FechaNacimiento.Value.ToString("dd/MM/yyyy") : "No registrada")</MudTd>
-                    <MudTd DataLabel="Código">
-                        <MudText Typo="Typo.body2">@context.CodigoReferido</MudText>
-                    </MudTd>
-                    <MudTd DataLabel="Referidor">@Display(context.Referidor)</MudTd>
-                    <MudTd DataLabel="Registro">@context.FechaRegistro.ToString("yyyy-MM-dd")</MudTd>
-                    <MudTd DataLabel="Estado">
-                        <MudChip T="string"
-                                 Color="@(context.Estado ? Color.Success : Color.Default)"
-                                 Variant="Variant.Filled"
-                                 Size="Size.Small">
-                            @(context.Estado ? "Activo" : "Inactivo")
-                        </MudChip>
-                    </MudTd>
-                    <MudTd DataLabel="Tipo">
-                        <MudChip T="string"
-                                 Color="@(context.Nivel == 1 ? Color.Primary : Color.Info)"
-                                 Variant="Variant.Outlined"
-                                 Size="Size.Small">
-                            @context.TipoReferido
-                        </MudChip>
-                    </MudTd>
-                    <MudTd DataLabel="Acciones">
-                        <MudStack Row="true" Spacing="1">
-                            <MudTooltip Text="Copiar enlace de referido">
-                                <MudIconButton Icon="@Icons.Material.Filled.ContentCopy"
-                                               Color="Color.Primary"
-                                               Size="Size.Small"
-                                               OnClick="@(() => CopyReferralUrlAsync(context))" />
-                            </MudTooltip>
-                            <MudTooltip Text="Desactivar referido">
-                                <MudIconButton Icon="@Icons.Material.Filled.Block"
-                                               Color="Color.Error"
-                                               Size="Size.Small"
-                                               Disabled="@(!context.Estado || ViewModel.IsBusy)"
-                                               OnClick="@(() => DeactivateAsync(context))" />
-                            </MudTooltip>
-                        </MudStack>
-                    </MudTd>
-                </RowTemplate>
+            <MudDataGrid @ref="referidosGrid"
+                         T="CiudadanoReferidoModel"
+                         ServerData="LoadReferidosServerData"
+                         Hover="true"
+                         Dense="true"
+                         Breakpoint="Breakpoint.Md"
+                         Elevation="0"
+                         Class="dashboard-table"
+                         Filterable="true"
+                         FilterMode="DataGridFilterMode.ColumnFilterMenu"
+                         SortMode="SortMode.Single"
+                         RowsPerPage="10">
+                <Columns>
+                    <PropertyColumn Property="item => item.NombresCompletos" Title="Simpatizante">
+                        <CellTemplate Context="cellContext">
+                            <MudStack Spacing="0">
+                                <MudText Typo="Typo.subtitle2">@cellContext.Item.NombresCompletos</MudText>
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">@cellContext.Item.NumeroIdentificacion</MudText>
+                            </MudStack>
+                        </CellTemplate>
+                    </PropertyColumn>
+                    <PropertyColumn Property="item => item.Email" Title="Contacto">
+                        <CellTemplate Context="cellContext">
+                            <MudStack Spacing="0">
+                                <MudText Typo="Typo.body2">@Display(cellContext.Item.Email)</MudText>
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">@Display(cellContext.Item.Celular)</MudText>
+                            </MudStack>
+                        </CellTemplate>
+                    </PropertyColumn>
+                    <PropertyColumn Property="item => item.FechaNacimiento" Title="Fecha de nacimiento" Format="dd/MM/yyyy" />
+                    <PropertyColumn Property="item => item.CodigoReferido" Title="Código" />
+                    <PropertyColumn Property="item => item.Referidor" Title="Referidor" />
+                    <PropertyColumn Property="item => item.FechaRegistro" Title="Registro" Format="yyyy-MM-dd" />
+                    <PropertyColumn Property="item => item.Estado" Title="Estado">
+                        <CellTemplate Context="cellContext">
+                            <MudChip T="string"
+                                     Color="@(cellContext.Item.Estado ? Color.Success : Color.Default)"
+                                     Variant="Variant.Filled"
+                                     Size="Size.Small">
+                                @(cellContext.Item.Estado ? "Activo" : "Inactivo")
+                            </MudChip>
+                        </CellTemplate>
+                    </PropertyColumn>
+                    <PropertyColumn Property="item => item.TipoReferido" Title="Tipo">
+                        <CellTemplate Context="cellContext">
+                            <MudChip T="string"
+                                     Color="@(cellContext.Item.Nivel == 1 ? Color.Primary : Color.Info)"
+                                     Variant="Variant.Outlined"
+                                     Size="Size.Small">
+                                @cellContext.Item.TipoReferido
+                            </MudChip>
+                        </CellTemplate>
+                    </PropertyColumn>
+                    <TemplateColumn Title="Acciones" Sortable="false" Filterable="false">
+                        <CellTemplate Context="cellContext">
+                            <MudStack Row="true" Spacing="1">
+                                <MudTooltip Text="Copiar enlace de referido">
+                                    <MudIconButton Icon="@Icons.Material.Filled.ContentCopy"
+                                                   Color="Color.Primary"
+                                                   Size="Size.Small"
+                                                   OnClick="@(() => CopyReferralUrlAsync(cellContext.Item))" />
+                                </MudTooltip>
+                                <MudTooltip Text="Desactivar referido">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Block"
+                                                   Color="Color.Error"
+                                                   Size="Size.Small"
+                                                   Disabled="@(!cellContext.Item.Estado || ViewModel.IsBusy)"
+                                                   OnClick="@(() => DeactivateAsync(cellContext.Item))" />
+                                </MudTooltip>
+                            </MudStack>
+                        </CellTemplate>
+                    </TemplateColumn>
+                </Columns>
                 <NoRecordsContent>
                     <MudText Typo="Typo.body2" Color="Color.Secondary" Class="pa-4">
                         No hay referidos que coincidan con los filtros.
                     </MudText>
                 </NoRecordsContent>
-            </MudTable>
+                <PagerContent>
+                    <MudDataGridPager T="CiudadanoReferidoModel"
+                                      PageSizeOptions="new[] { 10, 25, 50 }"
+                                      RowsPerPageString="Registros por página"
+                                      InfoFormat="{first_item}-{last_item} de {all_items}" />
+                </PagerContent>
+            </MudDataGrid>
         </MudPaper>
         </MudStack>
     </div>
 }
 
 @code {
+    private MudDataGrid<CiudadanoReferidoModel>? referidosGrid;
+
     protected override async Task OnInitializedAsync()
     {
         await ViewModel.InitializeAsync();
@@ -252,7 +268,45 @@ else
 
     private async Task ReloadAsync()
     {
-        await ViewModel.CargarReferidosAsync();
+        if (referidosGrid is not null)
+        {
+            await referidosGrid.ReloadServerData();
+        }
+    }
+
+    private async Task<GridData<CiudadanoReferidoModel>> LoadReferidosServerData(
+        GridState<CiudadanoReferidoModel> state)
+    {
+        return await ViewModel.ObtenerReferidosGridAsync(state);
+    }
+
+    private async Task OnSearchChanged(string value)
+    {
+        ViewModel.SearchText = value ?? string.Empty;
+        await ReloadFromFirstPageAsync();
+    }
+
+    private async Task OnEstadoFiltroChanged(string value)
+    {
+        ViewModel.EstadoFiltro = value;
+        await ReloadFromFirstPageAsync();
+    }
+
+    private async Task OnTipoFiltroChanged(string value)
+    {
+        ViewModel.TipoFiltro = value;
+        await ReloadFromFirstPageAsync();
+    }
+
+    private async Task ReloadFromFirstPageAsync()
+    {
+        if (referidosGrid is null)
+        {
+            return;
+        }
+
+        referidosGrid.NavigateTo(Page.First);
+        await referidosGrid.ReloadServerData();
     }
 
     private async Task CopyReferralUrlAsync(CiudadanoReferidoModel referido)
@@ -307,6 +361,7 @@ else
         var success = await ViewModel.DesactivarReferidoAsync(referido);
         if (success)
         {
+            await ReloadAsync();
             await JSRuntime.InvokeVoidAsync(
                 "RedVictoriaSweetAlert.fire",
                 "success",

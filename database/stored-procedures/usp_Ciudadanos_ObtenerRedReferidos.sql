@@ -1,8 +1,77 @@
 CREATE OR ALTER PROCEDURE dbo.usp_Ciudadanos_ObtenerRedReferidos
-    @CiudadanoId INT
+    @CiudadanoId INT,
+    @PageNumber INT = NULL,
+    @PageSize INT = NULL,
+    @SearchText NVARCHAR(200) = NULL,
+    @NombresCompletos NVARCHAR(200) = NULL,
+    @NumeroIdentificacion NVARCHAR(50) = NULL,
+    @Email NVARCHAR(150) = NULL,
+    @Celular NVARCHAR(30) = NULL,
+    @FechaNacimiento DATE = NULL,
+    @CodigoReferido NVARCHAR(50) = NULL,
+    @Referidor NVARCHAR(200) = NULL,
+    @FechaRegistro DATE = NULL,
+    @Estado BIT = NULL,
+    @TipoReferido NVARCHAR(20) = NULL,
+    @SortColumn NVARCHAR(80) = NULL,
+    @SortDescending BIT = 0
 AS
 BEGIN
     SET NOCOUNT ON;
+
+    DECLARE @EffectivePageNumber INT = ISNULL(NULLIF(@PageNumber, 0), 1);
+    DECLARE @EffectivePageSize INT = ISNULL(NULLIF(@PageSize, 0), 2147483647);
+    DECLARE @Offset INT = (@EffectivePageNumber - 1) * @EffectivePageSize;
+
+    DECLARE @Referidos TABLE
+    (
+        CiudadanoId INT NOT NULL,
+        NombresCompletos NVARCHAR(200) NOT NULL,
+        FechaNacimiento DATE NULL,
+        LugarNacimiento NVARCHAR(150) NULL,
+        Email NVARCHAR(150) NULL,
+        Celular NVARCHAR(30) NULL,
+        TieneWhatsapp BIT NULL,
+        ParametroIdDondeVive INT NULL,
+        DondeViveDescripcion NVARCHAR(200) NULL,
+        PuestoVotacion NVARCHAR(200) NULL,
+        ParametroIdTipoIdentificacion INT NULL,
+        TipoIdentificacionDescripcion NVARCHAR(200) NULL,
+        NumeroIdentificacion NVARCHAR(50) NULL,
+        Direccion NVARCHAR(250) NULL,
+        DepartamentoId INT NULL,
+        MunicipioId INT NULL,
+        ParametroIdGrupoEdad INT NULL,
+        GrupoEdadDescripcion NVARCHAR(200) NULL,
+        ParametroIdGenero INT NULL,
+        GeneroDescripcion NVARCHAR(200) NULL,
+        ParametroIdSoy INT NULL,
+        SoyDescripcion NVARCHAR(200) NULL,
+        CodigoReferido NVARCHAR(50) NOT NULL,
+        CiudadanoReferidorId INT NULL,
+        TieneAcceso BIT NOT NULL,
+        ParametroIdVereda INT NULL,
+        VeredaDescripcion NVARCHAR(200) NULL,
+        Estado BIT NOT NULL,
+        FechaRegistro DATETIME NOT NULL,
+        Celular2 NVARCHAR(30) NULL,
+        TieneWhatsapp2 BIT NULL,
+        ParametroIdTipoDiscapacidad INT NULL,
+        TipoDiscapacidadDescripcion NVARCHAR(200) NULL,
+        ParametroIdEstadoCivil INT NULL,
+        EstadoCivilDescripcion NVARCHAR(200) NULL,
+        TieneHijos BIT NULL,
+        Cuantos INT NULL,
+        TieneVehiculo BIT NULL,
+        ParametroIdTipoVehiculo INT NULL,
+        TipoVehiculoDescripcion NVARCHAR(200) NULL,
+        ParametroIdReligion INT NULL,
+        ReligionDescripcion NVARCHAR(200) NULL,
+        EsEmpleado BIT NULL,
+        Referidor NVARCHAR(200) NULL,
+        Nivel INT NOT NULL,
+        TipoReferido NVARCHAR(20) NOT NULL
+    );
 
     ;WITH RedReferidos AS
     (
@@ -99,6 +168,7 @@ BEGIN
           AND rr.Ruta NOT LIKE '%/' + CAST(c.CiudadanoId AS VARCHAR(20)) + '/%'
           AND rr.Nivel < 20
     )
+    INSERT INTO @Referidos
     SELECT
         rr.CiudadanoId,
         rr.NombresCompletos,
@@ -167,9 +237,114 @@ BEGIN
         ON pTipoVehiculo.ParametroId = rr.ParametroIdTipoVehiculo
     LEFT JOIN dbo.Parametros pReligion
         ON pReligion.ParametroId = rr.ParametroIdReligion
-    ORDER BY 
-        rr.Nivel,
-        rr.FechaRegistro DESC,
-        rr.NombresCompletos
     OPTION (MAXRECURSION 20);
+
+    ;WITH Filtrados AS
+    (
+        SELECT *
+        FROM @Referidos
+        WHERE (@SearchText IS NULL
+            OR NombresCompletos LIKE '%' + @SearchText + '%'
+            OR NumeroIdentificacion LIKE '%' + @SearchText + '%'
+            OR Celular LIKE '%' + @SearchText + '%'
+            OR Celular2 LIKE '%' + @SearchText + '%'
+            OR Email LIKE '%' + @SearchText + '%'
+            OR CodigoReferido LIKE '%' + @SearchText + '%'
+            OR Referidor LIKE '%' + @SearchText + '%'
+            OR TipoReferido LIKE '%' + @SearchText + '%'
+            OR DondeViveDescripcion LIKE '%' + @SearchText + '%'
+            OR TipoIdentificacionDescripcion LIKE '%' + @SearchText + '%'
+            OR GrupoEdadDescripcion LIKE '%' + @SearchText + '%'
+            OR GeneroDescripcion LIKE '%' + @SearchText + '%'
+            OR SoyDescripcion LIKE '%' + @SearchText + '%'
+            OR VeredaDescripcion LIKE '%' + @SearchText + '%'
+            OR TipoDiscapacidadDescripcion LIKE '%' + @SearchText + '%'
+            OR EstadoCivilDescripcion LIKE '%' + @SearchText + '%'
+            OR TipoVehiculoDescripcion LIKE '%' + @SearchText + '%'
+            OR ReligionDescripcion LIKE '%' + @SearchText + '%'
+            OR (Estado = 1 AND N'Activo' LIKE '%' + @SearchText + '%')
+            OR (Estado = 0 AND N'Inactivo' LIKE '%' + @SearchText + '%'))
+          AND (@NombresCompletos IS NULL OR NombresCompletos LIKE '%' + @NombresCompletos + '%')
+          AND (@NumeroIdentificacion IS NULL OR NumeroIdentificacion LIKE '%' + @NumeroIdentificacion + '%')
+          AND (@Email IS NULL OR Email LIKE '%' + @Email + '%')
+          AND (@Celular IS NULL OR Celular LIKE '%' + @Celular + '%' OR Celular2 LIKE '%' + @Celular + '%')
+          AND (@FechaNacimiento IS NULL OR CONVERT(DATE, FechaNacimiento) = @FechaNacimiento)
+          AND (@CodigoReferido IS NULL OR CodigoReferido LIKE '%' + @CodigoReferido + '%')
+          AND (@Referidor IS NULL OR Referidor LIKE '%' + @Referidor + '%')
+          AND (@FechaRegistro IS NULL OR CONVERT(DATE, FechaRegistro) = @FechaRegistro)
+          AND (@Estado IS NULL OR Estado = @Estado)
+          AND (@TipoReferido IS NULL OR TipoReferido LIKE '%' + @TipoReferido + '%')
+    )
+    SELECT *
+    FROM Filtrados
+    ORDER BY
+        CASE WHEN @SortColumn IS NULL THEN Nivel END ASC,
+        CASE WHEN @SortColumn IS NULL THEN FechaRegistro END DESC,
+        CASE WHEN @SortColumn IS NULL THEN NombresCompletos END ASC,
+        CASE WHEN @SortColumn = N'NombresCompletos' AND @SortDescending = 0 THEN NombresCompletos END ASC,
+        CASE WHEN @SortColumn = N'NombresCompletos' AND @SortDescending = 1 THEN NombresCompletos END DESC,
+        CASE WHEN @SortColumn = N'Email' AND @SortDescending = 0 THEN Email END ASC,
+        CASE WHEN @SortColumn = N'Email' AND @SortDescending = 1 THEN Email END DESC,
+        CASE WHEN @SortColumn = N'FechaNacimiento' AND @SortDescending = 0 THEN FechaNacimiento END ASC,
+        CASE WHEN @SortColumn = N'FechaNacimiento' AND @SortDescending = 1 THEN FechaNacimiento END DESC,
+        CASE WHEN @SortColumn = N'CodigoReferido' AND @SortDescending = 0 THEN CodigoReferido END ASC,
+        CASE WHEN @SortColumn = N'CodigoReferido' AND @SortDescending = 1 THEN CodigoReferido END DESC,
+        CASE WHEN @SortColumn = N'Referidor' AND @SortDescending = 0 THEN Referidor END ASC,
+        CASE WHEN @SortColumn = N'Referidor' AND @SortDescending = 1 THEN Referidor END DESC,
+        CASE WHEN @SortColumn = N'FechaRegistro' AND @SortDescending = 0 THEN FechaRegistro END ASC,
+        CASE WHEN @SortColumn = N'FechaRegistro' AND @SortDescending = 1 THEN FechaRegistro END DESC,
+        CASE WHEN @SortColumn = N'Estado' AND @SortDescending = 0 THEN CAST(Estado AS INT) END ASC,
+        CASE WHEN @SortColumn = N'Estado' AND @SortDescending = 1 THEN CAST(Estado AS INT) END DESC,
+        CASE WHEN @SortColumn = N'TipoReferido' AND @SortDescending = 0 THEN TipoReferido END ASC,
+        CASE WHEN @SortColumn = N'TipoReferido' AND @SortDescending = 1 THEN TipoReferido END DESC,
+        Nivel ASC,
+        FechaRegistro DESC,
+        NombresCompletos ASC
+    OFFSET @Offset ROWS FETCH NEXT @EffectivePageSize ROWS ONLY;
+
+    ;WITH Filtrados AS
+    (
+        SELECT *
+        FROM @Referidos
+        WHERE (@SearchText IS NULL
+            OR NombresCompletos LIKE '%' + @SearchText + '%'
+            OR NumeroIdentificacion LIKE '%' + @SearchText + '%'
+            OR Celular LIKE '%' + @SearchText + '%'
+            OR Celular2 LIKE '%' + @SearchText + '%'
+            OR Email LIKE '%' + @SearchText + '%'
+            OR CodigoReferido LIKE '%' + @SearchText + '%'
+            OR Referidor LIKE '%' + @SearchText + '%'
+            OR TipoReferido LIKE '%' + @SearchText + '%'
+            OR DondeViveDescripcion LIKE '%' + @SearchText + '%'
+            OR TipoIdentificacionDescripcion LIKE '%' + @SearchText + '%'
+            OR GrupoEdadDescripcion LIKE '%' + @SearchText + '%'
+            OR GeneroDescripcion LIKE '%' + @SearchText + '%'
+            OR SoyDescripcion LIKE '%' + @SearchText + '%'
+            OR VeredaDescripcion LIKE '%' + @SearchText + '%'
+            OR TipoDiscapacidadDescripcion LIKE '%' + @SearchText + '%'
+            OR EstadoCivilDescripcion LIKE '%' + @SearchText + '%'
+            OR TipoVehiculoDescripcion LIKE '%' + @SearchText + '%'
+            OR ReligionDescripcion LIKE '%' + @SearchText + '%'
+            OR (Estado = 1 AND N'Activo' LIKE '%' + @SearchText + '%')
+            OR (Estado = 0 AND N'Inactivo' LIKE '%' + @SearchText + '%'))
+          AND (@NombresCompletos IS NULL OR NombresCompletos LIKE '%' + @NombresCompletos + '%')
+          AND (@NumeroIdentificacion IS NULL OR NumeroIdentificacion LIKE '%' + @NumeroIdentificacion + '%')
+          AND (@Email IS NULL OR Email LIKE '%' + @Email + '%')
+          AND (@Celular IS NULL OR Celular LIKE '%' + @Celular + '%' OR Celular2 LIKE '%' + @Celular + '%')
+          AND (@FechaNacimiento IS NULL OR CONVERT(DATE, FechaNacimiento) = @FechaNacimiento)
+          AND (@CodigoReferido IS NULL OR CodigoReferido LIKE '%' + @CodigoReferido + '%')
+          AND (@Referidor IS NULL OR Referidor LIKE '%' + @Referidor + '%')
+          AND (@FechaRegistro IS NULL OR CONVERT(DATE, FechaRegistro) = @FechaRegistro)
+          AND (@Estado IS NULL OR Estado = @Estado)
+          AND (@TipoReferido IS NULL OR TipoReferido LIKE '%' + @TipoReferido + '%')
+    )
+    SELECT COUNT(1)
+    FROM Filtrados;
+
+    SELECT
+        COUNT(CASE WHEN Nivel = 1 THEN 1 END) AS TotalDirectos,
+        COUNT(CASE WHEN Nivel > 1 THEN 1 END) AS TotalIndirectos,
+        COUNT(CASE WHEN Estado = 1 THEN 1 END) AS TotalActivos,
+        COUNT(CASE WHEN Estado = 0 THEN 1 END) AS TotalInactivos
+    FROM @Referidos;
 END;

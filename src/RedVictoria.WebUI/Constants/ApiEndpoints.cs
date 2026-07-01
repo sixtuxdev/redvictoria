@@ -6,6 +6,7 @@ public static class ApiEndpoints
     public const string TerminosyCondiciones = "api/TerminosyCondiciones/insertar";
     public const string ValidarCodigoReferido = "api/Ciudadanos/validar-referido";
     public const string Referidos = "api/Ciudadanos/referidos";
+    public const string ReferidosPaginados = "api/Ciudadanos/referidos/paginado";
     public const string ExportarReferidos = "api/Ciudadanos/referidos/exportar";
     public const string Parametros = "api/Parametros";
     public const string Departamentos = "api/Departamentos";

@@ -22,6 +22,10 @@ public interface ICiudadanoService
     Task<ReferidosResultModel> ObtenerRedReferidosAsync(
         CancellationToken cancellationToken = default);
 
+    Task<ReferidosPageResultModel> ObtenerRedReferidosPaginadosAsync(
+        ReferidosPageRequestModel request,
+        CancellationToken cancellationToken = default);
+
     Task<OperationResultModel> DesactivarReferidoAsync(
         int ciudadanoReferidoId,
         CancellationToken cancellationToken = default);

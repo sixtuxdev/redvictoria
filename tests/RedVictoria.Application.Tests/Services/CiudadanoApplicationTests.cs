@@ -601,6 +601,24 @@ public class CiudadanoApplicationTests
             return Task.FromResult(RedReferidos);
         }
 
+        public Task<CiudadanoReferidoPagedResult> ObtenerRedReferidosPaginadosAsync(
+            CiudadanoReferidoQuery query,
+            CancellationToken cancellationToken = default)
+        {
+            var items = RedReferidos
+                .Skip(((query.PageNumber ?? 1) - 1) * (query.PageSize ?? RedReferidos.Count))
+                .Take(query.PageSize ?? RedReferidos.Count)
+                .ToArray();
+
+            return Task.FromResult(new CiudadanoReferidoPagedResult(
+                items,
+                RedReferidos.Count,
+                RedReferidos.Count(item => item.Nivel == 1),
+                RedReferidos.Count(item => item.Nivel > 1),
+                RedReferidos.Count(item => item.Estado),
+                RedReferidos.Count(item => !item.Estado)));
+        }
+
         public Task<bool> DesactivarReferidoAsync(
             int ciudadanoAutenticadoId,
             int ciudadanoReferidoId,
@@ -673,6 +691,13 @@ public class CiudadanoApplicationTests
             CancellationToken cancellationToken = default)
         {
             return Task.FromException<IReadOnlyCollection<CiudadanoReferidoResult>>(_exception);
+        }
+
+        public Task<CiudadanoReferidoPagedResult> ObtenerRedReferidosPaginadosAsync(
+            CiudadanoReferidoQuery query,
+            CancellationToken cancellationToken = default)
+        {
+            return Task.FromException<CiudadanoReferidoPagedResult>(_exception);
         }
 
         public Task<bool> DesactivarReferidoAsync(

@@ -76,6 +76,26 @@ public class CiudadanosController : ControllerBase
     }
 
     [Authorize]
+    [HttpGet("referidos/paginado")]
+    public async Task<IActionResult> ObtenerRedReferidosPaginados(
+        [FromQuery] CiudadanoReferidoPagedRequest request,
+        CancellationToken cancellationToken)
+    {
+        var ciudadanoId = GetCiudadanoId();
+        if (!ciudadanoId.HasValue)
+        {
+            return Unauthorized();
+        }
+
+        var response = await _ciudadanoApplication.ObtenerRedReferidosPaginadosAsync(
+            ciudadanoId.Value,
+            request,
+            cancellationToken);
+
+        return response.IsSuccess ? Ok(response) : BadRequest(response);
+    }
+
+    [Authorize]
     [HttpGet("referidos/exportar")]
     public async Task<IActionResult> ExportarRedReferidos(CancellationToken cancellationToken)
     {
