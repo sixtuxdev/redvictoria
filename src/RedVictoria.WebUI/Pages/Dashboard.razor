@@ -277,7 +277,9 @@ else
     private async Task<GridData<CiudadanoReferidoModel>> LoadReferidosServerData(
         GridState<CiudadanoReferidoModel> state)
     {
-        return await ViewModel.ObtenerReferidosGridAsync(state);
+        var data = await ViewModel.ObtenerReferidosGridAsync(state);
+        await InvokeAsync(StateHasChanged);
+        return data;
     }
 
     private async Task OnSearchChanged(string value)

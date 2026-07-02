@@ -239,44 +239,43 @@ BEGIN
         ON pReligion.ParametroId = rr.ParametroIdReligion
     OPTION (MAXRECURSION 20);
 
-    ;WITH Filtrados AS
-    (
-        SELECT *
-        FROM @Referidos
-        WHERE (@SearchText IS NULL
-            OR NombresCompletos LIKE '%' + @SearchText + '%'
-            OR NumeroIdentificacion LIKE '%' + @SearchText + '%'
-            OR Celular LIKE '%' + @SearchText + '%'
-            OR Celular2 LIKE '%' + @SearchText + '%'
-            OR Email LIKE '%' + @SearchText + '%'
-            OR CodigoReferido LIKE '%' + @SearchText + '%'
-            OR Referidor LIKE '%' + @SearchText + '%'
-            OR TipoReferido LIKE '%' + @SearchText + '%'
-            OR DondeViveDescripcion LIKE '%' + @SearchText + '%'
-            OR TipoIdentificacionDescripcion LIKE '%' + @SearchText + '%'
-            OR GrupoEdadDescripcion LIKE '%' + @SearchText + '%'
-            OR GeneroDescripcion LIKE '%' + @SearchText + '%'
-            OR SoyDescripcion LIKE '%' + @SearchText + '%'
-            OR VeredaDescripcion LIKE '%' + @SearchText + '%'
-            OR TipoDiscapacidadDescripcion LIKE '%' + @SearchText + '%'
-            OR EstadoCivilDescripcion LIKE '%' + @SearchText + '%'
-            OR TipoVehiculoDescripcion LIKE '%' + @SearchText + '%'
-            OR ReligionDescripcion LIKE '%' + @SearchText + '%'
-            OR (Estado = 1 AND N'Activo' LIKE '%' + @SearchText + '%')
-            OR (Estado = 0 AND N'Inactivo' LIKE '%' + @SearchText + '%'))
-          AND (@NombresCompletos IS NULL OR NombresCompletos LIKE '%' + @NombresCompletos + '%')
-          AND (@NumeroIdentificacion IS NULL OR NumeroIdentificacion LIKE '%' + @NumeroIdentificacion + '%')
-          AND (@Email IS NULL OR Email LIKE '%' + @Email + '%')
-          AND (@Celular IS NULL OR Celular LIKE '%' + @Celular + '%' OR Celular2 LIKE '%' + @Celular + '%')
-          AND (@FechaNacimiento IS NULL OR CONVERT(DATE, FechaNacimiento) = @FechaNacimiento)
-          AND (@CodigoReferido IS NULL OR CodigoReferido LIKE '%' + @CodigoReferido + '%')
-          AND (@Referidor IS NULL OR Referidor LIKE '%' + @Referidor + '%')
-          AND (@FechaRegistro IS NULL OR CONVERT(DATE, FechaRegistro) = @FechaRegistro)
-          AND (@Estado IS NULL OR Estado = @Estado)
-          AND (@TipoReferido IS NULL OR TipoReferido LIKE '%' + @TipoReferido + '%')
-    )
     SELECT *
-    FROM Filtrados
+    INTO #Filtrados
+    FROM @Referidos
+    WHERE (@SearchText IS NULL
+        OR NombresCompletos LIKE '%' + @SearchText + '%'
+        OR NumeroIdentificacion LIKE '%' + @SearchText + '%'
+        OR Celular LIKE '%' + @SearchText + '%'
+        OR Celular2 LIKE '%' + @SearchText + '%'
+        OR Email LIKE '%' + @SearchText + '%'
+        OR CodigoReferido LIKE '%' + @SearchText + '%'
+        OR Referidor LIKE '%' + @SearchText + '%'
+        OR TipoReferido LIKE '%' + @SearchText + '%'
+        OR DondeViveDescripcion LIKE '%' + @SearchText + '%'
+        OR TipoIdentificacionDescripcion LIKE '%' + @SearchText + '%'
+        OR GrupoEdadDescripcion LIKE '%' + @SearchText + '%'
+        OR GeneroDescripcion LIKE '%' + @SearchText + '%'
+        OR SoyDescripcion LIKE '%' + @SearchText + '%'
+        OR VeredaDescripcion LIKE '%' + @SearchText + '%'
+        OR TipoDiscapacidadDescripcion LIKE '%' + @SearchText + '%'
+        OR EstadoCivilDescripcion LIKE '%' + @SearchText + '%'
+        OR TipoVehiculoDescripcion LIKE '%' + @SearchText + '%'
+        OR ReligionDescripcion LIKE '%' + @SearchText + '%'
+        OR (Estado = 1 AND N'Activo' LIKE '%' + @SearchText + '%')
+        OR (Estado = 0 AND N'Inactivo' LIKE '%' + @SearchText + '%'))
+      AND (@NombresCompletos IS NULL OR NombresCompletos LIKE '%' + @NombresCompletos + '%')
+      AND (@NumeroIdentificacion IS NULL OR NumeroIdentificacion LIKE '%' + @NumeroIdentificacion + '%')
+      AND (@Email IS NULL OR Email LIKE '%' + @Email + '%')
+      AND (@Celular IS NULL OR Celular LIKE '%' + @Celular + '%' OR Celular2 LIKE '%' + @Celular + '%')
+      AND (@FechaNacimiento IS NULL OR CONVERT(DATE, FechaNacimiento) = @FechaNacimiento)
+      AND (@CodigoReferido IS NULL OR CodigoReferido LIKE '%' + @CodigoReferido + '%')
+      AND (@Referidor IS NULL OR Referidor LIKE '%' + @Referidor + '%')
+      AND (@FechaRegistro IS NULL OR CONVERT(DATE, FechaRegistro) = @FechaRegistro)
+      AND (@Estado IS NULL OR Estado = @Estado)
+      AND (@TipoReferido IS NULL OR TipoReferido LIKE '%' + @TipoReferido + '%');
+
+    SELECT *
+    FROM #Filtrados
     ORDER BY
         CASE WHEN @SortColumn IS NULL THEN Nivel END ASC,
         CASE WHEN @SortColumn IS NULL THEN FechaRegistro END DESC,
@@ -302,49 +301,13 @@ BEGIN
         NombresCompletos ASC
     OFFSET @Offset ROWS FETCH NEXT @EffectivePageSize ROWS ONLY;
 
-    ;WITH Filtrados AS
-    (
-        SELECT *
-        FROM @Referidos
-        WHERE (@SearchText IS NULL
-            OR NombresCompletos LIKE '%' + @SearchText + '%'
-            OR NumeroIdentificacion LIKE '%' + @SearchText + '%'
-            OR Celular LIKE '%' + @SearchText + '%'
-            OR Celular2 LIKE '%' + @SearchText + '%'
-            OR Email LIKE '%' + @SearchText + '%'
-            OR CodigoReferido LIKE '%' + @SearchText + '%'
-            OR Referidor LIKE '%' + @SearchText + '%'
-            OR TipoReferido LIKE '%' + @SearchText + '%'
-            OR DondeViveDescripcion LIKE '%' + @SearchText + '%'
-            OR TipoIdentificacionDescripcion LIKE '%' + @SearchText + '%'
-            OR GrupoEdadDescripcion LIKE '%' + @SearchText + '%'
-            OR GeneroDescripcion LIKE '%' + @SearchText + '%'
-            OR SoyDescripcion LIKE '%' + @SearchText + '%'
-            OR VeredaDescripcion LIKE '%' + @SearchText + '%'
-            OR TipoDiscapacidadDescripcion LIKE '%' + @SearchText + '%'
-            OR EstadoCivilDescripcion LIKE '%' + @SearchText + '%'
-            OR TipoVehiculoDescripcion LIKE '%' + @SearchText + '%'
-            OR ReligionDescripcion LIKE '%' + @SearchText + '%'
-            OR (Estado = 1 AND N'Activo' LIKE '%' + @SearchText + '%')
-            OR (Estado = 0 AND N'Inactivo' LIKE '%' + @SearchText + '%'))
-          AND (@NombresCompletos IS NULL OR NombresCompletos LIKE '%' + @NombresCompletos + '%')
-          AND (@NumeroIdentificacion IS NULL OR NumeroIdentificacion LIKE '%' + @NumeroIdentificacion + '%')
-          AND (@Email IS NULL OR Email LIKE '%' + @Email + '%')
-          AND (@Celular IS NULL OR Celular LIKE '%' + @Celular + '%' OR Celular2 LIKE '%' + @Celular + '%')
-          AND (@FechaNacimiento IS NULL OR CONVERT(DATE, FechaNacimiento) = @FechaNacimiento)
-          AND (@CodigoReferido IS NULL OR CodigoReferido LIKE '%' + @CodigoReferido + '%')
-          AND (@Referidor IS NULL OR Referidor LIKE '%' + @Referidor + '%')
-          AND (@FechaRegistro IS NULL OR CONVERT(DATE, FechaRegistro) = @FechaRegistro)
-          AND (@Estado IS NULL OR Estado = @Estado)
-          AND (@TipoReferido IS NULL OR TipoReferido LIKE '%' + @TipoReferido + '%')
-    )
     SELECT COUNT(1)
-    FROM Filtrados;
+    FROM #Filtrados;
 
     SELECT
         COUNT(CASE WHEN Nivel = 1 THEN 1 END) AS TotalDirectos,
         COUNT(CASE WHEN Nivel > 1 THEN 1 END) AS TotalIndirectos,
         COUNT(CASE WHEN Estado = 1 THEN 1 END) AS TotalActivos,
         COUNT(CASE WHEN Estado = 0 THEN 1 END) AS TotalInactivos
-    FROM @Referidos;
+    FROM #Filtrados;
 END;
